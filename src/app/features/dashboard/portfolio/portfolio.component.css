@@ -1,0 +1,466 @@
+:root {
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --background-color: #f9fafc;
+    --text-color: #333;
+    --card-background: #ffffff;
+    --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    --card-hover-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    --border-radius: 8px;
+    --primary-color: #007bff;
+    --primary-hover-color: #0056b3;
+    --secondary-background: #f5f5f5;
+    --border-color: #eee;
+    --text-muted: #777;
+    --btn-primary-color: #4CAF50;
+  --btn-primary-hover-color: #45a049;
+  --btn-danger-color: #f44336;
+  --btn-danger-hover-color: #da190b;
+  }
+  
+  body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    margin: 0;
+    color: var(--text-color);
+  }
+  
+  .portfolio-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  .card {
+    background-color: var(--card-background);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--card-hover-shadow);
+  }
+  
+  .profile-overview,
+  .chart-section {
+    composes: card;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .chart {
+    height: 250px;
+    background: linear-gradient(135deg, #6a9dff, #4c77ff);
+    border-radius: 6px;
+    margin-top: 10px;
+    position: relative;
+  }
+  
+  .chart-footer {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+    padding-top: 8px;
+  }
+  
+  h2 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--text-color);
+  }
+  
+  .profile-details,
+  .performance-summary {
+    padding: 10px;
+    background-color: var(--secondary-background);
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+  }
+  
+  h3 {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #444;
+  }
+  
+  .profile-stat,
+  .summary-stat,
+  .kpi {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .profile-stat span,
+  .chart-legend span {
+    font-size: 0.85rem;
+    color: #555;
+  }
+  
+  .chart-legend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .summary-stat,
+  .kpi {
+    padding: 10px;
+    background-color: var(--card-background);
+    border-radius: 6px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 15px;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .summary-stat:hover,
+  .kpi:hover {
+    box-shadow: var(--card-hover-shadow);
+  }
+  
+  .kpi-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  
+  .profile-img {
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+    background-color: #ddd;
+    margin-bottom: 15px;
+    object-fit: cover;
+  }
+  
+  .profile-contact {
+    margin-top: 15px;
+  }
+  
+  .contact-info span {
+    display: block;
+    font-size: 0.85rem;
+    color: #555;
+  }
+  
+  .transaction-filters {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 8px;
+  }
+  
+  .transaction-filters button {
+    padding: 8px 15px;
+    border: none;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .transaction-filters button:hover {
+    background-color: var(--primary-hover-color);
+  }
+  
+  @media (max-width: 1024px) {
+    .portfolio-layout {
+      grid-template-columns: 1fr;
+      padding: 15px;
+    }
+  
+    .profile-overview,
+    .chart-section {
+      grid-column: span 1;
+    }
+  
+    .summary-stat,
+    .kpi {
+      padding: 8px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .summary-stat,
+    .kpi {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .transaction-filters {
+      flex-wrap: wrap;
+    }
+  
+    .transaction-filters button {
+      margin-bottom: 8px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .portfolio-layout,
+    .card {
+      padding: 10px;
+    }
+  
+    .summary-stat,
+    .kpi {
+      padding: 8px;
+    }
+  }
+  :root {
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --background-color: #f9fafc;
+    --text-color: #333;
+    --card-background: #ffffff;
+    --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    --card-hover-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    --border-radius: 8px;
+    --primary-color: #007bff;
+    --primary-hover-color: #0056b3;
+    --secondary-background: #f5f5f5;
+    --border-color: #eee;
+    --text-muted: #777;
+    --positive-color: #28a745;
+    --negative-color: #dc3545;
+  }
+  
+  /* ... (previous styles remain the same) ... */
+  
+  /* New styles for the holdings table */
+  .portfolio-holdings {
+    overflow: hidden;
+  }
+  
+  .portfolio-holdings h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .portfolio-holdings .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  
+  .portfolio-holdings th,
+  .portfolio-holdings td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .portfolio-holdings thead {
+    background-color: var(--secondary-background);
+  }
+  
+  .portfolio-holdings th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  
+  .portfolio-holdings .expandable-row {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .portfolio-holdings .expandable-row:hover {
+    background-color: var(--secondary-background);
+  }
+  
+  .portfolio-holdings .details-row {
+    display: none;
+    background-color: var(--secondary-background);
+  }
+  
+  .portfolio-holdings .details-row.show {
+    display: table-row;
+  }
+  
+  .portfolio-holdings .expanded-info {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .portfolio-holdings .expanded-info p {
+    margin: 0.5rem 0;
+  }
+  
+  .portfolio-holdings .positive {
+    color: var(--positive-color);
+  }
+  
+  .portfolio-holdings .negative {
+    color: var(--negative-color);
+  }
+  
+  @media (max-width: 768px) {
+    .portfolio-holdings th,
+    .portfolio-holdings td {
+      padding: 0.75rem;
+    }
+  
+    .portfolio-holdings th:nth-child(4),
+    .portfolio-holdings td:nth-child(4) {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .portfolio-holdings th,
+    .portfolio-holdings td {
+      padding: 0.5rem;
+    }
+  
+    .portfolio-holdings th:nth-child(3),
+    .portfolio-holdings td:nth-child(3),
+    .portfolio-holdings th:nth-child(5),
+    .portfolio-holdings td:nth-child(5) {
+      display: none;
+    }
+  }
+  .portfolio-watchlist {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+  }
+  
+  .watchlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--secondary-background);
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .watchlist-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  
+  .btn-add-stock {
+    padding: 0.5rem 1rem;
+    background-color: var(--btn-primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-add-stock:hover {
+    background-color: var(--btn-primary-hover-color);
+  }
+  
+  .watchlist-table-container {
+    overflow-x: auto;
+  }
+  
+  .watchlist-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  
+  .watchlist-table th,
+  .watchlist-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .watchlist-table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  
+  .stock-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .stock-logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.5rem;
+    border-radius: 50%;
+  }
+  
+  .mini-chart {
+    width: 100px;
+    height: 30px;
+  }
+  
+  .btn-action {
+    padding: 0.25rem 0.5rem;
+    margin-right: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-buy {
+    background-color: var(--btn-primary-color);
+    color: white;
+  }
+  
+  .btn-buy:hover {
+    background-color: var(--btn-primary-hover-color);
+  }
+  
+  .btn-remove {
+    background-color: var(--btn-danger-color);
+    color: white;
+  }
+  
+  .btn-remove:hover {
+    background-color: var(--btn-danger-hover-color);
+  }
+  
+  @media (max-width: 768px) {
+    .watchlist-table th,
+    .watchlist-table td {
+      padding: 0.75rem;
+    }
+  
+    .watchlist-table th:nth-child(4),
+    .watchlist-table td:nth-child(4) {
+      display: none;
+    }
+  
+    .btn-action {
+      padding: 0.25rem;
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .watchlist-table th,
+    .watchlist-table td {
+      padding: 0.5rem;
+    }
+  
+    .watchlist-table th:nth-child(3),
+    .watchlist-table td:nth-child(3),
+    .watchlist-table th:nth-child(5),
+    .watchlist-table td:nth-child(5) {
+      display: none;
+    }
+  
+    .stock-logo {
+      display: none;
+    }
+  }

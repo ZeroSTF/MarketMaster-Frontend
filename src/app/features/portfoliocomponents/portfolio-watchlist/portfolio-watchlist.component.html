@@ -1,0 +1,21 @@
+<div class="portfolio-watchlist card">
+    <h3>Watchlist</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Change</th>
+                <th>Trend</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of watchlist">
+                <td>{{ item.stock }}</td>
+                <td>${{ item.price }}</td>
+                <td class="positive">{{ item.change }}</td>
+                <td><canvas class="mini-chart"></canvas></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
