@@ -1,7 +1,10 @@
-
-<div class="w-auto h-full shrink-0 [background:rgba(151,207,255,0.10)] shadow-[0px_1px_10px_0px_rgba(0,0,0,0.25)] backdrop-blur-[2px]">
-<!-- <app-header></app-header> -->
-<app-nav-bar></app-nav-bar>
-<app-side-bar></app-side-bar>
-<router-outlet></router-outlet>
-</div>
+<div class="h-screen flex flex-col  [background:rgba(151,207,255,0.10)]">
+    <app-nav-bar class="w-full h-16 fixed top-0 left-0 z-10 "></app-nav-bar>  
+    <div class="flex flex-grow pt-16">
+      <app-side-bar class="w-64 h-full fixed top-16 left-0  z-10"></app-side-bar>
+      <div class="flex-grow ml-64 p-4 overflow-auto">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+  
