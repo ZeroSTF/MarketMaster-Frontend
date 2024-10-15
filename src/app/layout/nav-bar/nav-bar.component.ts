@@ -6,7 +6,7 @@ import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgModel } from '@angular/forms';
 import { ClickOutsideDirective } from '../../Utils/click-outside.directive';
 
 
@@ -22,7 +22,8 @@ import { ClickOutsideDirective } from '../../Utils/click-outside.directive';
     MatFormFieldModule, 
     MatInputModule,
     MatMenuTrigger,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    
   ],
   templateUrl: './nav-bar.component.html',
   styles: [`
