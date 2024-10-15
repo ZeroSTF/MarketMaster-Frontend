@@ -1,0 +1,61 @@
+<nav (clickOutside)="toggleMenu()" class="flex items-center justify-between mx-2 px-4 py-2 max-w-full min-w-72 shadow-[0px_4px_4px_rgba(0,0,0,0.25)] backdrop-blur-[10px] rounded-2xl bg-white">
+  
+  <!-- Logo -->
+  <div class="flex items-center min-w-[180px]">
+    <svg width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+      <g id="Group 39795">
+        <path d="M12.8455 5.52806C12.8455 3.93948 14.7727 3.15125 15.8859 4.28453L22.319 10.8335C23.0027 11.5295 23.3858 12.466 23.3858 13.4416V20.7238C23.3858 22.3124 21.4585 23.1006 20.3453 21.9673L13.9122 15.4184C13.2285 14.7224 12.8455 13.7858 12.8455 12.8102V5.52806Z" fill="#0C7FDA"/>
+        <path d="M6.31201 5.27611C6.31201 3.68753 8.23924 2.8993 9.35246 4.03257L15.6323 10.4255C16.4142 11.2215 16.8523 12.2926 16.8523 13.4084V20.4719C16.8523 22.0604 14.9251 22.8487 13.8119 21.7154L7.37874 15.1664C6.69507 14.4705 6.31201 13.5339 6.31201 12.5583V5.27611Z" fill="#2196F3"/>
+        <path d="M0 5.52806C0 3.93948 1.92722 3.15125 3.04045 4.28453L9.47358 10.8335C10.1572 11.5295 10.5403 12.466 10.5403 13.4416V20.7238C10.5403 22.3124 8.61308 23.1006 7.49985 21.9673L1.06673 15.4184C0.383062 14.7224 0 13.7858 0 12.8102V5.52806Z" fill="#6EBBF7"/>
+      </g>
+    </svg>
+    <b class="text-xl leading-tight">MarketMaster.</b>
+  </div>
+
+  <!-- Search and Navigation Menu -->
+  <div class="flex flex-grow items-center gap-4">
+    <div class="hidden lg:flex items-center space-x-8 text-base font-roboto-flex text-gray-600 whitespace-nowrap">
+      <a href="#" class="text-[color:var(--Primary-500,#2196F3)] font-semibold no-underline">Dashboard</a>
+      <a href="#" class="text-gray-400 font-semibold no-underline">Trader</a>
+      <a href="#" class="text-gray-400 font-semibold no-underline">Gamer</a>
+      <a href="#" class="text-gray-400 font-semibold no-underline">Learner</a>
+      <div class="flex items-center gap-2">
+        <a href="#" class="text-gray-400 font-semibold no-underline">Quick Links</a>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </div>
+    </div>
+    
+    <input 
+      type="text" 
+      placeholder="Search" 
+      class="hidden sm:block flex-grow h-10 px-4 rounded-full bg-white bg-opacity-50 border border-gray-300 focus:outline-none focus:ring focus:ring-blue-300 mr-4 min-w-[200px]"
+    />
+  </div>
+
+  <div class="flex items-center space-x-3">
+    <mat-icon class="">notifications</mat-icon>
+
+    <div class="relative inline-block">
+      <img 
+        class="w-9 h-9 rounded-full cursor-pointer" 
+        src="images/avaterNav.png" 
+        alt="Avatar" 
+        (click)="toggleMenu()"
+      />
+      <div *ngIf="isOpen" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50">
+        <ul class="py-1">
+          <li *ngFor="let link of ['Dashboard', 'Trader', 'Gamer', 'Learner']" class="text-gray-700 hover:bg-gray-200">
+            <a href="#" class="block lg:hidden px-4 py-2 text-gray-400 font-semibold no-underline" (click)="toggleMenu()">{{ link }}</a>
+          </li>
+          
+          <li class="border-t border-gray-200 block lg:hidden"></li>
+          <li>
+            <a href="#" class="px-4 py-2 text-gray-400 font-semibold no-underline">Log out</a>
+
+            
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
