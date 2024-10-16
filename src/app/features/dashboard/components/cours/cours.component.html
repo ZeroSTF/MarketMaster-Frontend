@@ -1,0 +1,30 @@
+<div class="bg-white rounded-lg shadow-lg h-full flex flex-col p-1">
+    <!-- Title Section -->
+    <div class="pb-0 pl-2 border-b border-gray-200">
+      <h2 class="text-base font-bold text-[#01013D]">Courses</h2>
+    </div>
+  
+    <!-- Tab Bar Section for Chapters (Scrollable) -->
+    <div class="overflow-x-auto">
+      <div class="flex space-x-2 py-2 text-xs border-b border-gray-200">
+        <button
+          *ngFor="let chapter of chapters; let i = index"
+          class="whitespace-nowrap px-2 py-1 font-semibold text-gray-600 hover:text-[#01013D] focus:text-[#01013D] focus:border-b-2 focus:border-blue-500"
+          (click)="selectChapter(i)"
+          [class.active]="selectedChapter === i">
+          {{ chapter.name }}
+        </button>
+      </div>
+    </div>
+  
+    <!-- Content Section for the Selected Chapter -->
+    <div class="pt-3 flex-grow overflow-auto text-sm text-gray-700 leading-tight">
+      <div *ngIf="selectedChapterContent">
+        <div *ngFor="let topic of selectedChapterContent.topics" class="mb-2 p-2 bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm">
+          <p class="font-semibold">{{ topic.title }}</p>
+          <p>{{ topic.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

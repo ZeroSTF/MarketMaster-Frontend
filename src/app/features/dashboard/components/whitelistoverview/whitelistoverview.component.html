@@ -8,7 +8,6 @@
         <table class="w-full text-left border-collapse bg-white rounded-lg">
           <thead class="bg-gray-100 border-b border-gray-300 text-xs">
             <tr>
-              <th class="px-2 py-1">Name</th>
               <th class="px-2 py-1">Symbol</th>
               <th class="px-2 py-1">Performance</th>
               <th class="px-2 py-1">Category</th>
@@ -16,7 +15,6 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of whitelist" class="border-b hover:bg-gray-100 text-xs">
-              <td class="px-2 py-1">{{ item.name }}</td>
               <td class="px-2 py-1">{{ item.symbol }}</td>
               <td class="px-2 py-1">{{ item.performance }}%</td>
               <td class="px-2 py-1">{{ item.category }}</td>
@@ -35,7 +33,6 @@
         <table class="w-full text-left border-collapse bg-white rounded-lg">
           <thead class="bg-gray-100 border-b border-gray-300 text-xs">
             <tr>
-              <th class="px-2 py-1">Name</th>
               <th class="px-2 py-1">Symbol</th>
               <th class="px-2 py-1">Performance</th>
               <th class="px-2 py-1">Category</th>
@@ -43,7 +40,6 @@
           </thead>
           <tbody>
             <tr *ngFor="let winner of bestWinners" class="border-b hover:bg-gray-100 text-xs">
-              <td class="px-2 py-1">{{ winner.name }}</td>
               <td class="px-2 py-1">{{ winner.symbol }}</td>
               <td class="px-2 py-1">{{ winner.performance }}%</td>
               <td class="px-2 py-1">{{ winner.category }}</td>

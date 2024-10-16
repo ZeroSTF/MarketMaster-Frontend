@@ -1,0 +1,20 @@
+/* Make the tab bar horizontally scrollable if there are too many chapters */
+.overflow-x-auto {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  
+  /* Optional: style the scrollbar */
+  .overflow-x-auto::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .overflow-x-auto::-webkit-scrollbar-thumb {
+    background-color: #b3b3b3;
+    border-radius: 10px;
+  }
+  
+  .overflow-x-auto::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+  }
+  
