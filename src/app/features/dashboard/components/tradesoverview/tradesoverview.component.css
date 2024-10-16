@@ -1,0 +1,44 @@
+.active {
+    border-bottom: 2px solid #1E88E5;
+    color: #1E88E5;
+  }
+  
+  /* Button Styling */
+  button {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  button.active {
+    background-color: #1E88E5;
+    color: white;
+  }
+  
+  button:hover {
+    background-color: #1E88E5;
+    color: white;
+  }
+  
+  /* Table Styling */
+  table {
+    border-spacing: 0;
+    width: 100%;
+  }
+  
+  th, td {
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  tr:hover {
+    background-color: #f0f7ff; /* Light blue background for hover */
+  }
+  
+  /* Title */
+  h2 {
+    color: #01013D;
+  }
+
+  @media (max-width: 640px) {
+    th, td {
+      padding: 8px 4px;
+    }
+  }
