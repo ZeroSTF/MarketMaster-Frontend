@@ -1,0 +1,19 @@
+/* Truncate the text and show ellipsis when collapsed */
+.truncate {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+  
+  /* Expanded class will remove ellipsis */
+  .truncate.expanded {
+    white-space: normal;
+    text-overflow: clip;
+  }
+  
+  /* Clamp the lines when not expanded */
+  .line-clamp {
+    white-space: nowrap;
+  }
+  

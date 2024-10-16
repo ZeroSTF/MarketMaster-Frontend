@@ -1,0 +1,39 @@
+<div class="bg-white rounded-lg shadow-lg h-full flex flex-col p-1">
+    <!-- Title Section -->
+    <div class="pb-0 pl-2 border-b border-gray-200">
+      <h2 class="text-base font-bold text-[#01013D]">News</h2>
+    </div>
+  
+    <!-- Tab Bar Section -->
+    <div class="flex justify-between py-2 text-xs border-b border-gray-200">
+      <button class="px-2 py-1 font-semibold text-gray-600 hover:text-[#01013D] focus:text-[#01013D] focus:border-b-2 focus:border-blue-500">Breaking</button>
+      <button class="px-2 py-1 font-semibold text-gray-600 hover:text-[#01013D] focus:text-[#01013D] focus:border-b-2 focus:border-blue-500">Watchlist</button>
+      <button class="px-2 py-1 font-semibold text-gray-600 hover:text-[#01013D] focus:text-[#01013D] focus:border-b-2 focus:border-blue-500">Financial</button>
+      <button class="px-2 py-1 font-semibold text-gray-600 hover:text-[#01013D] focus:text-[#01013D] focus:border-b-2 focus:border-blue-500">All</button>
+    </div>
+  
+    <!-- Content Section -->
+    <div class="pt-3 flex-grow overflow-auto text-sm text-gray-700 leading-tight">
+      <!-- News Item 1 -->
+      <div class="mb-2 p-2 bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm" (click)="toggleFullText(1)">
+        <p class="font-semibold truncate" [class.expanded]="expandedNews[1]" [class.line-clamp]="!expandedNews[1]">
+          Breaking News Headline 1: Major Stock Market Surge Amidst New Developments...
+        </p>
+      </div>
+      
+      <!-- News Item 2 -->
+      <div class="mb-2 p-2 bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm" (click)="toggleFullText(2)">
+        <p class="font-semibold truncate" [class.expanded]="expandedNews[2]" [class.line-clamp]="!expandedNews[2]">
+          Breaking News Headline 2: Tech Giants Report Record Profits as Market Grows...
+        </p>
+      </div>
+      
+      <!-- News Item 3 -->
+      <div class="mb-2 p-2 bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm" (click)="toggleFullText(3)">
+        <p class="font-semibold truncate" [class.expanded]="expandedNews[3]" [class.line-clamp]="!expandedNews[3]">
+          Breaking News Headline 3: Global Financial Markets Show Signs of Recovery...
+        </p>
+      </div>
+    </div>
+  </div>
+  

@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { PortfolioComponent } from './features/dashboard/portfolio/portfolio.component';
+import { OverviewComponent } from './features/dashboard/pages/overview/overview.component';
 
 export const routes: Routes = [
   {
-    path: 'portfolio', // This will directly link to PortfolioComponent
-    component: PortfolioComponent,
+    path: 'overview', // This will directly link to PortfolioComponent
+    component: OverviewComponent,
   },
 ];
