@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -6,7 +6,9 @@ import { ActivatedRoute } from '@angular/router';
   standalone: true,
   imports: [],
   templateUrl: './stockdetails.component.html',
-  styleUrl: './stockdetails.component.css'
+  styleUrl: './stockdetails.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class StockdetailsComponent implements OnInit {
   stockInfo = signal({

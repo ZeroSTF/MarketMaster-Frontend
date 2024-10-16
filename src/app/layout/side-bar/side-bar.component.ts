@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatListModule} from '@angular/material/list';
@@ -15,6 +15,8 @@ import {MatListModule} from '@angular/material/list';
     MatListModule
 
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class SideBarComponent {
   @Input() hidden = false; 

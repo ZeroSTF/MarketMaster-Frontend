@@ -29,28 +29,12 @@ stocksSignal =signal<Stock[]> ([
 
 ]);
 
-// Signal for the search term
 private searchTermSignal = signal('');
 
 constructor() {}
 
-// Expose signals for components to access
 getStocks() {
   return this.stocksSignal();
 }
 
-getSearchTerm() {
-  return this.searchTermSignal();
 }
-
-setSearchTerm(term: string) {
-  this.searchTermSignal.set(term);
-}
-
-// Filter stocks based on the current search term
-getFilteredStocks() {
-  const searchTerm = this.searchTermSignal().toLowerCase();
-  return this.stocksSignal().filter(stock => 
-    stock.symbol.toLowerCase().includes(searchTerm)
-  );
-}}
