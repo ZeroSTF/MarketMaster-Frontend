@@ -1,33 +1,18 @@
 <div class="flex h-screen overflow-hidden">
-    <!-- Sidebar Container -->
-    <aside
-      class="relative transition-all duration-500 ease-in-out"
-      [ngClass]="{ 'w-64': !hidden, 'w-6': hidden }"
-    >
-      <app-dashboard-sidebar [hidden]="hidden" (toggle)="toggleSidebar()"></app-dashboard-sidebar>
+  <!-- Sidebar Container -->
+  <aside
+    
+  >
+    <app-dashboard-sidebar [hidden]="hidden" (toggle)="toggleSidebar()"></app-dashboard-sidebar>
 
-      <!-- Toggle Button Container -->
-      @if (hidden) {
-      <div
-        class="absolute inset-0 rounded-2xl ml-2 bg-transparent backdrop-blur-md flex items-center justify-center mt-2 z-10"
-      >
-        <button
-          (click)="toggleSidebar()"
-          class="p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg"
-          aria-label="Toggle Sidebar"
-        >
-          <mat-icon
-            class="ml-2 transition-all duration-300 ease-in-out hover:text-blue-500 hover:blur-[1px] hover:shadow-[0_0_10px_#3b82f6]"
-          >
-            menu_open
-          </mat-icon>
-        </button>
-      </div>
-      }
-    </aside>
+    <!-- Toggle Button Container -->
+    
+  </aside>
 
-    <!-- Main Content -->
-    <main class="h-full ml-4 mr-2 flex-grow overflow-hidden transition-all duration-500 ease-in-out">
+  <!-- Main Content -->
+  <main class="flex-grow overflow-auto ml-0 mr-2 transition-all duration-500 ease-in-out">
+    <div class="min-h-full h-full p-1">
       <router-outlet></router-outlet>
-    </main>
-  </div>
+    </div>
+  </main>
+</div>
