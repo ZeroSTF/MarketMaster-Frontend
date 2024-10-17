@@ -87,7 +87,7 @@ export class AuthService {
     const storedToken = localStorage.getItem('tokenResponse');
     if (storedToken) {
       this.tokenResponseSignal.set(JSON.parse(storedToken));
-      // You might want to validate the token here or fetch user details
+      // TODO validate the token here or fetch user details
     }
   }
 

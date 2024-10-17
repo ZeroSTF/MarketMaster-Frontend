@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PortfolioChartComponent } from './portfolio-chart.component';
+import { DashboardLayoutComponent } from './dashboard-layout.component';
 
-describe('PortfolioChartComponent', () => {
-  let component: PortfolioChartComponent;
-  let fixture: ComponentFixture<PortfolioChartComponent>;
+describe('DashboardLayoutComponent', () => {
+  let component: DashboardLayoutComponent;
+  let fixture: ComponentFixture<DashboardLayoutComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PortfolioChartComponent]
+      imports: [DashboardLayoutComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PortfolioChartComponent);
+    fixture = TestBed.createComponent(DashboardLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

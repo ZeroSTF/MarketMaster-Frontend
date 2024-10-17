@@ -1,51 +1,10 @@
-<!-- <div class="h-screen flex flex-col  [background:rgba(151,207,255,0.10)]">
-    <app-nav-bar class="w-full h-16 fixed top-0 left-0 z-10 "></app-nav-bar>  
-    <div class="flex flex-grow pt-16">
-      <app-side-bar class="w-64 h-full fixed top-16 left-0  z-10"></app-side-bar>
-      <div class="flex-grow ml-64 p-0 overflow-auto">
-        <router-outlet></router-outlet>
-      </div>
-    </div>
-  </div> -->
   <div
   class="h-screen flex flex-col [background:rgba(151,207,255,0.10)] overflow-hidden"
 >
   <app-nav-bar></app-nav-bar>
 
-  <div class="flex h-screen overflow-hidden">
-    <!-- Sidebar Container -->
-    <aside
-      class="relative transition-all duration-500 ease-in-out"
-      [ngClass]="{ 'w-64': !hidden, 'w-6': hidden }"
-    >
-      <app-side-bar [hidden]="hidden" (toggle)="toggleSidebar()"></app-side-bar>
-
-      <!-- Toggle Button Container -->
-      @if (hidden) {
-      <div
-        class="absolute inset-0 rounded-2xl ml-2 bg-transparent backdrop-blur-md flex items-center justify-center mt-2 z-10"
-      >
-        <button
-          (click)="toggleSidebar()"
-          class="p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded-lg"
-          aria-label="Toggle Sidebar"
-        >
-          <mat-icon
-            class="ml-2 transition-all duration-300 ease-in-out hover:text-blue-500 hover:blur-[1px] hover:shadow-[0_0_10px_#3b82f6]"
-          >
-            menu_open
-          </mat-icon>
-        </button>
-      </div>
-      }
-    </aside>
-
-    <!-- Main Content -->
-    <main
-      class="h-full ml-4 mr-2 flex-grow transition-all duration-500 ease-in-out">
-      <router-outlet></router-outlet>
-    </main>
-  </div>
+  <router-outlet></router-outlet>
+  
 </div>
 
   

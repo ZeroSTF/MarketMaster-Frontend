@@ -1,4 +1,4 @@
-import { StockService } from './../../../../services/stock.service';
+import { AssetService } from './../../../../services/asset.service';
 import { Component, computed, effect, inject, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -8,11 +8,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-import { StockdetailsComponent } from '../stockdetails/stockdetails.component';
-import { Stock } from '../../../../models/stock.model';
+import { AssetdetailsComponent } from '../assetdetails/assetdetails.component';
+import { Asset } from '../../../../models/asset.model';
 
 @Component({
-  selector: 'app-stock-list',
+  selector: 'app-asset-list',
   standalone: true,
   imports: [
     CommonModule,
@@ -23,12 +23,12 @@ import { Stock } from '../../../../models/stock.model';
     MatInputModule,
     MatSelectModule,
     MatIconModule,
-    StockdetailsComponent
+    AssetdetailsComponent
   ],
   templateUrl: './discover.component.html',
 })
 export class DiscoverComponent {
-  //stock table
+  //asset table
   columns = [
     { field: 'logoUrl', label: 'Logo' },
     { field: 'symbol', label: 'Symbol' },
@@ -41,11 +41,11 @@ export class DiscoverComponent {
     { field: 'actions', label: 'Actions' }
   ];
 
-  private stockservice = inject(StockService);
-  stockDetailsVisible: { [symbol: string]: boolean } = {};
-  selectedStock: Stock | null = null;
+  private assetservice = inject(AssetService);
+  assetDetailsVisible: { [symbol: string]: boolean } = {};
+  selectedAsset: Asset | null = null;
   displayedColumns = this.columns.map(col => col.field);
-  dataSource = new MatTableDataSource<Stock>();
+  dataSource = new MatTableDataSource<Asset>();
   
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -53,24 +53,25 @@ export class DiscoverComponent {
   searchControl = signal('');
   sectorControl = signal('all');
   trendControl = signal('all');
-  stocks = this.stockservice.stocksSignal;
+  
+  assets  = this.assetservice.assetsSignal;
 
 
-  filteredStocks = computed(() => {
+  filteredAssets = computed(() => {
     const searchTerm = this.searchControl().toLowerCase();
     const sector = this.sectorControl();
     const trend = this.trendControl();
 
-    return this.stocks().filter(stock => 
-      stock.symbol.toLowerCase().includes(searchTerm) &&
-      (sector === 'all' || stock.sector === sector) &&
-      (trend === 'all' || stock.trendDirection === trend)
-    );
+    return this.assets()?.filter(asset => 
+      asset.symbol.toLowerCase().includes(searchTerm) &&
+      (sector === 'all' || asset.sector === sector) &&
+      (trend === 'all' || asset.trendDirection === trend)
+    ) ;
   });
 
   constructor() {
     effect(() => {
-      this.dataSource.data = this.filteredStocks();
+      this.dataSource.data = this.filteredAssets();
     });
   }
 
@@ -94,16 +95,16 @@ export class DiscoverComponent {
 
   
 
-  // Open stock details
-  // viewStockDetails(stock: Stock) {
-  //   this.selectedStock = this.selectedStock === stock ? null : stock;
-  //   this.stockDetailsVisible[stock.symbol] = !this.stockDetailsVisible[stock.symbol];
+  // Open asset details
+  // viewAssetDetails(asset: Asset) {
+  //   this.selectedAsset = this.selectedAsset === asset ? null : asset;
+  //   this.assetDetailsVisible[asset.symbol] = !this.assetDetailsVisible[asset.symbol];
   // }
-  viewStockDetails(stock: Stock) {
-    this.stockservice.selectStock(stock);  // Set selected stock in the service
-    this.selectedStock = this.selectedStock === stock ? null : stock;
-    this.stockDetailsVisible[stock.symbol] = !this.stockDetailsVisible[stock.symbol];
-    console.log('Selected Stock:', this.selectedStock);
+  viewAssetDetails(asset: Asset) {
+    this.assetservice.selectAsset(asset);  // Set selected asset in the service
+    this.selectedAsset = this.selectedAsset === asset ? null : asset;
+    this.assetDetailsVisible[asset.symbol] = !this.assetDetailsVisible[asset.symbol];
+    console.log('Selected Asset:', this.selectedAsset);
   }
 
   
