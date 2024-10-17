@@ -30,8 +30,13 @@ import { ClickOutsideDirective } from '../../utils/click-outside.directive';
 })
 export class NavBarComponent {
   isOpen = false;
+  isOpen2 = false;
+
 
   toggleMenu() {
     this.isOpen = !this.isOpen;
+  }
+  toggleMenu2() {
+    this.isOpen2 = !this.isOpen2;
   }
 }
