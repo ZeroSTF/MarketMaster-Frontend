@@ -1,34 +1,84 @@
+<!-- stock-details.component.html -->
 @if (selectedStock(); as stock) {
-  <div class="stock-details">
-    <h2>{{ stock.symbol }} Details</h2>
-
-    <div class="details-container">
-      <div class="stock-logo">
-        <img [src]="stock.logoUrl" alt="{{ stock.symbol }} Logo" />
+  <div class="scrollbar-hide p-4 rounded-lg ">
+    <!-- Header Section -->
+    <div class="flex items-center gap-3 mb-4">
+      <div class="stock-logo w-8 h-8 bg-navy-blue rounded-lg flex items-center justify-center">
+        <img [src]="stock.logoUrl" [alt]="stock.symbol" class="w-6 h-6" />
       </div>
+      <div>
+        <h2 class="text-lg font-bold">{{ stock.symbol }}</h2>
+        <p class="text-sm text-gray-600">{{ stock.sector }}</p>
+      </div>
+    </div>
 
-      <div class="stock-info">
-        <p><strong>Price:</strong> ${{ stock.price }}</p>
-        <p><strong>Volume:</strong> {{ stock.volume | number }}</p>
-        <p><strong>Market Cap:</strong> {{ stock.marketCap | number:'1.0-0' }}</p>
-        <p><strong>P/E Ratio:</strong> {{ stock.peRatio }}</p>
-        <p><strong>Dividend Yield:</strong> {{ stock.dividendYield }}%</p>
-        <p><strong>Sector:</strong> {{ stock.sector }}</p>
+    <!-- Price Section -->
+    <div class="mb-4">
+      <div class="flex items-baseline">
+        <span class="text-2xl font-bold">${{ stock.price }}</span>
+        <span [class]="stock.trendDirection === 'up' ? 'text-green-500' : 'text-red-500'"
+              class="ml-2 text-lg">
+          @if (stock.trendDirection === 'up') {
+            <span>📈</span>
+          } @else {
+            <span>📉</span>
+          }
+        </span>
+      </div>
+    </div>
 
-        <div [class]="stock.trendDirection === 'up' ? 'trend-up' : 'trend-down'">
-          <p><strong>Trend:</strong> 
-            @if (stock.trendDirection === 'up') {
-              <span class="text-green-600">📈 Up</span>
-            } @else {
-              <span class="text-red-600">📉 Down</span>
-            }
-          </p>
-        </div>
+    <!-- Chart Section -->
+    <div class="mb-4">
+      <app-chart></app-chart>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="grid grid-cols-2 gap-2 mb-4">
+      <div class="p-2 bg-gray-50 rounded">
+        <p class="text-xs text-gray-600">Volume</p>
+        <p class="text-sm font-semibold">{{ stock.volume | number }}</p>
+      </div>
+      <div class="p-2 bg-gray-50 rounded">
+        <p class="text-xs text-gray-600">Market Cap</p>
+        <p class="text-sm font-semibold">{{ stock.marketCap | number:'1.0-0' }}</p>
+      </div>
+      <div class="p-2 bg-gray-50 rounded">
+        <p class="text-xs text-gray-600">P/E Ratio</p>
+        <p class="text-sm font-semibold">{{ stock.peRatio }}</p>
+      </div>
+      <div class="p-2 bg-gray-50 rounded">
+        <p class="text-xs text-gray-600">Dividend Yield</p>
+        <p class="text-sm font-semibold">{{ stock.dividendYield }}%</p>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="grid grid-cols-3 gap-2 mb-4">
+      <button class="bg-blue-600 text-white py-1 px-2 rounded text-sm font-medium hover:bg-blue-700">
+        Buy
+      </button>
+      <button class="border border-blue-600 text-blue-600 py-1 px-2 rounded text-sm font-medium hover:bg-blue-50">
+        Trade
+      </button>
+      <button class="border border-gray-300 text-gray-700 py-1 px-2 rounded text-sm font-medium hover:bg-gray-50">
+        Watch
+      </button>
+    </div>
+
+    <!-- Tab Navigation and Content (simplified) -->
+    <div class="border-t border-gray-200 pt-2">
+      <h3 class="text-sm font-semibold mb-2">Recent News</h3>
+      <div class="space-y-2">
+        @for (newsItem of newsItems.slice(0, 3); track newsItem.id) {
+          <div class="p-2 bg-gray-50 rounded text-xs">
+            <p class="font-medium line-clamp-2">{{ newsItem.headline }}</p>
+          </div>
+        }
       </div>
     </div>
   </div>
 } @else {
-  <div class="no-selection">
-    <p>No stock selected. Please select a stock to view details.</p>
+  <div class="flex items-center justify-center h-full">
+    <p class="text-gray-500">Select a stock to view details</p>
   </div>
 }
