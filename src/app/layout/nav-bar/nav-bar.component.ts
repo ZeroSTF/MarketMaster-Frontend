@@ -33,10 +33,15 @@ import { StockService } from '../../services/stock.service';
 })
 export class NavBarComponent implements OnInit {
   isOpen = false;
+  searchTerm = '';
+  private  stockService = inject(StockService);
+
 
   ngOnInit(): void { }
 
-  
+  onSearchChange(newTerm: string) {
+    this.stockService.setSearchTerm(newTerm);
+  }
 
   toggleMenu() {
     this.isOpen = !this.isOpen;
