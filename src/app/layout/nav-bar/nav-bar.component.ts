@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
@@ -7,7 +7,7 @@ import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, NgModel } from '@angular/forms';
-import { ClickOutsideDirective } from '../../utils/click-outside.directive';
+import { ClickOutsideDirective } from '../../Utils/click-outside.directive';
 
 
 @Component({
@@ -26,16 +26,10 @@ import { ClickOutsideDirective } from '../../utils/click-outside.directive';
     
   ],
   templateUrl: './nav-bar.component.html',
-  styles: [`
-    
-  `]
+  styles: [``]
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent {
   isOpen = false;
-
-  constructor() { }
-
-  ngOnInit(): void { }
 
   toggleMenu() {
     this.isOpen = !this.isOpen;

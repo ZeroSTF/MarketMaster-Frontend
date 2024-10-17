@@ -1,0 +1,33 @@
+/* Table Styling */
+table {
+    border-spacing: 0;
+    width: 100%;
+  }
+  
+  th, td {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 4px 8px;
+  }
+  
+  th {
+    font-size: 0.75rem; /* Smaller font size for header */
+  }
+  
+  td {
+    font-size: 0.75rem; /* Smaller font size for body */
+  }
+  
+  tr:hover {
+    background-color: #f9fafb;
+  }
+  
+  /* Scroll behavior for table container */
+  .flex-grow {
+    max-height: calc(100% - 32px); /* Adjust the height of the tables */
+    overflow-y: auto;
+  }
+  
+  h2 {
+    font-size: 0.875rem; /* Smaller heading size */
+  }
+  

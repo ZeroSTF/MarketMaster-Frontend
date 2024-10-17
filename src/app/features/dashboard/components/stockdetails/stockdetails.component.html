@@ -1,0 +1,29 @@
+<div *ngIf="selectedStock() as stock" class="stock-details">
+  <h2>{{ stock.symbol }} Details</h2>
+
+  <div class="details-container">
+    <div class="stock-logo">
+      <img [src]="stock.logoUrl" alt="{{ stock.symbol }} Logo" />
+    </div>
+
+    <div class="stock-info">
+      <p><strong>Price:</strong> ${{ stock.price }}</p>
+      <p><strong>Volume:</strong> {{ stock.volume | number }}</p>
+      <p><strong>Market Cap:</strong> {{ stock.marketCap | number:'1.0-0' }}</p>
+      <p><strong>P/E Ratio:</strong> {{ stock.peRatio }}</p>
+      <p><strong>Dividend Yield:</strong> {{ stock.dividendYield }}%</p>
+      <p><strong>Sector:</strong> {{ stock.sector }}</p>
+
+      <div [class]="stock.trendDirection === 'up' ? 'trend-up' : 'trend-down'">
+        <p><strong>Trend:</strong> 
+          <span *ngIf="stock.trendDirection === 'up'" class="text-green-600">📈 Up</span>
+          <span *ngIf="stock.trendDirection === 'down'" class="text-red-600">📉 Down</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!selectedStock()" class="no-selection">
+  <p>No stock selected. Please select a stock to view details.</p>
+</div>

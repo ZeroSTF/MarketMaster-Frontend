@@ -1,0 +1,42 @@
+<div class="h-screen w-full flex flex-wrap">
+    <!-- Left column: Contains the top-left and bottom-left stacked -->
+    <div class="w-full md:w-1/4 flex flex-col">
+      <!-- Top left section: 1/4 width, 1/3 height, 4 boxes -->
+      <div class="h-1/3 p-2">
+       
+          <app-overviewdetails ></app-overviewdetails>
+        
+      </div>
+  
+      <!-- Bottom left section: 1/4 width, 2/3 height -->
+      <div class="h-2/3 p-2">
+        <app-cours></app-cours>
+      </div>
+    </div>
+  
+    <!-- Second column -->
+    <div class="w-full md:w-1/4 flex flex-col">
+      <!-- Top second section next to top-left: 1/4 width, 1/3 height -->
+      <div class="h-1/3 p-2">
+<app-news></app-news>      </div>
+  
+      <!-- Bottom second section -->
+      <div class="h-2/3 p-2">
+        <app-whitelistoverview></app-whitelistoverview>
+      </div>
+    </div>
+  
+    <!-- Right column -->
+    <div class="w-full md:w-1/2 flex flex-col">
+      <!-- Top right section: 2/3 height -->
+      <div class="h-3/5 p-2">
+        <app-chart></app-chart>
+      </div>
+  
+      <!-- Bottom right section: 1/3 height -->
+      <div class="h-2/5 p-2">
+        <app-tradesoverview></app-tradesoverview>
+      </div>
+    </div>
+  </div>
+  
