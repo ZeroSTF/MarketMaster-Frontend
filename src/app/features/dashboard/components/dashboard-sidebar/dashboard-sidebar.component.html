@@ -1,0 +1,58 @@
+<div class="h-full flex flex-col bg-white mx-2 my-2 shadow-lg rounded-3xl px-4 pt-2.5 pb-16 transition-all duration-500 ease-in-out"
+     [ngClass]="{ 
+       'w-64 opacity-100': !hidden, 
+       'w-16 opacity-0': hidden 
+     }"
+     [ngStyle]="{ 'overflow': hidden ? 'hidden' : 'visible' }">
+  <div class="flex-shrink-0 mb-8 relative">
+    <img class="w-full h-28 object-cover rounded-t-lg" alt="Background" src="images/SideHEader.png">
+    <img class="w-20 h-20 absolute left-1/2 transform -translate-x-1/2 -bottom-10 
+                 rounded-full object-cover border-4 border-white" 
+         alt="Avatar" src="images/SidebarAvatar.png">
+  </div>
+
+  @if (!hidden) {
+    <b class="text-2xl p-1 text-left text-gray-600 mt-4">
+      Welcome Back
+    </b>
+  }
+
+  <div class="flex-shrink-0 mt-1 text-left flex items-start">
+    @if (!hidden) {
+      <b class="text-xl text-gray-800">Adela Parkson</b>
+    }
+    <button
+      (click)="toggleSidebar()"
+      class="ml-4 rounded-full hover:text-gray-300 focus:outline-none"
+      [matTooltip]="hidden ? '' : 'Click to hide'"
+      aria-label="Toggle Sidebar"
+    >
+      <span class="material-icons align-middle">
+        {{ hidden ? 'chevron_right' : 'menu_open' }}
+      </span>
+    </button>
+  </div>
+  <nav class="flex-grow flex flex-col items-start gap-0 mt-10 pr-2">
+    <mat-list>
+      <mat-list-item *ngFor="let btn of sidebarButtons" [routerLink]="btn.link" 
+        class="flex items-center gap-2 w-full px-2.5 py-2 rounded-lg no-underline 
+        hover:bg-gray-100 transition-colors duration-300"
+        [ngClass]="{ 'bg-blue-50': selectedButton === btn.name }"
+        (click)="clickSideButton(btn.name)">
+        <span class="material-icons text-lg" 
+              [ngClass]="{ 'text-blue-500': selectedButton === btn.name, 
+                            'text-gray-400': selectedButton !== btn.name }">
+          {{ btn.icon }}
+        </span>
+        <span class="text-base font-semibold leading-6" 
+              [ngClass]="{ 'text-blue-500': selectedButton === btn.name, 
+                            'text-gray-400': selectedButton !== btn.name }">
+          {{ btn.label }}
+        </span>
+      </mat-list-item>
+    </mat-list>
+  
+    <div class="mt-8 mb-4 text-sm font-semibold text-gray-400 uppercase w-full">Support</div>
+  </nav>
+  
+</div>

@@ -1,6 +1,13 @@
-import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, firstValueFrom, tap } from 'rxjs';
+import { Injectable, Signal, computed, inject, signal } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  firstValueFrom,
+  tap,
+  throwError,
+} from 'rxjs';
 import {
   SignupRequest,
   LoginRequest,
@@ -11,105 +18,87 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
+  private readonly API_URL = `${environment.apiUrl}/auth`;
+  private readonly currentUserSignal = signal<User | null>(null);
+  private readonly tokenResponseSignal = signal<TokenResponse | null>(null);
 
-  currentUser = signal<User | null>(null);
-  isLoggedIn = signal<boolean>(false);
-
-  constructor() {
-    this.checkInitialAuthState();
+  public readonly currentUser: Signal<User | null> = computed(() =>
+    this.currentUserSignal()
+  );
+  public readonly isAuthenticated: Signal<boolean> = computed(
+    () => !!this.currentUserSignal()
+  );
+  public getTokenResponseSignal() {
+    return this.tokenResponseSignal();
   }
 
-  private async checkInitialAuthState(): Promise<void> {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      try {
-        await this.fetchUserData();
-        this.isLoggedIn.set(true);
-      } catch (error) {
-        console.error('Failed to fetch user data', error);
-        this.clearAuthState();
-      }
-    }
+  constructor(private http: HttpClient) {
+    this.loadUserFromStorage();
   }
 
-  async signup(signupRequest: SignupRequest): Promise<void> {
-    try {
-      const response = await firstValueFrom(
-        this.http.post<TokenResponse>(
-          `${this.apiUrl}/auth/signup`,
-          signupRequest
-        )
+  signup(signupRequest: SignupRequest): Observable<User> {
+    return this.http.post<User>(`${this.API_URL}/signup`, signupRequest).pipe(
+      tap((user) => this.currentUserSignal.set(user)),
+      catchError(this.handleError)
+    );
+  }
+
+  login(loginRequest: LoginRequest): Observable<TokenResponse> {
+    return this.http
+      .post<TokenResponse>(`${this.API_URL}/login`, loginRequest)
+      .pipe(
+        tap((tokenResponse) => this.setTokenResponse(tokenResponse)),
+        catchError(this.handleError)
       );
-      await this.handleAuthResponse(response);
-    } catch (error) {
-      console.error('Signup failed', error);
-      throw error;
-    }
   }
 
-  async login(loginRequest: LoginRequest): Promise<void> {
-    try {
-      const response = await firstValueFrom(
-        this.http.post<TokenResponse>(`${this.apiUrl}/auth/login`, loginRequest)
+  logout(): Observable<void> {
+    return this.http.post<void>(`${this.API_URL}/logout`, {}).pipe(
+      tap(() => this.clearAuth()),
+      catchError(this.handleError)
+    );
+  }
+
+  refreshToken(): Observable<TokenResponse> {
+    const refreshToken = this.tokenResponseSignal()?.refreshToken;
+    if (!refreshToken) {
+      return throwError(() => new Error('No refresh token available'));
+    }
+    return this.http
+      .post<TokenResponse>(`${this.API_URL}/refresh-token`, { refreshToken })
+      .pipe(
+        tap((tokenResponse) => this.setTokenResponse(tokenResponse)),
+        catchError(this.handleError)
       );
-      await this.handleAuthResponse(response);
-    } catch (error) {
-      console.error('Login failed', error);
-      throw error;
+  }
+
+  private setTokenResponse(tokenResponse: TokenResponse): void {
+    this.tokenResponseSignal.set(tokenResponse);
+    localStorage.setItem('tokenResponse', JSON.stringify(tokenResponse));
+  }
+
+  private clearAuth(): void {
+    this.currentUserSignal.set(null);
+    this.tokenResponseSignal.set(null);
+    localStorage.removeItem('tokenResponse');
+  }
+
+  private loadUserFromStorage(): void {
+    const storedToken = localStorage.getItem('tokenResponse');
+    if (storedToken) {
+      this.tokenResponseSignal.set(JSON.parse(storedToken));
+      // TODO validate the token here or fetch user details
     }
   }
 
-  async logout(): Promise<void> {
-    try {
-      await firstValueFrom(
-        this.http.post<void>(`${this.apiUrl}/auth/logout`, {})
-      );
-    } finally {
-      this.clearAuthState();
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'An unknown error occurred';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-  }
-
-  async refreshToken(): Promise<void> {
-    try {
-      const refreshToken = localStorage.getItem('refreshToken');
-      const response = await firstValueFrom(
-        this.http.post<TokenResponse>(`${this.apiUrl}/auth/refresh-token`, {
-          refreshToken,
-        })
-      );
-      await this.handleAuthResponse(response);
-    } catch (error) {
-      console.error('Token refresh failed', error);
-      this.clearAuthState();
-      throw error;
-    }
-  }
-
-  private async handleAuthResponse(response: TokenResponse): Promise<void> {
-    localStorage.setItem('accessToken', response.accessToken);
-    localStorage.setItem('refreshToken', response.refreshToken);
-    await this.fetchUserData();
-    this.isLoggedIn.set(true);
-  }
-
-  private async fetchUserData(): Promise<void> {
-    try {
-      const userData = await firstValueFrom(
-        this.http.get<User>(`${this.apiUrl}/user/me`)
-      );
-      this.currentUser.set(userData);
-    } catch (error) {
-      console.error('Failed to fetch user data', error);
-      throw error;
-    }
-  }
-
-  private clearAuthState(): void {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    this.currentUser.set(null);
-    this.isLoggedIn.set(false);
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }
