@@ -5,62 +5,44 @@ import {
   HttpInterceptorFn,
   HttpErrorResponse,
   HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
 } from '@angular/common/http';
-import { Observable, from, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, from, throwError } from 'rxjs';
+import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 
-@Injectable({ providedIn: 'root' })
-export class AuthInterceptorService {
-  private authService = inject(AuthService);
+export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
 
-  intercept(
-    request: HttpRequest<unknown>,
-    next: HttpHandlerFn
-  ): Observable<HttpEvent<unknown>> {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      request = this.addToken(request, token);
-    }
-
-    return next(request).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          return this.handle401Error(request, next);
-        }
-        return throwError(() => error);
-      })
-    );
-  }
-
-  private addToken(
-    request: HttpRequest<unknown>,
-    token: string
-  ): HttpRequest<unknown> {
-    return request.clone({
+  const tokenResponse = authService.getTokenResponseSignal();
+  if (tokenResponse) {
+    req = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${tokenResponse.accessToken}`,
       },
     });
   }
 
-  private handle401Error(
-    request: HttpRequest<unknown>,
-    next: HttpHandlerFn
-  ): Observable<HttpEvent<unknown>> {
-    return from(this.authService.refreshToken()).pipe(
-      switchMap(() => {
-        const newToken = localStorage.getItem('accessToken');
-        return next(this.addToken(request, newToken!));
-      }),
-      catchError((error) => {
-        this.authService.logout();
-        return throwError(() => error);
-      })
-    );
-  }
-}
-
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  return inject(AuthInterceptorService).intercept(req, next);
+  return next(req).pipe(
+    catchError((error) => {
+      if (error.status === 401 && !req.url.includes('/refresh-token')) {
+        return authService.refreshToken().pipe(
+          switchMap((newTokenResponse) => {
+            req = req.clone({
+              setHeaders: {
+                Authorization: `Bearer ${newTokenResponse.accessToken}`,
+              },
+            });
+            return next(req);
+          }),
+          catchError((refreshError) => {
+            authService.logout();
+            return throwError(() => refreshError);
+          })
+        );
+      }
+      return throwError(() => error);
+    })
+  );
 };
