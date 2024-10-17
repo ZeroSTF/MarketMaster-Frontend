@@ -9,3 +9,12 @@ export interface Asset {
     trendDirection: 'up' | 'down';
     logoUrl: string;
   }
+
+  export interface AssetPortfolio {
+    name: string;
+    symbol: string;
+    percentChange: number;
+    portfolioValue: number;
+    trendImageUrl: string;
+  }
+  
