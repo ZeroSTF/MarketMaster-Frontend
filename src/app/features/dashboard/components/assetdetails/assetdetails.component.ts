@@ -1,5 +1,5 @@
 import { Component, inject} from '@angular/core';
-import { StockService } from '../../../../services/stock.service';
+import { AssetService } from '../../../../services/asset.service';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,7 +11,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ChartComponent } from "../chart/chart.component";
 
 @Component({
-  selector: 'app-stock-details',
+  selector: 'app-asset-details',
   standalone: true,
   imports: [
     CommonModule,
@@ -22,14 +22,14 @@ import { ChartComponent } from "../chart/chart.component";
     MatIconModule,
     ChartComponent
 ],
-  templateUrl: './stockdetails.component.html',
-  styleUrl: './stockdetails.component.css'
+  templateUrl: './assetdetails.component.html',
+  styleUrl: './assetdetails.component.css'
 })
-export class StockdetailsComponent {
-  private stockService = inject(StockService);
+export class AssetdetailsComponent {
+  private assetService = inject(AssetService);
 
-  // Signal to track the selected stock
-  selectedStock = this.stockService.selectedStockSignal;
+  // Signal to track the selected asset
+  selectedAsset = this.assetService.selectedAssetSignal;
   expandedNews: { [key: number]: boolean } = {};
   activeTab: 'overview' | 'financial' | 'news' = 'overview';
 

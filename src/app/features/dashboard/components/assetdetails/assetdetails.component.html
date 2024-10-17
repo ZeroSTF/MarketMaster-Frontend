@@ -1,24 +1,24 @@
-<!-- stock-details.component.html -->
-@if (selectedStock(); as stock) {
+<!-- asset-details.component.html -->
+@if (selectedAsset(); as asset) {
   <div class="scrollbar-hide p-4 rounded-lg ">
     <!-- Header Section -->
     <div class="flex items-center gap-3 mb-4">
-      <div class="stock-logo w-8 h-8 bg-navy-blue rounded-lg flex items-center justify-center">
-        <img [src]="stock.logoUrl" [alt]="stock.symbol" class="w-6 h-6" />
+      <div class="asset-logo w-8 h-8 bg-navy-blue rounded-lg flex items-center justify-center">
+        <img [src]="asset.logoUrl" [alt]="asset.symbol" class="w-6 h-6" />
       </div>
       <div>
-        <h2 class="text-lg font-bold">{{ stock.symbol }}</h2>
-        <p class="text-sm text-gray-600">{{ stock.sector }}</p>
+        <h2 class="text-lg font-bold">{{ asset.symbol }}</h2>
+        <p class="text-sm text-gray-600">{{ asset.sector }}</p>
       </div>
     </div>
 
     <!-- Price Section -->
     <div class="mb-4">
       <div class="flex items-baseline">
-        <span class="text-2xl font-bold">${{ stock.price }}</span>
-        <span [class]="stock.trendDirection === 'up' ? 'text-green-500' : 'text-red-500'"
+        <span class="text-2xl font-bold">${{ asset.price }}</span>
+        <span [class]="asset.trendDirection === 'up' ? 'text-green-500' : 'text-red-500'"
               class="ml-2 text-lg">
-          @if (stock.trendDirection === 'up') {
+          @if (asset.trendDirection === 'up') {
             <span>📈</span>
           } @else {
             <span>📉</span>
@@ -36,19 +36,19 @@
     <div class="grid grid-cols-2 gap-2 mb-4">
       <div class="p-2 bg-gray-50 rounded">
         <p class="text-xs text-gray-600">Volume</p>
-        <p class="text-sm font-semibold">{{ stock.volume | number }}</p>
+        <p class="text-sm font-semibold">{{ asset.volume | number }}</p>
       </div>
       <div class="p-2 bg-gray-50 rounded">
         <p class="text-xs text-gray-600">Market Cap</p>
-        <p class="text-sm font-semibold">{{ stock.marketCap | number:'1.0-0' }}</p>
+        <p class="text-sm font-semibold">{{ asset.marketCap | number:'1.0-0' }}</p>
       </div>
       <div class="p-2 bg-gray-50 rounded">
         <p class="text-xs text-gray-600">P/E Ratio</p>
-        <p class="text-sm font-semibold">{{ stock.peRatio }}</p>
+        <p class="text-sm font-semibold">{{ asset.peRatio }}</p>
       </div>
       <div class="p-2 bg-gray-50 rounded">
         <p class="text-xs text-gray-600">Dividend Yield</p>
-        <p class="text-sm font-semibold">{{ stock.dividendYield }}%</p>
+        <p class="text-sm font-semibold">{{ asset.dividendYield }}%</p>
       </div>
     </div>
 
@@ -79,6 +79,6 @@
   </div>
 } @else {
   <div class="flex items-center justify-center h-full">
-    <p class="text-gray-500">Select a stock to view details</p>
+    <p class="text-gray-500">Select a asset to view details</p>
   </div>
 }

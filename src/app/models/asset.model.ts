@@ -1,4 +1,4 @@
-export interface Stock {
+export interface Asset {
     symbol: string;
     price: number;
     volume: number;

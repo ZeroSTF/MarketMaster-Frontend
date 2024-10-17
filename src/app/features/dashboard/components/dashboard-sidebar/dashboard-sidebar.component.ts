@@ -5,8 +5,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatListModule} from '@angular/material/list';
 
 @Component({
-  selector: 'app-side-bar',
-  templateUrl: './side-bar.component.html',
+  selector: 'app-dashboard-sidebar',
+  templateUrl: './dashboard-sidebar.component.html',
   standalone: true,
   imports: [
     CommonModule,
@@ -16,14 +16,14 @@ import {MatListModule} from '@angular/material/list';
 
   ],
 })
-export class SideBarComponent {
+export class DashboardSidebarComponent {
   @Input() hidden = false; 
   @Output() toggle = new EventEmitter<void>(); 
   selectedButton: string = 'overview'; 
 
   sidebarButtons = [
-    { name: 'overview', label: 'Overview', icon: 'home', link: '/overview', badge: '3 new updates' },
-    { name: 'explore', label: 'Explore', icon: 'explore', link: '/discover' },
+    { name: 'overview', label: 'Overview', icon: 'home', link: '/dashboard/overview', badge: '3 new updates' },
+    { name: 'explore', label: 'Explore', icon: 'explore', link: '/dashboard/discover' },
     { name: 'portfolio', label: 'Portfolio', icon: 'account_balance_wallet', link: '#' },
     { name: 'settings', label: 'Settings', icon: 'settings', link: '#' },
     { name: 'community', label: 'Community', icon: 'group', link: '#' },

@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, firstValueFrom, tap } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import {
   SignupRequest,
   LoginRequest,
