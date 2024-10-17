@@ -1,42 +1,29 @@
-<div class="p-4 md:p-6 lg:p-8 h-full">
-    <div class="max-w-4xl mx-auto">
-      <!-- Header -->
-      <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
-        <div>
-          <h1 class="text-2xl font-bold">{{ stockInfo().symbol }}</h1>
-          <p class="text-gray-600">{{ stockInfo().name }}</p>
-        </div>
-        <div class="mt-4 md:mt-0">
-          <span class="text-3xl font-bold">${{ stockInfo().price }}</span>
-          <span 
-            class="ml-2 px-2 py-1 rounded text-sm"
-            [class]="stockInfo().change >= 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
-          >
-            {{ stockInfo().change >= 0 ? '+' : '' }}{{ stockInfo().change }}%
-          </span>
-        </div>
-      </div>
-  
-      
-  
-      <!-- Stats Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bg-white rounded-lg shadow-sm p-4">
-          <div class="text-sm text-gray-600">Market Cap</div>
-          <div class="text-xl font-semibold">${{ stockInfo().marketCap }}B</div>
-        </div>
-        <div class="bg-white rounded-lg shadow-sm p-4">
-          <div class="text-sm text-gray-600">Volume</div>
-          <div class="text-xl font-semibold">{{ stockInfo().volume }}M</div>
-        </div>
-        <div class="bg-white rounded-lg shadow-sm p-4">
-          <div class="text-sm text-gray-600">P/E Ratio</div>
-          <div class="text-xl font-semibold">{{ stockInfo().peRatio }}</div>
-        </div>
-        <div class="bg-white rounded-lg shadow-sm p-4">
-          <div class="text-sm text-gray-600">52W High</div>
-          <div class="text-xl font-semibold">${{ stockInfo().high52w }}</div>
-        </div>
+<div *ngIf="selectedStock() as stock" class="stock-details">
+  <h2>{{ stock.symbol }} Details</h2>
+
+  <div class="details-container">
+    <div class="stock-logo">
+      <img [src]="stock.logoUrl" alt="{{ stock.symbol }} Logo" />
+    </div>
+
+    <div class="stock-info">
+      <p><strong>Price:</strong> ${{ stock.price }}</p>
+      <p><strong>Volume:</strong> {{ stock.volume | number }}</p>
+      <p><strong>Market Cap:</strong> {{ stock.marketCap | number:'1.0-0' }}</p>
+      <p><strong>P/E Ratio:</strong> {{ stock.peRatio }}</p>
+      <p><strong>Dividend Yield:</strong> {{ stock.dividendYield }}%</p>
+      <p><strong>Sector:</strong> {{ stock.sector }}</p>
+
+      <div [class]="stock.trendDirection === 'up' ? 'trend-up' : 'trend-down'">
+        <p><strong>Trend:</strong> 
+          <span *ngIf="stock.trendDirection === 'up'" class="text-green-600">📈 Up</span>
+          <span *ngIf="stock.trendDirection === 'down'" class="text-red-600">📉 Down</span>
+        </p>
       </div>
     </div>
   </div>
+</div>
+
+<div *ngIf="!selectedStock()" class="no-selection">
+  <p>No stock selected. Please select a stock to view details.</p>
+</div>

@@ -95,9 +95,15 @@ export class DiscoverComponent {
   
 
   // Open stock details
+  // viewStockDetails(stock: Stock) {
+  //   this.selectedStock = this.selectedStock === stock ? null : stock;
+  //   this.stockDetailsVisible[stock.symbol] = !this.stockDetailsVisible[stock.symbol];
+  // }
   viewStockDetails(stock: Stock) {
+    this.stockservice.selectStock(stock);  // Set selected stock in the service
     this.selectedStock = this.selectedStock === stock ? null : stock;
     this.stockDetailsVisible[stock.symbol] = !this.stockDetailsVisible[stock.symbol];
+    console.log('Selected Stock:', this.selectedStock);
   }
 
   
