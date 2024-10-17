@@ -4,14 +4,13 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes'; // This works with named exports
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { authInterceptor } from './auth/interceptors/auth.interceptor';
-import { errorInterceptor } from './auth/interceptors/error.interceptor';
+import { jwtInterceptor } from './auth/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
+    provideHttpClient(withInterceptors([jwtInterceptor])),
     provideAnimationsAsync(),
   ],
 };
