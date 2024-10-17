@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, NgModel } from '@angular/forms';
 import { ClickOutsideDirective } from '../../Utils/click-outside.directive';
-import { StockService } from '../../services/stock.service';
 
 
 @Component({
@@ -27,21 +26,10 @@ import { StockService } from '../../services/stock.service';
     
   ],
   templateUrl: './nav-bar.component.html',
-  styles: [`
-    
-  `]
+  styles: [``]
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent {
   isOpen = false;
-  searchTerm = '';
-  private  stockService = inject(StockService);
-
-
-  ngOnInit(): void { }
-
-  onSearchChange(newTerm: string) {
-    this.stockService.setSearchTerm(newTerm);
-  }
 
   toggleMenu() {
     this.isOpen = !this.isOpen;

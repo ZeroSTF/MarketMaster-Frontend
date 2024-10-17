@@ -6,7 +6,6 @@ import { Stock } from '../models/stock.model';
 })
 export class StockService {
 
-// Defining the stock data and the search term as signals
 stocksSignal =signal<Stock[]> ([
   { symbol: 'AAPL', price: 145.00, volume: 1000000, marketCap: 2400000000000, peRatio: 28.00, dividendYield: 0.58, sector: 'tech', trendDirection: 'up', logoUrl: 'images/logo1.png' },
   { symbol: 'MSFT', price: 300.00, volume: 800000, marketCap: 2250000000000, peRatio: 35.00, dividendYield: 0.82, sector: 'tech', trendDirection: 'down', logoUrl: 'images/logo2.png' },
@@ -29,28 +28,13 @@ stocksSignal =signal<Stock[]> ([
 
 ]);
 
-// Signal for the search term
-private searchTermSignal = signal('');
 
 constructor() {}
 
-// Expose signals for components to access
 getStocks() {
   return this.stocksSignal();
 }
 
-getSearchTerm() {
-  return this.searchTermSignal();
-}
 
-setSearchTerm(term: string) {
-  this.searchTermSignal.set(term);
-}
 
-// Filter stocks based on the current search term
-getFilteredStocks() {
-  const searchTerm = this.searchTermSignal().toLowerCase();
-  return this.stocksSignal().filter(stock => 
-    stock.symbol.toLowerCase().includes(searchTerm)
-  );
-}}
+}
