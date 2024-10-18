@@ -1,12 +1,12 @@
 import { Injectable, signal } from '@angular/core';
-import { Asset } from '../models/asset.model';
+import { AssetDiscover } from '../models/asset.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssetService {
 
-  assetsSignal =signal<Asset[]>  ([
+  assetsSignal =signal<AssetDiscover[]>  ([
   { symbol: 'AAPL', price: 145.00, volume: 1000000, marketCap: 2400000000000, peRatio: 28.00, dividendYield: 0.58, sector: 'tech', trendDirection: 'up', logoUrl: 'images/logo1.png' },
   { symbol: 'MSFT', price: 300.00, volume: 800000, marketCap: 2250000000000, peRatio: 35.00, dividendYield: 0.82, sector: 'tech', trendDirection: 'down', logoUrl: 'images/logo2.png' },
   { symbol: 'GOOGL', price: 2800.00, volume: 500000, marketCap: 1900000000000, peRatio: 29.00, dividendYield: 0.00, sector: 'tech', trendDirection: 'up', logoUrl: 'images/logo3.png' },
@@ -35,9 +35,9 @@ export class AssetService {
     return this.assetsSignal();
   }
 
-  selectedAssetSignal = signal<Asset | null>(null);
+  selectedAssetSignal = signal<AssetDiscover | null>(null);
 
-  selectAsset(asset: Asset) {
+  selectAsset(asset: AssetDiscover) {
     this.selectedAssetSignal.set(asset);
   }
 

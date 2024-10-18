@@ -1,4 +1,4 @@
-export interface Asset {
+export interface AssetDiscover {
     symbol: string;
     price: number;
     volume: number;

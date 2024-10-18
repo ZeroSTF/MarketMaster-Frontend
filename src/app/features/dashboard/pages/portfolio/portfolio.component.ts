@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AssetPortfolio } from '../../../../models/asset.model';
+import { ChartComponent } from '../../components/chart/chart.component';
+import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-portfolio',
   standalone: true,
-  imports: [CommonModule,],
+  imports: [CommonModule, ChartComponent, DragDropModule],
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.css'
 })
@@ -23,6 +25,26 @@ export class PortfolioComponent  {
     { name: 'NVIDIA Corp', symbol: 'NVDA', percentChange: 1.50, portfolioValue: 10200.80, trendImageUrl: 'images/upTrend.png' },
     { name: 'JPMorgan Chase & Co', symbol: 'JPM', percentChange: -0.20, portfolioValue: 6800.90, trendImageUrl: 'images/downTrend.png' }
   ];
+  // First row for the "Holdings" (first four by default)
+  firstRowAssets = this.userAssets.slice(0, 4);
+  
+  // Remaining assets for expandable section
+  expandableAssets = this.userAssets.slice(4);
+
+  drop(event: CdkDragDrop<any[]>) {
+    console.log('Drop event triggered:', event);  // Console log to check the event object
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
+  }
+  
 }
 
  
