@@ -16,6 +16,10 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  showPassword = false;
+  isLoading = false;
+
+
 
   loginForm = this.fb.nonNullable.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
