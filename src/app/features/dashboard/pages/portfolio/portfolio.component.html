@@ -1,0 +1,258 @@
+<div class="h-screen flex flex-grow flex-col my-2 px-2 py-1 shadow-lg rounded-3xl overflow-hidden    transition-all duration-500 ease-in-out">
+  <!-- Portfolio Metrics & assets -->
+  <div class=" grid grid-cols-1 lg:grid-cols-4 gap-2 flex-none">
+    <div class="lg:col-span-1 bg-white rounded-lg shadow  w-auto">
+      <div class="grid grid-cols-2 grid-rows-2 gap-2 h-full">
+        <!-- Card 1: Portfolio Value (Positive) -->
+        <div class="bg-white rounded-lg shadow p-1 flex flex-col items-center justify-center border-b-4 border-green-500">
+          <div class="text-sm text-gray-500">Portfolio Value</div>
+          <div class="text-lg font-bold text-gray-800">$120K</div>
+          <div class="text-green-500 text-xs">+5.2%</div>
+        </div>
+
+        <!-- Card 2: Total Return (Positive) -->
+        <div
+          class="bg-white rounded-lg shadow p-1 flex flex-col items-center justify-center border-b-4 border-green-500"
+        >
+          <div class="text-sm text-gray-500">Estimated Value</div>
+          <div class="text-lg font-bold text-gray-800">$18.5K</div>
+          <div class="text-green-500 text-xs">+15.4%</div>
+        </div>
+
+        <!-- Card 3: Daily Change (Positive) -->
+        <div
+          class="bg-white rounded-lg shadow p-1 flex flex-col items-center justify-center border-b-4 border-green-500"
+        >
+          <div class="text-sm text-gray-500">Cash Balance</div>
+          <div class="text-lg font-bold text-gray-800">$1.2K</div>
+          <div class="text-green-500 text-xs">+1.1%</div>
+        </div>
+
+        <!-- Card 4: Holdings (Negative) -->
+        <div
+          class="bg-white rounded-lg shadow p-1 flex flex-col items-center justify-center border-b-4 border-red-500"
+        >
+          <div class="text-sm text-gray-500">Annual Return</div>
+          <div class="text-lg font-bold text-gray-800">15</div>
+          <div class="text-red-500 text-xs">-0.8%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assets -->
+    <div
+      class="  lg:col-span-3 bg-transparent rounded-lg shadow-[0px_2px_7px_0px_rgba(33,150,243,0.5)] backdrop-blur-[4px] full h-auto rounded-tl-[10px]"
+    >
+      <div class="scrollbar-hide px-4 py-2 max-h-[40vh] overflow-y-auto">
+        <div class="flex justify-between items-start">
+          <div>
+            <h2 class="text-2xl font-bold">Holdings</h2>
+            <!-- <p class="text-gray-500 text-base font-semibold">700 Shares in 12 Holdings</p> -->
+
+          </div>
+          <div class="text-right">
+            <!-- hidable for toggeling the chart -->
+            <p class="text-base font-semibold"></p>
+          </div>
+        </div>
+        <div
+          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+          cdkDropList
+          [cdkDropListConnectedTo]="['expandableList']"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div
+            *ngFor="let asset of firstRowAssets; let i = index"
+            class="asset-item"
+            (click)="selectAsset(asset)"
+
+            cdkDrag
+          >
+            <div class="p-2 bg-white rounded-2xl min-w-[160px] max-w-full mb-4">
+              <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center">
+                  <div
+                    class="bg-black text-white px-2 py-0.5 rounded-full text-xs"
+                  >
+                    {{ asset.name }}
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-xs text-gray-500">{{ asset.symbol }}</p>
+                  <p
+                    class="text-xs"
+                    [ngClass]="
+                      asset.percentChange >= 0
+                        ? 'text-green-500'
+                        : 'text-red-500'
+                    "
+                  >
+                    {{ asset.percentChange >= 0 ? "+" : ""
+                    }}{{ asset.percentChange.toFixed(2) }}%
+                  </p>
+                </div>
+              </div>
+              <div class="flex justify-between items-end">
+                <p class="font-bold text-lg">
+                  {{ asset.portfolioValue | currency }}
+                </p>
+                <img
+                  [src]="asset.trendImageUrl"
+                  alt="Stock trend"
+                  class="w-16 h-4 object-contain"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <!-- <button
+          (click)="isExpanded = !isExpanded"
+          class="w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-gray-900"
+        >
+          <span>{{ isExpanded ? "Show Less" : "Show More" }}</span>
+          <span
+            class="transform transition-transform"
+            [class.rotate-180]="isExpanded"
+            >▼</span
+          >
+        </button> -->
+
+        <!-- Expandable Rows -->
+        <div
+          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 transition-all"
+          *ngIf="isExpanded"
+          cdkDropList
+          #expandableList="cdkDropList"
+          [cdkDropListConnectedTo]="['firstRowAssets']"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div
+            *ngFor="let asset of expandableAssets; let i = index"
+            class="asset-item"
+            (click)="selectAsset(asset)"
+
+            cdkDrag
+          >
+            <div class="p-2 bg-white rounded-2xl min-w-[160px] max-w-full mb-4">
+              <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center">
+                  <div
+                    class="bg-black text-white px-2 py-0.5 rounded-full text-xs"
+                  >
+                    {{ asset.name }}
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-xs text-gray-500">{{ asset.symbol }}</p>
+                  <p
+                    class="text-xs"
+                    [ngClass]="
+                      asset.percentChange >= 0
+                        ? 'text-green-500'
+                        : 'text-red-500'
+                    "
+                  >
+                    {{ asset.percentChange >= 0 ? "+" : ""
+                    }}{{ asset.percentChange.toFixed(2) }}%
+                  </p>
+                </div>
+              </div>
+              <div class="flex justify-between items-end">
+                <p class="font-bold text-lg">
+                  {{ asset.portfolioValue | currency }}
+                </p>
+                <img
+                  [src]="asset.trendImageUrl"
+                  alt="Stock trend"
+                  class="w-16 h-4 object-contain"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white rounded-b-lg to-transparent pointer-events-none"></div>
+
+    
+    </div>
+  </div>
+  <!-- chart, stock details  -->
+  <div class=" h-auto grid grid-cols-1 lg:grid-cols-4 gap-2 my-1 min-h-0 flex-1">
+    <!-- watchlist -->
+    <div class="lg:col-span-1 bg-white rounded-lg shadow p-4 w-auto overflow-y-auto">
+      <app-whitelistoverview></app-whitelistoverview>
+    </div>
+
+    <!-- Asset Chart -->
+    <div class=" lg:col-span-3 bg-white rounded-lg shadow p-4 w-auto overflow-y-auto scrollbar-hide">
+      <div class="h-auto  flex-1 ">
+        @if (!selectedAsset) {
+          <div class="h-full flex-1">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-xl font-semibold">Portfolio Performance</h2>
+            </div>
+            <app-chart></app-chart>
+          </div>
+        } @else {
+          <div class="h-full flex-1">
+            <!-- Asset Details Section -->
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-xl font-semibold">{{selectedAsset.name}} ({{selectedAsset.symbol}})</h2>
+              <button 
+                (click)="clearSelectedAsset()" 
+                class="text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                <span class="text-sm">Back to Global chart ×</span>
+              </button>
+            </div>
+            
+            <!-- Asset Details Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-sm text-gray-500">Portfolio Value</div>
+                <div class="text-lg font-bold">{{selectedAsset.portfolioValue | currency}}</div>
+              </div>
+              
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-sm text-gray-500">Performance</div>
+                <div class="text-lg font-bold" [class.text-green-500]="selectedAsset.percentChange > 0" 
+                     [class.text-red-500]="selectedAsset.percentChange < 0">
+                  {{selectedAsset.percentChange > 0 ? '+' : ''}}{{selectedAsset.percentChange}}%
+                </div>
+              </div>
+              
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-sm text-gray-500">24h Volume</div>
+                <div class="text-lg font-bold">$1.2M</div>
+              </div>
+            </div>
+  
+            
+  
+            <!-- Additional Asset Metrics -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+              <div class="p-3 bg-gray-50 rounded-lg">
+                <div class="text-xs text-gray-500">Market Cap</div>
+                <div class="text-sm font-semibold">$2.5T</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded-lg">
+                <div class="text-xs text-gray-500">P/E Ratio</div>
+                <div class="text-sm font-semibold">27.5</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded-lg">
+                <div class="text-xs text-gray-500">52W High</div>
+                <div class="text-sm font-semibold">$198.23</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded-lg">
+                <div class="text-xs text-gray-500">52W Low</div>
+                <div class="text-sm font-semibold">$124.17</div>
+              </div>
+            </div>
+          </div>
+        }     
+      </div>
+    </div>
+  </div>
+</div>
