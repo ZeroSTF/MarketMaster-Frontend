@@ -3,16 +3,18 @@ import { CommonModule } from '@angular/common';
 import { AssetPortfolio } from '../../../../models/asset.model';
 import { ChartComponent } from '../../components/chart/chart.component';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { WhitelistoverviewComponent } from '../../components/whitelistoverview/whitelistoverview.component';
 
 @Component({
   selector: 'app-portfolio',
   standalone: true,
-  imports: [CommonModule, ChartComponent, DragDropModule],
+  imports: [CommonModule, ChartComponent, DragDropModule , WhitelistoverviewComponent],
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.css'
 })
 export class PortfolioComponent  {
-  isExpanded = false;
+  isExpanded = true;
+  selectedAsset: AssetPortfolio | null = null;
 
   //
   userAssets: AssetPortfolio[] = [
@@ -43,6 +45,14 @@ export class PortfolioComponent  {
         event.currentIndex
       );
     }
+  }
+
+  selectAsset(asset: AssetPortfolio) {
+    this.selectedAsset = asset;
+  }
+
+  clearSelectedAsset() {
+    this.selectedAsset = null;
   }
   
 }
