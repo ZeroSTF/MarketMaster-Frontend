@@ -25,7 +25,11 @@ export class PortfolioComponent  {
     { name: 'Meta Platforms Inc', symbol: 'META', percentChange: -0.75, portfolioValue: 8700.60, trendImageUrl: 'images/downTrend.png' },
     { name: 'Tesla Inc', symbol: 'TSLA', percentChange: 2.10, portfolioValue: 7500.40, trendImageUrl: 'images/upTrend.png' },
     { name: 'NVIDIA Corp', symbol: 'NVDA', percentChange: 1.50, portfolioValue: 10200.80, trendImageUrl: 'images/upTrend.png' },
+    { name: 'JPMorgan Chase & Co', symbol: 'JPM', percentChange: -0.20, portfolioValue: 6800.90, trendImageUrl: 'images/downTrend.png' },
+    { name: 'JPMorgan Chase & Co', symbol: 'JPM', percentChange: -0.20, portfolioValue: 6800.90, trendImageUrl: 'images/downTrend.png' },
+    { name: 'JPMorgan Chase & Co', symbol: 'JPM', percentChange: -0.20, portfolioValue: 6800.90, trendImageUrl: 'images/downTrend.png' },
     { name: 'JPMorgan Chase & Co', symbol: 'JPM', percentChange: -0.20, portfolioValue: 6800.90, trendImageUrl: 'images/downTrend.png' }
+
   ];
   // First row for the "Holdings" (first four by default)
   firstRowAssets = this.userAssets.slice(0, 4);
