@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { AssetPortfolio } from '../../../../models/asset.model';
 import { ChartComponent } from '../../components/chart/chart.component';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { WhitelistoverviewComponent } from '../../components/whitelistoverview/whitelistoverview.component';
+import { WatchlistoverviewComponent } from '../../components/watchlistoverview/watchlistoverview.component';
 
 @Component({
   selector: 'app-portfolio',
   standalone: true,
-  imports: [CommonModule, ChartComponent, DragDropModule , WhitelistoverviewComponent],
+  imports: [CommonModule, ChartComponent, DragDropModule, WatchlistoverviewComponent ],
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.css'
 })
