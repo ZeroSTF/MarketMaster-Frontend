@@ -1,0 +1,91 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Create your account
+      </h2>
+    </div>
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-6">
+      <div class="rounded-md shadow-sm">
+        <!-- Email -->
+        <div class="mb-4">
+          <label for="email" class="sr-only">Email</label>
+          <input id="email" formControlName="email" type="email" required
+            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Email">
+          <div *ngIf="signupForm.controls.email.invalid && signupForm.controls.email.touched"
+            class="text-red-500 text-sm mt-1">
+            Please enter a valid email address.
+          </div>
+        </div>
+
+        <!-- Username -->
+        <div class="mb-4">
+          <label for="username" class="sr-only">Username</label>
+          <input id="username" formControlName="username" type="text" required
+            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Username">
+          <div *ngIf="signupForm.controls.username.invalid && signupForm.controls.username.touched"
+            class="text-red-500 text-sm mt-1">
+            Username must be at least 3 characters.
+          </div>
+        </div>
+
+        <!-- First Name -->
+        <div class="mb-4">
+          <label for="firstName" class="sr-only">First Name</label>
+          <input id="firstName" formControlName="firstName" type="text" required
+            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="First Name">
+        </div>
+
+        <!-- Last Name -->
+        <div class="mb-4">
+          <label for="lastName" class="sr-only">Last Name</label>
+          <input id="lastName" formControlName="lastName" type="text" required
+            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Last Name">
+        </div>
+
+        <!-- Password -->
+        <div class="mb-4">
+          <label for="password" class="sr-only">Password</label>
+          <input id="password" formControlName="password" type="password" required
+            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Password">
+          <div *ngIf="signupForm.controls.password.invalid && signupForm.controls.password.touched"
+            class="text-red-500 text-sm mt-1">
+            Password must be at least 6 characters.
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-4">
+          <label for="confirmPassword" class="sr-only">Confirm Password</label>
+          <input id="confirmPassword" formControlName="confirmPassword" type="password" required
+            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Confirm Password">
+          <div *ngIf="signupForm.errors?.['passwordsMismatch'] && signupForm.controls.confirmPassword.touched"
+            class="text-red-500 text-sm mt-1">
+            Passwords do not match.
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div>
+        <button type="submit" [disabled]="signupForm.invalid"
+          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
+          Sign Up
+        </button>
+      </div>
+
+      <!-- Login Link -->
+      <div class="text-center text-sm">
+        <p>Already have an account? <a routerLink="/login"
+            class="font-medium text-indigo-600 hover:text-indigo-500">Sign
+            in</a></p>
+      </div>
+    </form>
+  </div>
+</div>
