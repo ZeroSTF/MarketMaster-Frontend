@@ -21,7 +21,7 @@ export class DashboardSidebarComponent {
   sidebarButtons = [
     { name: 'overview', label: 'Overview', icon: 'home', link: '/dashboard/overview', badge: '' },
     { name: 'explore', label: 'Explore', icon: 'explore', link: '/dashboard/discover' },
-    { name: 'portfolio', label: 'Portfolio', icon: 'account_balance_wallet', link: '#' },
+    { name: 'portfolio', label: 'Portfolio', icon: 'account_balance_wallet', link: '/dashboard/portfolio' },
     { name: 'settings', label: 'Settings', icon: 'settings', link: '#' },
     { name: 'community', label: 'Community', icon: 'group', link: '#' },
     { name: 'help', label: 'Help & Support', icon: 'help', link: '#' },

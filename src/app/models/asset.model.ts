@@ -1,4 +1,4 @@
-export interface Asset {
+export interface AssetDiscover {
     symbol: string;
     price: number;
     volume: number;
@@ -9,3 +9,12 @@ export interface Asset {
     trendDirection: 'up' | 'down';
     logoUrl: string;
   }
+
+  export interface AssetPortfolio {
+    name: string;
+    symbol: string;
+    percentChange: number;
+    portfolioValue: number;
+    trendImageUrl: string;
+  }
+  
