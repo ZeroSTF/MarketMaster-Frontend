@@ -31,6 +31,11 @@ export const routes: Routes = [
     component: DashboardLayoutComponent,
     children: [
       {
+        path: '',
+        redirectTo: 'overview',
+        pathMatch: 'full',
+      },
+      {
         path: 'overview',
         component: OverviewComponent,
       },
