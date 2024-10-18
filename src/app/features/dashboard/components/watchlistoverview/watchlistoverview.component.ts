@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 @Component({
-  selector: 'app-whitelistoverview',
+  selector: 'app-watchListoverview',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './whitelistoverview.component.html',
-  styleUrls: ['./whitelistoverview.component.css']
+  templateUrl: './watchlistoverview.component.html',
+  styleUrls: ['./watchlistoverview.component.css']
 })
-export class WhitelistoverviewComponent {
-  whitelist = [
+export class WatchlistoverviewComponent {
+  watchList = [
     {  symbol: 'CMPA', performance: 15.2, category: 'Tech' },
     {  symbol: 'CMPB', performance: 8.5, category: 'Finance' },
     {  symbol: 'CMPC', performance: 12.0, category: 'Healthcare' },
