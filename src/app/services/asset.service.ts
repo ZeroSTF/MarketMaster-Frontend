@@ -27,6 +27,7 @@ export class AssetService {
   { symbol: 'TSLA', price: 700.00, volume: 600000, marketCap: 700000000000, peRatio: 200.00, dividendYield: 0.00, sector: 'auto', trendDirection: 'down', logoUrl: 'images/logo1.png' }
 
   ]);
+  
   private watchlistSignal = signal<WatchlistItem[]| null>([
     { symbol: 'CMPA', performance: 15.2, category: 'Tech', trend: 'up' },
     { symbol: 'CMPB', performance: 8.5, category: 'Finance', trend: 'down' },
