@@ -17,7 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { AssetdetailsComponent } from '../../components/assetdetails/assetdetails.component';
-import { Asset } from '../../../../models/asset.model';
+import { AssetDiscover } from '../../../../models/asset.model';
 import { WebsocketService } from '../../../../services/websocket.service';
 import { AssetDailyDto } from '../../../../models/assetdto.model';
 import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
@@ -71,10 +71,10 @@ export class DiscoverComponent implements OnInit{
   private yfinanceService = inject(YfinanceService);
   selectedAsset: AssetStatisticsDto | null = null;
   assetDetailsVisible: { [symbol: string]: boolean } = {};
-  
+  //selectedAsset: AssetDiscover | null = null;
   displayedColumns = this.columns.map((col) => col.field);
   stockColumns = this.columns1.map((col) => col.field); // Columns for stock data
-  dataSource = new MatTableDataSource<Asset>();
+  dataSource = new MatTableDataSource<AssetDiscover>();
   stockDataSource = new MatTableDataSource<AssetDailyDto>(); // DataSource for stock data
   stockDatas: AssetDailyDto[] = [];
 
@@ -85,7 +85,7 @@ export class DiscoverComponent implements OnInit{
   sectorControl = signal('all');
   trendControl = signal('all');
 
-  assets = this.assetservice.assetsSignal;
+  assets = this.assetservice.assets;
 
   filteredAssets = computed(() => {
     const searchTerm = this.searchControl().toLowerCase();
@@ -101,9 +101,7 @@ export class DiscoverComponent implements OnInit{
   });
 
   constructor() {
-    effect(() => {
-      this.dataSource.data = this.assets();
-    });
+ 
   }
 
   ngOnInit() {
@@ -132,6 +130,11 @@ export class DiscoverComponent implements OnInit{
     this.trendControl.set((event.target as HTMLSelectElement).value);
   }
 
+  // Open asset details
+  // viewAssetDetails(asset: Asset) {
+  //   this.selectedAsset = this.selectedAsset === asset ? null : asset;
+  //   this.assetDetailsVisible[asset.symbol] = !this.assetDetailsVisible[asset.symbol];
+  // }
   viewAssetDetails(asset: AssetStatisticsDto) {
     this.yfinanceService.selectAsset(asset); // Set selected asset in the service
     this.selectedAsset = this.selectedAsset === asset ? null : asset;

@@ -35,7 +35,9 @@ export class AssetdetailsComponent implements OnInit {
   private webSocketService = inject(WebsocketService);
   private yfinanceService = inject(YfinanceService);
   // Signal to track the selected asset
+
   selectedAsset = this.yfinanceService.selectedAssetSignal;
+
   expandedNews: { [key: number]: boolean } = {};
   activeTab: 'overview' | 'financial' | 'news' = 'overview';
   stockDatas: any[] = [];
