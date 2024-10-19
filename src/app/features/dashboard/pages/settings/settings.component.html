@@ -1,1 +1,187 @@
-<p>settings works!</p>
+<!-- settings.component.html -->
+<div class="min-h-screen">
+    <!-- Profile Header -->
+    <div class="relative">
+        <!-- Background image div -->
+        <div class="w-full h-64 overflow-hidden rounded-2xl relative">
+            <!-- Background image -->
+            <div class="w-[1180px] h-[182.009px] mx-auto shrink-0 bg-[url('/assets/images/SideHEader.png')] bg-no-repeat bg-[center_top_-877.537px] bg-[length:100%_577.145%]">
+            </div>
+            <!-- Dark blue overlay -->
+            <div class="absolute inset-0 bg-black opacity-80"></div>
+          </div>
+        
+        <!-- Profile info card with negative margin -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg -mt-24 mb-6">
+            <div class="flex items-center justify-between p-6">
+              <div class="flex items-center space-x-4">
+                <img src="images/SidebarAvatar.png" alt="Adela Parkson" class="w-16 h-16 rounded-full border-4 border-white">
+                <div>
+                  <h2 class="text-xl font-medium">Adela Parkson</h2>
+                  <p class="text-sm text-gray-500">estherasimmmple.com</p>
+                </div>
+              </div>
+              <div class="flex space-x-4">
+                <button 
+                  class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1" 
+                  [ngClass]="{'text-blue-600': activeTab === 'account'}" 
+                  (click)="activeTab = 'account'"
+                >
+                  <mat-icon>person</mat-icon>
+                  <span>Account</span>
+                </button>
+                <button 
+                  class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1" 
+                  [ngClass]="{'text-blue-600': activeTab === 'security'}" 
+                  (click)="activeTab = 'security'"
+                >
+                  <mat-icon>security</mat-icon>
+                  <span>Security</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Platform Settings -->
+      <div class="bg-white rounded-2xl p-6 shadow-lg">
+        <h3 class="text-xs uppercase text-gray-400 mb-4">ACCOUNT</h3>
+        
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-600">Email me when someone follows me</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" [formControl]="emailOnFollowControl" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+            </label>
+          </div>
+  
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-600">Email me when someone answers on my post</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" [formControl]="emailOnAnswerControl" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+            </label>
+          </div>
+  
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-600">Email me when someone mentions me</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" [formControl]="emailOnMentionControl" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+            </label>
+          </div>
+  
+          <h3 class="text-xs uppercase text-gray-400 mt-8 mb-4">APPLICATION</h3>
+  
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-600">New launches and projects</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" [formControl]="newLaunchesControl" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+            </label>
+          </div>
+  
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-600">Monthly product updates</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" [formControl]="monthlyUpdatesControl" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+            </label>
+          </div>
+  
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-600">Subscribe to newsletter</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" [formControl]="newsletterControl" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+            </label>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Profile Information -->
+      <div class="bg-white rounded-2xl p-6 shadow-lg" *ngIf="activeTab === 'account'">
+        <h2 class="text-xl font-medium mb-6">Profile Information</h2>
+        
+        <form [formGroup]="profileForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-2">Full name</label>
+            <input formControlName="fullName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+  
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-2">Email</label>
+            <input formControlName="email" type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+  
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-2">Location</label>
+            <input formControlName="location" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+  
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-2">Organization</label>
+            <input formControlName="organization" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+        </form>
+      </div>
+  
+      <!-- Security Information -->
+      <div class="bg-white rounded-2xl p-6 shadow-lg" *ngIf="activeTab === 'security'">
+        <h2 class="text-xl font-medium mb-6">Security Information</h2>
+        
+        <form [formGroup]="securityForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-2">Username</label>
+            <input formControlName="username" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+  
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-2">Password</label>
+            <input formControlName="password" type="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+  
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-2">Organization</label>
+            <input formControlName="organization" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" >
+          </div>
+  
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-2">Date</label>
+            <input formControlName="date" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" >
+          </div>
+        </form>
+      </div>
+  
+      <!-- Payment Method -->
+      <div class="bg-white rounded-2xl p-6 shadow-lg">
+        <h2 class="text-xl font-medium mb-6">Trade With Real Money</h2>
+        
+        <div class="bg-gradient-to-br from-blue-900 to-blue-800 rounded-xl p-6 mb-6 text-white">
+          <div class="text-xl tracking-wider mb-8">7812 2139 0823 XXXX</div>
+          <div class="flex justify-between items-end">
+            <div class="text-sm opacity-80">VALID THRU</div>
+            <div class="w-12 h-8">
+            </div>
+          </div>
+        </div>
+  
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-lg font-medium mb-1">Payment Method</h3>
+            <div class="flex items-center space-x-2">
+                <i class="fab fa-cc-mastercard w-6 h-6"></i>
+                <span class="text-sm text-gray-600">7812 2139 0823 XXXX</span>
+            </div>
+          </div>
+          <button class="px-4 py-2 bg-blue-900 text-white text-sm font-medium rounded-lg">
+            ADD A NEW CARD
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
