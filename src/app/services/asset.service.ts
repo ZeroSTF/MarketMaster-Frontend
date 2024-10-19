@@ -58,7 +58,8 @@ export class AssetService {
       { name: 'JPMorgan Chase & Co', symbol: 'JPM', percentChange: -0.20, portfolioValue: 6800.90, trendImageUrl: 'images/downTrend.png' },
   
     ])
-  selectedAssetSignal = signal<AssetDiscover | null>(null);
+
+  private selectedAssetSignal = signal<AssetDiscover | null>(null);
 
 
 
@@ -70,6 +71,8 @@ export class AssetService {
   readonly watchlist = computed(() => this.watchlistSignal());
   readonly bestWinners = computed(() => this.bestWinnersSignal());
   readonly userAssets = computed(() => this.userAssetsSignal());
+  readonly selectedAsset = computed(() => this.selectedAssetSignal());
+
 
   getAssets() {
     return this.assetsSignal();

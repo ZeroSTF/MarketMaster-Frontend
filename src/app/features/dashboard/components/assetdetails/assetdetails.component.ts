@@ -29,7 +29,7 @@ export class AssetdetailsComponent {
   private assetService = inject(AssetService);
 
   // Signal to track the selected asset
-  selectedAsset = this.assetService.selectedAssetSignal;
+  selectedAsset = this.assetService.selectedAsset;
   expandedNews: { [key: number]: boolean } = {};
   activeTab: 'overview' | 'financial' | 'news' = 'overview';
 
