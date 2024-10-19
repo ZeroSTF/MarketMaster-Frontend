@@ -61,7 +61,7 @@ export class DiscoverComponent {
   sectorControl = signal('all');
   trendControl = signal('all');
 
-  assets = this.assetservice.assetsSignal;
+  assets = this.assetservice.assets;
 
   filteredAssets = computed(() => {
     const searchTerm = this.searchControl().toLowerCase();

@@ -1,59 +1,108 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
-    <div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        Sign in to your account
-      </h2>
+<div class="flex min-h-screen w-full items-center justify-center bg-cover bg-center bg-no-repeat  "
+     style="background-image: linear-gradient(0deg, rgba(25, 18, 63, 0.61), rgba(25, 18, 63, 0.61)), url('/images/BackgroundSignInUp.png');">
+  <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 sm:p-8 relative mx-4 p-16">
+    <!-- Close Button -->
+    <button type="button" class="absolute right-4 top-4">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 hover:text-gray-600">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <img src="images/LogoMM.png" alt="MarketMaster" class="h-6 mx-auto mb-6"/>
+      <h1 class="text-2xl font-medium mb-2">Log in</h1>
+      <p class="text-gray-600 text-sm">
+        Don't have an account? 
+        <a routerLink="/signup" class="text-blue-600 font-semibold hover:underline">Sign up</a>
+      </p>
     </div>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-6">
-      <div class="rounded-md shadow-sm">
-        <div class="mb-4">
-          <label for="username" class="sr-only">Username / Email</label>
-          <input id="username" formControlName="username" type="text" required
-            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder="Username / Email">
-        </div>
-        <div>
-          <label for="password" class="sr-only">Password</label>
-          <input id="password" formControlName="password" type="password" required
-            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder="Password">
-        </div>
-      </div>
 
-      <!-- Remember Me and Forgot Password -->
-      <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <input id="remember-me" name="remember-me" type="checkbox"
-            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-          <label for="remember-me" class="ml-2 block text-sm text-gray-900"> Remember me </label>
-        </div>
-        <div class="text-sm">
-          <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"> Forgot your password? </a>
-        </div>
-      </div>
+    <!-- Social Login -->
+    <div class="space-y-4 mb-6">
+      <button class="w-full flex items-center justify-center gap-2 px-4 py-3 border rounded-lg hover:bg-gray-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="#1877F2">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+        <span>Log in with Facebook</span>
+      </button>
+      <button class="w-full flex items-center justify-center gap-2 px-4 py-3 border rounded-lg hover:bg-gray-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24">
+          <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z"/>
+          <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z"/>
+          <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z"/>
+          <path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067Z"/>
+        </svg>
+        <span>Log in with Google</span>
+      </button>
+    </div>
 
-      <!-- Submit Button -->
+    <!-- Divider -->
+    <div class="flex items-center gap-3 mb-6">
+      <hr class="flex-1 border-gray-200"/>
+      <span class="text-gray-500 text-sm">OR</span>
+      <hr class="flex-1 border-gray-200"/>
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
       <div>
-        <button type="submit" [disabled]="loginForm.invalid"
-          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
-          <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-            <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd"
-                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                clip-rule="evenodd" />
-            </svg>
-          </span>
-          Sign in
-        </button>
+        <input
+          type="text"
+          formControlName="username"
+          placeholder="Your email"
+          class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+          [class.border-red-500]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+        />
+        <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" 
+             class="text-red-500 text-sm mt-1">
+          <span *ngIf="loginForm.get('username')?.errors?.['required']">Email is required</span>
+          <span *ngIf="loginForm.get('username')?.errors?.['minlength']">Email must be at least 3 characters</span>
+        </div>
       </div>
 
-      <!-- Signup Link -->
-      <div class="text-center text-sm">
-        <p>Don't have an account? <a routerLink="/signup" class="font-medium text-indigo-600 hover:text-indigo-500">Sign
-            up</a></p>
+      <div class="relative">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Your password"
+          class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none pr-16"
+          [class.border-red-500]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+        />
+        <button
+          type="button"
+          (click)="showPassword = !showPassword"
+          class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm"
+        >
+          {{ showPassword ? 'Hide' : 'Show' }}
+        </button>
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" 
+             class="text-red-500 text-sm mt-1">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+        </div>
       </div>
+
+      <div class="text-right">
+        <a routerLink="/forgot-password" class="text-sm text-gray-600 hover:underline">
+          Forgot your password?
+        </a>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="!loginForm.valid || isLoading"
+        class="w-full bg-gray-300 text-gray-700 rounded-lg py-3 font-medium hover:bg-gray-400 transition-colors disabled:opacity-50 relative"
+      >
+        <span [class.invisible]="isLoading">Log in</span>
+        <div *ngIf="isLoading" class="absolute inset-0 flex items-center justify-center">
+          <svg class="animate-spin h-5 w-5 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+      </button>
     </form>
   </div>
 </div>

@@ -16,6 +16,8 @@ export class SignupComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  showPassword = false;
+
 
   signupForm = this.fb.nonNullable.group(
     {
