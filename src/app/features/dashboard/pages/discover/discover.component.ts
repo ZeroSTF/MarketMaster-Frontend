@@ -78,7 +78,7 @@ export class DiscoverComponent {
 
   constructor() {
     effect(() => {
-      this.dataSource.data = this.filteredAssets();
+      this.dataSource.data = this.filteredAssets()??[];
     });
   }
 

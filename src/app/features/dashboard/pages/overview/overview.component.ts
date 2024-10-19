@@ -5,14 +5,14 @@ import { NewsComponent } from '../../components/news/news.component';
 import { TradesoverviewComponent } from '../../components/tradesoverview/tradesoverview.component';
 import { ChartComponent } from '../../components/chart/chart.component';
 import { CoursComponent } from '../../components/cours/cours.component';
-import { WatchlistoverviewComponent } from '../../components/watchlistoverview/watchlistoverview.component';
+import { WatchlistComponent } from '../../components/watchlist/watchlist.component';
 
 
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [CommonModule,OverviewdetailsComponent,NewsComponent,TradesoverviewComponent,WatchlistoverviewComponent,ChartComponent,CoursComponent],
+  imports: [CommonModule,OverviewdetailsComponent,NewsComponent,TradesoverviewComponent,WatchlistComponent,ChartComponent,CoursComponent],
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css']
 })
