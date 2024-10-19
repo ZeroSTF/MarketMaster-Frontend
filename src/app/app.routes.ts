@@ -4,6 +4,7 @@ import { DiscoverComponent } from './features/dashboard/pages/discover/discover.
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 import { PortfolioComponent } from './features/dashboard/pages/portfolio/portfolio.component';
 import { SettingsComponent } from './features/dashboard/pages/settings/settings.component';
+import { TraderLayoutComponent } from './layout/trader-layout/trader-layout.component';
 
 export const routes: Routes = [
   {
@@ -52,6 +53,19 @@ export const routes: Routes = [
       {
         path: 'settings',
         component: SettingsComponent,
+      },
+    ],
+  },
+
+  // TRADER ROUTES
+  {
+    path: 'trader',
+    component: TraderLayoutComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: '',
+        pathMatch: 'full',
       },
     ],
   },
