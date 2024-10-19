@@ -1,0 +1,122 @@
+<div class="flex min-h-screen w-full items-center justify-center bg-cover bg-center bg-no-repeat  p-4"
+     style="background-image: linear-gradient(0deg, rgba(25, 18, 63, 0.61), rgba(25, 18, 63, 0.61)), url('/images/BackgroundSignInUp.png');">
+  <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 sm:p-8 relative mx-4">
+    <!-- Close Button -->
+    <button type="button" class="absolute right-4 top-4">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M18 6L6 18M6 6L18 18" stroke="#666" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    
+
+    <!-- Horizontal Container -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-between items-stretch">
+      <!-- Social Signup (Left) -->
+      <div class="w-full sm:w-1/2 space-y-4 flex flex-col justify-center">
+        <!-- Header -->
+    <div class="text-center mb-8">
+      <img src="images/LogoMM.png" alt="MarketMaster" class="h-6 mx-auto mb-6"/>
+      <h1 class="text-2xl font-medium mb-2">Create an account</h1>
+      <p class="text-gray-600 text-sm">
+        Already have an account? 
+        <a routerLink="/login" class="text-blue-600 hover:underline">Log in</a>
+      </p>
+    </div>
+        <div class="flex flex-col items-center text-center  relative">
+          <img class="w-full h-28 object-cover rounded-t-lg" alt="Background" src="images/SideHEader.png">
+          <img class="w-20 h-20 absolute left-1/2 transform -translate-x-1/2 -bottom-10 
+                       rounded-full object-cover border-4 border-white" 
+               alt="Avatar" src="images/SidebarAvatar.png">
+        </div>
+        <button class="w-full flex items-center justify-center gap-2 px-4 py-3 border rounded-lg hover:bg-gray-50">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="#1877F2">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          <span>Continue with Facebook</span>
+        </button>
+        <button class="w-full flex items-center justify-center gap-2 px-4 py-3 border rounded-lg hover:bg-gray-50">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24">
+            <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z"/>
+            <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z"/>
+            <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z"/>
+            <path fill="#FBBC05" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.782.125-1.533.357-2.235L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.92.445 3.73 1.237 5.335l4.04-3.067Z"/>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+      </div>
+    
+      <!-- Signup Form (Right) -->
+      <div class="w-full sm:w-1/2 space-y-4 flex flex-col justify-center">
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-4">
+          <div>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="Your email"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            />
+          </div>
+    
+          <div>
+            <input
+              type="text"
+              formControlName="username"
+              placeholder="Username"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            />
+          </div>
+    
+          <div class="grid grid-cols-2 gap-4">
+            <input
+              type="text"
+              formControlName="firstName"
+              placeholder="First name"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            />
+            <input
+              type="text"
+              formControlName="lastName"
+              placeholder="Last name"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            />
+          </div>
+    
+          <div class="relative">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Password"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none pr-16"
+            />
+            <button
+              type="button"
+              (click)="showPassword = !showPassword"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm"
+            >
+              {{ showPassword ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+    
+          <div class="relative">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              placeholder="Confirm password"
+              class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none pr-16"
+            />
+          </div>
+    
+          <button
+            type="submit"
+            [disabled]="!signupForm.valid"
+            class="w-full bg-gray-300 text-gray-700 rounded-lg py-3 font-medium hover:bg-gray-400 transition-colors disabled:opacity-50"
+          >
+            Create account
+          </button>
+        </form>
+      </div>
+    </div>
+    
+  </div>
+</div>

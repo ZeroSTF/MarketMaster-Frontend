@@ -16,7 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { AssetdetailsComponent } from '../../components/assetdetails/assetdetails.component';
-import { Asset } from '../../../../models/asset.model';
+import { AssetDiscover } from '../../../../models/asset.model';
 
 @Component({
   selector: 'app-asset-list',
@@ -50,9 +50,9 @@ export class DiscoverComponent {
 
   private assetservice = inject(AssetService);
   assetDetailsVisible: { [symbol: string]: boolean } = {};
-  selectedAsset: Asset | null = null;
+  selectedAsset: AssetDiscover | null = null;
   displayedColumns = this.columns.map((col) => col.field);
-  dataSource = new MatTableDataSource<Asset>();
+  dataSource = new MatTableDataSource<AssetDiscover>();
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -61,7 +61,7 @@ export class DiscoverComponent {
   sectorControl = signal('all');
   trendControl = signal('all');
 
-  assets = this.assetservice.assetsSignal;
+  assets = this.assetservice.assets;
 
   filteredAssets = computed(() => {
     const searchTerm = this.searchControl().toLowerCase();
@@ -78,7 +78,7 @@ export class DiscoverComponent {
 
   constructor() {
     effect(() => {
-      this.dataSource.data = this.filteredAssets();
+      this.dataSource.data = this.filteredAssets()??[];
     });
   }
 
@@ -104,7 +104,7 @@ export class DiscoverComponent {
   //   this.selectedAsset = this.selectedAsset === asset ? null : asset;
   //   this.assetDetailsVisible[asset.symbol] = !this.assetDetailsVisible[asset.symbol];
   // }
-  viewAssetDetails(asset: Asset) {
+  viewAssetDetails(asset: AssetDiscover) {
     this.assetservice.selectAsset(asset); // Set selected asset in the service
     this.selectedAsset = this.selectedAsset === asset ? null : asset;
     this.assetDetailsVisible[asset.symbol] =
