@@ -4,26 +4,19 @@
     <!-- Header Section -->
     <div class="flex items-center gap-3 mb-4">
       <div class="asset-logo w-8 h-8 bg-navy-blue rounded-lg flex items-center justify-center">
-        <img [src]="asset.logoUrl" [alt]="asset.symbol" class="w-6 h-6" />
+        <img [src]="'images/' + asset.symbol + '.png'" [alt]="asset.symbol" class="w-6 h-6" />
       </div>
       <div>
         <h2 class="text-lg font-bold">{{ asset.symbol }}</h2>
-        <p class="text-sm text-gray-600">{{ asset.sector }}</p>
+        <p class="text-sm text-gray-600">{{ asset.forwardPE }}</p>
       </div>
     </div>
 
     <!-- Price Section -->
     <div class="mb-4">
       <div class="flex items-baseline">
-        <span class="text-2xl font-bold">${{ asset.price }}</span>
-        <span [class]="asset.trendDirection === 'up' ? 'text-green-500' : 'text-red-500'"
-              class="ml-2 text-lg">
-          @if (asset.trendDirection === 'up') {
-            <span>📈</span>
-          } @else {
-            <span>📉</span>
-          }
-        </span>
+        <span class="text-2xl font-bold">${{ asset.returnOnEquity }}</span>
+       
       </div>
     </div>
 
@@ -36,7 +29,7 @@
     <div class="grid grid-cols-2 gap-2 mb-4">
       <div class="p-2 bg-gray-50 rounded">
         <p class="text-xs text-gray-600">Volume</p>
-        <p class="text-sm font-semibold">{{ asset.volume | number }}</p>
+        <p class="text-sm font-semibold">{{ asset.debtToEquity | number }}</p>
       </div>
       <div class="p-2 bg-gray-50 rounded">
         <p class="text-xs text-gray-600">Market Cap</p>
@@ -44,7 +37,7 @@
       </div>
       <div class="p-2 bg-gray-50 rounded">
         <p class="text-xs text-gray-600">P/E Ratio</p>
-        <p class="text-sm font-semibold">{{ asset.peRatio }}</p>
+        <p class="text-sm font-semibold">{{ asset. profitMargins }}</p>
       </div>
       <div class="p-2 bg-gray-50 rounded">
         <p class="text-xs text-gray-600">Dividend Yield</p>

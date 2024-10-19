@@ -1,16 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding, effect, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DashboardSidebarComponent } from './features/dashboard/components/dashboard-sidebar/dashboard-sidebar.component';
 import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
+import { DarkModeService } from './services/dark-mode.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ DashboardSidebarComponent , NavBarComponent , RouterModule ],
+  imports: [DashboardSidebarComponent, NavBarComponent, RouterModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'MarketMaster-Frontend';
-  
+
+  @HostBinding('class.dark') darkClass = false;
+
+  constructor(private darkModeService: DarkModeService) {
+    effect(() => {
+      this.darkClass = this.darkModeService.isDarkMode()();
+    });
+  }
 }
