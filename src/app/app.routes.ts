@@ -3,6 +3,7 @@ import { OverviewComponent } from './features/dashboard/pages/overview/overview.
 import { DiscoverComponent } from './features/dashboard/pages/discover/discover.component';
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 import { PortfolioComponent } from './features/dashboard/pages/portfolio/portfolio.component';
+import { TraderLayoutComponent } from './layout/trader-layout/trader-layout.component';
 
 export const routes: Routes = [
   {
@@ -47,6 +48,19 @@ export const routes: Routes = [
       {
         path: 'portfolio',
         component: PortfolioComponent,
+      },
+    ],
+  },
+
+  // TRADER ROUTES
+  {
+    path: 'trader',
+    component: TraderLayoutComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: '',
+        pathMatch: 'full',
       },
     ],
   },
