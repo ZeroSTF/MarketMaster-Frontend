@@ -1,5 +1,6 @@
 import { AssetService } from '../../../../services/asset.service';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -17,7 +18,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { AssetdetailsComponent } from '../../components/assetdetails/assetdetails.component';
-import { AssetDiscover } from '../../../../models/asset.model';
 import { WebsocketService } from '../../../../services/websocket.service';
 import { AssetDailyDto } from '../../../../models/assetdto.model';
 import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
@@ -37,21 +37,14 @@ import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinan
     AssetdetailsComponent,
   ],
   templateUrl: './discover.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
+
 })
-export class DiscoverComponent implements OnInit{
-  //asset table
-  columns = [
-    { field: 'logoUrl', label: 'Logo' },
-    { field: 'symbol', label: 'Symbol' },
-    { field: 'price', label: 'Price' },
-    { field: 'volume', label: 'Volume' },
-    { field: 'marketCap', label: 'Market Cap' },
-    { field: 'peRatio', label: 'P/E Ratio' },
-    { field: 'dividendYield', label: 'Dividend Yield' },
-    { field: 'trend', label: 'Trend' },
-    { field: 'actions', label: 'Actions' },
-  ];
-  columns1 = [
+export class DiscoverComponent {
+  private webSocketService = inject(WebsocketService);
+  private yfinanceService = inject(YfinanceService);
+
+  readonly columns = [
     { field: 'logoUrl', label: 'Logo' },
     { field: 'symbol', label: 'Symbol' },
     { field: 'open', label: 'Open' },
@@ -59,24 +52,16 @@ export class DiscoverComponent implements OnInit{
     { field: 'low', label: 'Low' },
     { field: 'price', label: 'Price' },
     { field: 'volume', label: 'Volume' },
-    { field: 'latestTradingDay', label: 'Latest Trading Day' },
+    { field: 'latestTradingDay', label: 'Latest' },
     { field: 'previousClose', label: 'Previous Close' },
     { field: 'change', label: 'Change' },
-    { field: 'changePercent', label: 'Change Percent' },
+    { field: 'changePercent', label: 'Change%' },
     { field: 'actions', label: 'Actions' },
-  ];
-
-  private webSocketService = inject(WebsocketService);
-  private assetservice = inject(AssetService);
-  private yfinanceService = inject(YfinanceService);
+  ] as const;
   selectedAsset: AssetStatisticsDto | null = null;
   assetDetailsVisible: { [symbol: string]: boolean } = {};
-  //selectedAsset: AssetDiscover | null = null;
-  displayedColumns = this.columns.map((col) => col.field);
-  stockColumns = this.columns1.map((col) => col.field); // Columns for stock data
-  dataSource = new MatTableDataSource<AssetDiscover>();
-  stockDataSource = new MatTableDataSource<AssetDailyDto>(); // DataSource for stock data
-  stockDatas: AssetDailyDto[] = [];
+  readonly stockColumns = this.columns.map((col) => col.field);
+  stockDataSource = new MatTableDataSource<AssetDailyDto>();
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -85,7 +70,7 @@ export class DiscoverComponent implements OnInit{
   sectorControl = signal('all');
   trendControl = signal('all');
 
-  assets = this.assetservice.assets;
+  assets = this.webSocketService.getStockData();
 
   filteredAssets = computed(() => {
     const searchTerm = this.searchControl().toLowerCase();
@@ -95,27 +80,22 @@ export class DiscoverComponent implements OnInit{
     return this.assets()?.filter(
       (asset) =>
         asset.symbol.toLowerCase().includes(searchTerm) &&
-        (sector === 'all' || asset.sector === sector) &&
-        (trend === 'all' || asset.trendDirection === trend)
-    );
+        (sector === 'all' || asset.symbol === sector) &&
+        (trend === 'all' || asset.symbol === trend)
+    ); //symbol & symbol need to be changed with the real filters sector and trend , new API
   });
 
   constructor() {
- 
+    effect(() => {
+      this.stockDataSource.data = this.filteredAssets()??[];
+    }); 
   }
 
-  ngOnInit() {
-   
-    this.webSocketService.getStockData().subscribe((data: AssetDailyDto[]) => {
-      this.stockDatas = data;
-      this.stockDataSource.data = data; // Set stock data to stockDataSource
-    });
-   // this.webSocketService.fetchStockData();
-  }
+  
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    this.stockDataSource.sort = this.sort;
+    this.stockDataSource.paginator = this.paginator;
   }
 
   onSearchChange(event: Event) {
@@ -130,11 +110,6 @@ export class DiscoverComponent implements OnInit{
     this.trendControl.set((event.target as HTMLSelectElement).value);
   }
 
-  // Open asset details
-  // viewAssetDetails(asset: Asset) {
-  //   this.selectedAsset = this.selectedAsset === asset ? null : asset;
-  //   this.assetDetailsVisible[asset.symbol] = !this.assetDetailsVisible[asset.symbol];
-  // }
   viewAssetDetails(asset: AssetStatisticsDto) {
     this.yfinanceService.selectAsset(asset); // Set selected asset in the service
     this.selectedAsset = this.selectedAsset === asset ? null : asset;

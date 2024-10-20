@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AssetPortfolio } from '../../../../models/asset.model';
 import { ChartComponent } from '../../components/chart/chart.component';
@@ -11,7 +11,9 @@ import { AssetService } from '../../../../services/asset.service';
   standalone: true,
   imports: [CommonModule, ChartComponent, DragDropModule, WatchlistComponent ],
   templateUrl: './portfolio.component.html',
-  styleUrl: './portfolio.component.css'
+  styleUrl: './portfolio.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 export class PortfolioComponent  {
   isExpanded = true;

@@ -42,59 +42,64 @@
         </div>
         <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 h-full overflow-hidden">
         <!-- Main Flex Container -->
-        <div class="flex-grow flex flex-col overflow-hidden rounded-2xl lg:w-2/3 xl:w-3/4">
-            <div>
-                <mat-table [dataSource]="stockDataSource" matSort class="w-full">
-                    <ng-container *ngFor="let column of columns1" [matColumnDef]="column.field">
-                        <mat-header-cell 
-                            *matHeaderCellDef 
-                            class="bg-sky-50 text-blue-950 text-left font-semibold">
-                            {{ column.label }}
-                        </mat-header-cell>
-                    </ng-container>
-                    <mat-header-row *matHeaderRowDef="stockColumns"></mat-header-row>
-                </mat-table>
+        <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 h-full overflow-hidden">
+            <!-- Asset Table -->
+            <div class="flex-grow flex flex-col overflow-hidden rounded-2xl lg:w-2/3 xl:w-3/4">
+                <!-- Fixed Header -->
+                <div>
+                    <mat-table [dataSource]="stockDataSource" matSort class="w-full">
+                        <!-- Define Columns -->
+                        <ng-container *ngFor="let column of columns" [matColumnDef]="column.field">
+                            <mat-header-cell 
+                                *matHeaderCellDef 
+                                mat-sort-header
+                                class="bg-sky-50 text-blue-950 text-left font-semibold">
+                                {{ column.label }}
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let stock">
+                                <ng-container [ngSwitch]="column.field">
+                                    <ng-template *ngSwitchCase="'logoUrl'">
+                                        <img [src]="'images/' + stock.symbol + '.png'" [alt]="stock.symbol + ' logo'" class="w-6 h-6 rounded-full">
+                                    </ng-template>
+                                    <ng-template *ngSwitchCase="'price'">
+                                        {{ stock.price | currency:'USD':'symbol':'1.2-2' }}
+                                    </ng-template>
+                                    <ng-template *ngSwitchCase="'change'">
+                                        <span [ngClass]="{'text-green-500': stock.change > 0, 'text-red-500': stock.change < 0}">
+                                            {{ stock.change | number:'1.2-2' }}
+                                        </span>
+                                    </ng-template>
+                                    <ng-template *ngSwitchCase="'actions'">
+                                        <button mat-button class="text-blue-950 hover:bg-blue-100 font-medium"
+                                                (click)="viewAssetDetails(stock)">
+                                            Details
+                                        </button>
+                                    </ng-template>
+                                    <ng-template *ngSwitchDefault>
+                                        {{ stock[column.field] }}
+                                    </ng-template>
+                                </ng-container>
+                            </mat-cell>
+                        </ng-container>
+        
+                        <!-- Header and Row Definitions -->
+                        <mat-header-row *matHeaderRowDef="stockColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: stockColumns;"></mat-row>
+                    </mat-table>
+                </div>
+              
+                <div>
+                    <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons class="bg-sky-50"></mat-paginator>
+                </div>
             </div>
-    
-            <div class="overflow-y-auto flex-grow scrollbar-hide">
-                <mat-table [dataSource]="stockDataSource" matSort class="w-full">
-                    <ng-container *ngFor="let column of columns1" [matColumnDef]="column.field">
-                        <mat-cell *matCellDef="let stock" class="bg-white hover:bg-blue-50 border-b border-gray-300">
-                            <ng-container *ngIf="column.field === 'actions'">
-                                <button 
-                                  mat-button 
-                                  class="text-blue-950 hover:bg-blue-100 font-medium" 
-                                  (click)="viewAssetDetails(stock)">
-                                  Details
-                                </button>
-                              </ng-container>
-                              <span *ngIf=" column.field === 'logoUrl'">
-                                <img [src]="'images/' + stock.symbol + '.png'"  alt="{{ stock.symbol }} logo" class="w-6 h-6 rounded-full" />
-                            </span>
-                              <span *ngIf="column.field === 'price' || column.field === 'high' || column.field === 'low' || column.field === 'open'">
-                                ${{ stock[column.field].toFixed(2) }}
-                            </span>
-                            <span *ngIf="column.field !== 'price' && column.field !== 'high' && column.field !== 'low' && column.field !== 'open'">
-                                {{ stock[column.field] }}
-                            </span>
-                             
-                        </mat-cell>
-                    </ng-container>
-                 
-                    <mat-row *matRowDef="let row; columns: stockColumns;"></mat-row>
-                </mat-table>
-            </div>
-    
-            <div>
-                <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons class="bg-sky-50"></mat-paginator>
-            </div>
-        </div>
+        
             <!-- Asset Detail Component -->
             <div class="scrollbar-hide flex-none w-auto md:w-[30%] lg:w-[25%] xl:w-[20%] transition-all duration-500 ease-in-out bg-white p-4 rounded-lg shadow-lg h-full overflow-auto" *ngIf="selectedAsset">
                 <h3 class="text-lg font-bold text-blue-950 mb-2">Asset Details</h3>
                 <app-asset-details class="block h-[calc(100%-2rem)]"></app-asset-details>
             </div>
         </div>
-    </div>
+        
+</div>
 </div>
 
