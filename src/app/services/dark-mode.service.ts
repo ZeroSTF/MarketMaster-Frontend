@@ -13,4 +13,12 @@ export class DarkModeService {
   toggleDarkMode() {
     this.darkMode.set(!this.darkMode());
   }
+
+  enableDarkMode() {
+    this.darkMode.set(true);
+  }
+
+  enableLightMode() {
+    this.darkMode.set(false);
+  }
 }
