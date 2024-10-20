@@ -1,9 +1,11 @@
 import { AssetService } from '../../../../services/asset.service';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
   inject,
+  OnInit,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -16,7 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { AssetdetailsComponent } from '../../components/assetdetails/assetdetails.component';
-import { AssetDiscover } from '../../../../models/asset.model';
+import { Asset } from '../../../../models/asset.model';
 
 @Component({
   selector: 'app-asset-list',
@@ -33,87 +35,114 @@ import { AssetDiscover } from '../../../../models/asset.model';
     AssetdetailsComponent,
   ],
   templateUrl: './discover.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 export class DiscoverComponent {
-  //asset table
-  columns = [
+  private assetService = inject(AssetService);
+
+  readonly columns = [
     { field: 'logoUrl', label: 'Logo' },
     { field: 'symbol', label: 'Symbol' },
+    { field: 'open', label: 'Open' },
+    { field: 'high', label: 'High' },
+    { field: 'low', label: 'Low' },
     { field: 'price', label: 'Price' },
     { field: 'volume', label: 'Volume' },
-    { field: 'marketCap', label: 'Market Cap' },
-    { field: 'peRatio', label: 'P/E Ratio' },
-    { field: 'dividendYield', label: 'Dividend Yield' },
-    { field: 'trend', label: 'Trend' },
+    { field: 'latestTradingDay', label: 'Latest' },
+    { field: 'previousClose', label: 'Previous Close' },
+    { field: 'change', label: 'Change' },
+    { field: 'changePercent', label: 'Change%' },
     { field: 'actions', label: 'Actions' },
-  ];
+  ] as const;
 
-  private assetservice = inject(AssetService);
-  assetDetailsVisible: { [symbol: string]: boolean } = {};
-  selectedAsset: AssetDiscover | null = null;
-  displayedColumns = this.columns.map((col) => col.field);
-  dataSource = new MatTableDataSource<AssetDiscover>();
+  readonly stockColumns = this.columns.map((col) => col.field);
+
+  public selectedAsset = signal<Asset | null>(null);
+  public isLoading = signal<boolean>(true);
+  public stockDataSource = new MatTableDataSource<Asset>();
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  searchControl = signal('');
-  sectorControl = signal('all');
-  trendControl = signal('all');
+  public searchControl = signal<string>('');
+  public sectorControl = signal<string>('all');
+  public trendControl = signal<string>('all');
 
-  assets = this.assetservice.assetsSignal;
+  private rawData = signal<Asset[]>([]);
 
-  filteredAssets = computed(() => {
+  public filteredAssets = computed(() => {
     const searchTerm = this.searchControl().toLowerCase();
     const sector = this.sectorControl();
     const trend = this.trendControl();
+    const data = this.rawData();
 
-    return this.assets()?.filter(
-      (asset) =>
-        asset.symbol.toLowerCase().includes(searchTerm) &&
-        (sector === 'all' || asset.sector === sector) &&
-        (trend === 'all' || asset.trendDirection === trend)
+    return data.filter(asset => 
+      (searchTerm === '' || asset.symbol.toLowerCase().includes(searchTerm)) &&
+      (sector === 'all' || asset.symbol === sector) &&
+      (trend === 'all' ||
+       (trend === 'up' && asset.change > 0) ||
+       (trend === 'down' && asset.change < 0))
     );
   });
 
   constructor() {
-    effect(() => {
-      this.dataSource.data = this.filteredAssets();
-    });
+    effect(
+      () => {
+        const wsData = this.assetService.getStockData()();
+        this.rawData.set(wsData);
+      },
+      { allowSignalWrites: true }
+    );
+  
+    effect(
+      () => {
+        this.updateDataSource();
+      },
+      { allowSignalWrites: true }
+    );
+  }
+  
+
+  private updateDataSource() {
+    const filteredData = this.filteredAssets();
+    this.stockDataSource.data = filteredData;
+    this.isLoading.set(filteredData.length === 0);
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    this.stockDataSource.sort = this.sort;
+    this.stockDataSource.paginator = this.paginator;
+    this.setupSortingAccessor();
   }
 
-  onSearchChange(event: Event) {
+  private setupSortingAccessor() {
+    this.stockDataSource.sortingDataAccessor = (item: Asset, property: string) => {
+      const numericProperties = ['change', 'price', 'open', 'high', 'low', 'volume', 'previousClose', 'changePercent'];
+      return numericProperties.includes(property)
+        ? Number(item[property as keyof Asset]) || 0
+        : item[property as keyof Asset]?.toString() || '';
+    };
+  }
+
+  public onSearchChange(event: Event) {
     this.searchControl.set((event.target as HTMLInputElement).value);
   }
 
-  onSectorChange(event: Event) {
+  public onSectorChange(event: Event) {
     this.sectorControl.set((event.target as HTMLSelectElement).value);
   }
 
-  onTrendChange(event: Event) {
+  public onTrendChange(event: Event) {
     this.trendControl.set((event.target as HTMLSelectElement).value);
   }
 
-  // Open asset details
-  // viewAssetDetails(asset: Asset) {
-  //   this.selectedAsset = this.selectedAsset === asset ? null : asset;
-  //   this.assetDetailsVisible[asset.symbol] = !this.assetDetailsVisible[asset.symbol];
-  // }
-  viewAssetDetails(asset: AssetDiscover) {
-    this.assetservice.selectAsset(asset); // Set selected asset in the service
-    this.selectedAsset = this.selectedAsset === asset ? null : asset;
-    this.assetDetailsVisible[asset.symbol] =
-      !this.assetDetailsVisible[asset.symbol];
-    console.log('Selected Asset:', this.selectedAsset);
+  public viewAssetDetails(asset: Asset) {
+    this.selectedAsset.set(asset);
+    this.assetService.setSelectedAsset(asset);    
   }
 
-  // Format number for display
-  formatNumber(num: number): string {
+  public formatNumber(num: number): string {
     return num.toLocaleString();
   }
 }

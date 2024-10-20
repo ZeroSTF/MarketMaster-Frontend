@@ -1,54 +1,47 @@
-<!-- asset-details.component.html -->
 @if (selectedAsset(); as asset) {
   <div class="scrollbar-hide p-4 rounded-lg ">
     <!-- Header Section -->
     <div class="flex items-center gap-3 mb-4">
       <div class="asset-logo w-8 h-8 bg-navy-blue rounded-lg flex items-center justify-center">
-        <img [src]="asset.logoUrl" [alt]="asset.symbol" class="w-6 h-6" />
+        <img [src]="'images/' + asset.symbol + '.png'" [alt]="asset.symbol" class="w-6 h-6" />
       </div>
       <div>
         <h2 class="text-lg font-bold">{{ asset.symbol }}</h2>
-        <p class="text-sm text-gray-600">{{ asset.sector }}</p>
+        <p class="text-sm text-gray-600">Latest Trading Day: {{ asset.latestTradingDay }}</p>
       </div>
     </div>
 
     <!-- Price Section -->
     <div class="mb-4">
       <div class="flex items-baseline">
-        <span class="text-2xl font-bold">${{ asset.price }}</span>
-        <span [class]="asset.trendDirection === 'up' ? 'text-green-500' : 'text-red-500'"
-              class="ml-2 text-lg">
-          @if (asset.trendDirection === 'up') {
-            <span>📈</span>
-          } @else {
-            <span>📉</span>
-          }
+        <span class="text-2xl font-bold">${{ asset.price.toFixed(2) }}</span>
+        <span class="text-sm text-gray-600 ml-2" 
+              [ngClass]="{'text-green-600': asset.change >= 0, 'text-red-600': asset.change < 0}">
+          ({{ asset.change > 0 ? '+' : '' }}{{ asset.change.toFixed(2) }} 
+          {{ asset.changePercent }}%)
         </span>
       </div>
     </div>
 
-    <!-- Chart Section -->
+    <!-- Price Range Section -->
     <div class="mb-4">
-      <app-chart></app-chart>
+      <p class="text-xs text-gray-600">Price Range: ${{ asset.low.toFixed(2) }} - ${{ asset.high.toFixed(2) }}</p>
+    </div>
+
+    <!-- Volume Section -->
+    <div class="mb-4">
+      <p class="text-xs text-gray-600">Volume: {{ asset.volume | number }}</p>
     </div>
 
     <!-- Key Metrics -->
     <div class="grid grid-cols-2 gap-2 mb-4">
       <div class="p-2 bg-gray-50 rounded">
-        <p class="text-xs text-gray-600">Volume</p>
-        <p class="text-sm font-semibold">{{ asset.volume | number }}</p>
+        <p class="text-xs text-gray-600">Open Price</p>
+        <p class="text-sm font-semibold">${{ asset.open.toFixed(2) }}</p>
       </div>
       <div class="p-2 bg-gray-50 rounded">
-        <p class="text-xs text-gray-600">Market Cap</p>
-        <p class="text-sm font-semibold">{{ asset.marketCap | number:'1.0-0' }}</p>
-      </div>
-      <div class="p-2 bg-gray-50 rounded">
-        <p class="text-xs text-gray-600">P/E Ratio</p>
-        <p class="text-sm font-semibold">{{ asset.peRatio }}</p>
-      </div>
-      <div class="p-2 bg-gray-50 rounded">
-        <p class="text-xs text-gray-600">Dividend Yield</p>
-        <p class="text-sm font-semibold">{{ asset.dividendYield }}%</p>
+        <p class="text-xs text-gray-600">Previous Close</p>
+        <p class="text-sm font-semibold">${{ asset.previousClose.toFixed(2) }}</p>
       </div>
     </div>
 
@@ -65,7 +58,7 @@
       </button>
     </div>
 
-    <!-- Tab Navigation and Content (simplified) -->
+    <!-- Recent News Section -->
     <div class="border-t border-gray-200 pt-2">
       <h3 class="text-sm font-semibold mb-2">Recent News</h3>
       <div class="space-y-2">
@@ -79,6 +72,6 @@
   </div>
 } @else {
   <div class="flex items-center justify-center h-full">
-    <p class="text-gray-500">Select a asset to view details</p>
+    <p class="text-gray-500">Select an asset to view details</p>
   </div>
 }
