@@ -9,4 +9,6 @@ export interface AssetDailyDto {
     previousClose: number;
     change: number;
     changePercent: string;
+    [key: string]: string | number | undefined; // Add index signature
+
   }

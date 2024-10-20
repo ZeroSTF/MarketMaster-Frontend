@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AssetService } from '../../../../services/asset.service';
 @Component({
@@ -6,7 +6,9 @@ import { AssetService } from '../../../../services/asset.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './watchlist.component.html',
-  styleUrls: ['./watchlist.component.css']
+  styleUrls: ['./watchlist.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 export class WatchlistComponent {
   private assetService = inject(AssetService);

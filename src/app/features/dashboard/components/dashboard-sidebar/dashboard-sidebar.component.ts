@@ -23,8 +23,7 @@ export class DashboardSidebarComponent {
     { name: 'explore', label: 'Explore', icon: 'explore', link: '/dashboard/discover' },
     { name: 'portfolio', label: 'Portfolio', icon: 'account_balance_wallet', link: '/dashboard/portfolio' },
     { name: 'settings', label: 'Settings', icon: 'settings', link: '/dashboard/settings' },
-    { name: 'community', label: 'Community', icon: 'group', link: '#' },
-    { name: 'help', label: 'Help & Support', icon: 'help', link: '#' },
+    
   ];
 
   constructor(private breakpointObserver: BreakpointObserver) {
