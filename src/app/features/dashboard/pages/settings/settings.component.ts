@@ -2,24 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-// interface SettingsForm {
-//   emailOnFollow: boolean;
-//   emailOnMention: boolean;
-// }
-
-// interface ProfileForm {
-//   fullName: string;
-//   email: string;
-//   location: string;
-//   organization: string;
-// }
-
-// interface SecurityForm {
-//   username: string;
-//   password: string;
-//   organization: string;
-//   date: string;
-// }
 
 @Component({
   selector: 'app-settings',
