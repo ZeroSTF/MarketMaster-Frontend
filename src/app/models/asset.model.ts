@@ -1,14 +1,21 @@
-// export interface AssetDiscover {
-//     symbol: string;
-//     price: number;
-//     volume: number;
-//     marketCap: number;
-//     peRatio: number;
-//     dividendYield: number;
-//     sector: string;
-//     trendDirection: 'up' | 'down';
-//     logoUrl: string;
-//   }
+export interface Asset {
+  symbol: string;
+  open: number;
+  high: number;
+  low: number;
+  price: number;
+  volume: number;
+  latestTradingDay: string;
+  previousClose: number;
+  change: number;
+  changePercent: string;
+
+}
+
+
+
+
+
 
   export interface AssetPortfolio {
     name: string;
@@ -17,17 +24,7 @@
     portfolioValue: number;
     trendImageUrl: string;
   }
-  export interface AssetDiscover {
-    symbol: string;
-    price: number;
-    volume: number;
-    marketCap: number;
-    peRatio: number;
-    dividendYield: number;
-    sector: string;
-    trendDirection: 'up' | 'down';
-    logoUrl: string;
-  }
+ 
   
   export interface WatchlistItem {
     symbol: string;

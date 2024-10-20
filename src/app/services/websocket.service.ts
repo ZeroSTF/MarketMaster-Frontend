@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
-import { AssetDailyDto } from '../models/assetdto.model';
 import * as Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
+import { Asset } from '../models/asset.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +9,7 @@ import SockJS from 'sockjs-client';
 export class WebsocketService {
   private stompClient: Stomp.Client | null = null;
   private readonly serverUrl = 'http://localhost:8081/market';
-
-  private stockDataSignal = signal<AssetDailyDto[]>([]);
+  private stockDataSignal = signal<Asset[]>([]);
 
   constructor() {
     this.connect();
@@ -42,7 +41,7 @@ export class WebsocketService {
 
   private handleMessage(message: Stomp.Message): void {
     try {
-      const newData: AssetDailyDto[] = JSON.parse(message.body);
+      const newData: Asset[] = JSON.parse(message.body);
       this.stockDataSignal.set(newData);
     } catch (error) {
       console.error('Error parsing message:', error);

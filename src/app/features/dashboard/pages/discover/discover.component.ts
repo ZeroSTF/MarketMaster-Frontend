@@ -19,8 +19,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { AssetdetailsComponent } from '../../components/assetdetails/assetdetails.component';
 import { WebsocketService } from '../../../../services/websocket.service';
-import { AssetDailyDto } from '../../../../models/assetdto.model';
 import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
+import { Asset } from '../../../../models/asset.model';
 
 @Component({
   selector: 'app-asset-list',
@@ -42,7 +42,7 @@ import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinan
 })
 export class DiscoverComponent {
   private webSocketService = inject(WebsocketService);
-  // private yfinanceService = inject(YfinanceService);
+  private yfinanceService = inject(YfinanceService);
 
   readonly columns = [
     { field: 'logoUrl', label: 'Logo' },
@@ -63,7 +63,7 @@ export class DiscoverComponent {
 
   public selectedAsset = signal<AssetStatisticsDto | null>(null);
   public isLoading = signal<boolean>(true);
-  public stockDataSource = new MatTableDataSource<AssetDailyDto>();
+  public stockDataSource = new MatTableDataSource<Asset>();
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -72,7 +72,7 @@ export class DiscoverComponent {
   public sectorControl = signal<string>('all');
   public trendControl = signal<string>('all');
 
-  private rawData = signal<AssetDailyDto[]>([]);
+  private rawData = signal<Asset[]>([]);
 
   public filteredAssets = computed(() => {
     const searchTerm = this.searchControl().toLowerCase();
@@ -120,11 +120,11 @@ export class DiscoverComponent {
   }
 
   private setupSortingAccessor() {
-    this.stockDataSource.sortingDataAccessor = (item: AssetDailyDto, property: string) => {
+    this.stockDataSource.sortingDataAccessor = (item: Asset, property: string) => {
       const numericProperties = ['change', 'price', 'open', 'high', 'low', 'volume', 'previousClose', 'changePercent'];
       return numericProperties.includes(property)
-        ? Number(item[property as keyof AssetDailyDto]) || 0
-        : item[property as keyof AssetDailyDto]?.toString() || '';
+        ? Number(item[property as keyof Asset]) || 0
+        : item[property as keyof Asset]?.toString() || '';
     };
   }
 
@@ -141,8 +141,10 @@ export class DiscoverComponent {
   }
 
   public viewAssetDetails(asset: AssetStatisticsDto) {
-    console.log("viewdetailsclicked");
-    // Add logic for viewing asset details
+    this.selectedAsset.set(asset);
+    console.log("viewDetails clicked" , this.selectedAsset);
+    console.log("asset for yf" , asset);
+    this.yfinanceService.selectAsset(asset);
   }
 
   public formatNumber(num: number): string {

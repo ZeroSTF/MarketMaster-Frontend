@@ -9,8 +9,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ChartComponent } from "../chart/chart.component";
-import { AssetDailyDto } from '../../../../models/assetdto.model';
-import { WebsocketService } from '../../../../services/websocket.service';
 import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
 
 @Component({
@@ -29,13 +27,7 @@ import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinan
   styleUrl: './assetdetails.component.css'
 })
 export class AssetdetailsComponent implements OnInit {
-  
- 
-  private assetService = inject(AssetService);
-  private webSocketService = inject(WebsocketService);
   private yfinanceService = inject(YfinanceService);
-  // Signal to track the selected asset
-
   selectedAsset = this.yfinanceService.selectedAssetSignal;
 
   expandedNews: { [key: number]: boolean } = {};
@@ -62,31 +54,41 @@ export class AssetdetailsComponent implements OnInit {
     }
   ];
   ngOnInit(): void {
-    const selectedAssetValue = this.selectedAsset();
+    // Check selected asset initially
+    this.checkSelectedAsset();
+
+    // Create a reactive watcher for changes in the selected asset
+    // this.selectedAsset.subscribe(() => {
+    //   this.checkSelectedAsset();
+    // });
+  }
+
+  private checkSelectedAsset(): void {
+    const selectedAssetValue = this.selectedAsset(); // Get the current value of the signal
+
     if (selectedAssetValue) {
-      this.symbol = selectedAssetValue.symbol;
-      this.fetchStatistics();
+      this.fetchStatistics(selectedAssetValue.symbol);
     } else {
       console.error('No asset selected');
       this.error = 'No asset selected. Please select an asset first.';
     }
-    this.fetchStatistics()
   }
-  fetchStatistics() {
-    if (!this.symbol) {
+
+  fetchStatistics(symbol: string) {
+    if (!symbol) {
       this.error = 'Please enter a stock symbol';
       return;
     }
 
-    this.yfinanceService.getstats(this.symbol).subscribe({
+    this.yfinanceService.getstats(symbol).subscribe({
       next: (data) => {
         this.statistics = data;
-        this.error = '';
+        this.error = ''; // Clear any previous error
       },
       error: (err) => {
         console.error('Error fetching statistics', err);
         this.error = 'Failed to fetch statistics. Please try again.';
-        this.statistics = null;
+        this.statistics = null; // Reset statistics on error
       }
     });
   }
