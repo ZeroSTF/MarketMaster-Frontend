@@ -2,6 +2,7 @@ import { computed, Injectable, signal } from '@angular/core';
 import { Asset, AssetPortfolio, WatchlistItem } from '../models/asset.model';
 import SockJS from 'sockjs-client';
 import * as Stomp from 'stompjs';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -17,7 +18,7 @@ readonly userAssets = computed(() => this.userAssetsSignal());
 
 
 private stompClient: Stomp.Client | null = null;
-private readonly serverUrl = 'http://localhost:8081/market';
+private readonly serverUrl = `${environment.apiUrl}/ws`;
 private stockDataSignal = signal<Asset[]>([]);
 
 constructor() {
