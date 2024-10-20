@@ -1,0 +1,59 @@
+<div class="flex items-center justify-center min-h-screen bg-gradient-to-br  from-blue-100 to-indigo-200">
+    <div class="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-md">
+      <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-8">Create Your Account</h2>
+      <p class="text-center text-gray-600 mb-6">Fill in your details to register</p>
+      <form class="space-y-6">
+        <div class="relative">
+          <input formControlName="fullName" 
+                 type="text" 
+                 placeholder="Full Name" 
+                 class="w-full px-4 py-3 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition duration-300 ease-in-out">
+          <span class="absolute inset-y-0 right-4 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 9a1 1 0 112 0v2a1 1 0 11-2 0V9z" clip-rule="evenodd" />
+            </svg>
+          </span>
+        </div>
+        <div class="relative">
+          <input formControlName="email" 
+                 type="email" 
+                 placeholder="Email" 
+                 class="w-full px-4 py-3 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition duration-300 ease-in-out">
+          <span class="absolute inset-y-0 right-4 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M2.8 5a1.1 1.1 0 01.67-.7c.17-.07.36-.1.53-.1h12a1.1 1.1 0 011.2 1.1v9a1.1 1.1 0 01-1.2 1.1H4a1.1 1.1 0 01-.8-.3L2.1 9.7A1.1 1.1 0 012.8 5zm12 3H5a1.1 1.1 0 110 2h10a1.1 1.1 0 110-2z" clip-rule="evenodd" />
+            </svg>
+          </span>
+        </div>
+        <div class="relative">
+          <input formControlName="password" 
+                 type="password" 
+                 placeholder="Password" 
+                 class="w-full px-4 py-3 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition duration-300 ease-in-out">
+          <span class="absolute inset-y-0 right-4 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+            </svg>
+          </span>
+        </div>
+        <div class="relative">
+          <input formControlName="confirmPassword" 
+                 type="password" 
+                 placeholder="Confirm Password" 
+                 class="w-full px-4 py-3 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition duration-300 ease-in-out">
+          <span class="absolute inset-y-0 right-4 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4 8a1 1 0 00-1 1v4a1 1 0 001 1h12a1 1 0 001-1V9a1 1 0 00-1-1H4zM5 4a1 1 0 00-1 1v2h10V5a1 1 0 00-1-1H5z" clip-rule="evenodd" />
+            </svg>
+          </span>
+        </div>
+        <button type="submit" 
+                
+                class="w-full bg-gradient-to-r from-teal-500 to-green-500 text-white py-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+          Register
+        </button>
+      </form>
+      <p class="text-center text-gray-500 mt-8">Already have an account? <a href="#" class="text-teal-500 hover:underline">Login</a></p>
+    </div>
+  </div>
+  
