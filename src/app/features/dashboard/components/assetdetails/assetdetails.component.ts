@@ -1,4 +1,4 @@
-import { Component, inject} from '@angular/core';
+import { Component, inject, OnInit} from '@angular/core';
 import { AssetService } from '../../../../services/asset.service';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +9,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ChartComponent } from "../chart/chart.component";
+import { AssetDailyDto } from '../../../../models/assetdto.model';
+import { WebsocketService } from '../../../../services/websocket.service';
+import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
 
 @Component({
   selector: 'app-asset-details',
@@ -25,15 +28,22 @@ import { ChartComponent } from "../chart/chart.component";
   templateUrl: './assetdetails.component.html',
   styleUrl: './assetdetails.component.css'
 })
-export class AssetdetailsComponent {
+export class AssetdetailsComponent implements OnInit {
+  
+ 
   private assetService = inject(AssetService);
-
+  private webSocketService = inject(WebsocketService);
+  private yfinanceService = inject(YfinanceService);
   // Signal to track the selected asset
-  selectedAsset = this.assetService.selectedAssetSignal;
+
+  selectedAsset = this.yfinanceService.selectedAssetSignal;
+
   expandedNews: { [key: number]: boolean } = {};
   activeTab: 'overview' | 'financial' | 'news' = 'overview';
-
-  
+  stockDatas: any[] = [];
+  statistics: AssetStatisticsDto | null = null;
+  symbol: string = '';
+  error: string = '';
   newsItems = [
     {
       id: 1,
@@ -51,7 +61,35 @@ export class AssetdetailsComponent {
       content: 'Information about the new product launch...'
     }
   ];
-  
+  ngOnInit(): void {
+    const selectedAssetValue = this.selectedAsset();
+    if (selectedAssetValue) {
+      this.symbol = selectedAssetValue.symbol;
+      this.fetchStatistics();
+    } else {
+      console.error('No asset selected');
+      this.error = 'No asset selected. Please select an asset first.';
+    }
+    this.fetchStatistics()
+  }
+  fetchStatistics() {
+    if (!this.symbol) {
+      this.error = 'Please enter a stock symbol';
+      return;
+    }
+
+    this.yfinanceService.getstats(this.symbol).subscribe({
+      next: (data) => {
+        this.statistics = data;
+        this.error = '';
+      },
+      error: (err) => {
+        console.error('Error fetching statistics', err);
+        this.error = 'Failed to fetch statistics. Please try again.';
+        this.statistics = null;
+      }
+    });
+  }
   setActiveTab(tab: 'overview' | 'financial' | 'news') {
     this.activeTab = tab;
   }
@@ -59,5 +97,5 @@ export class AssetdetailsComponent {
   toggleFullText(id: number) {
     this.expandedNews[id] = !this.expandedNews[id];
   }
-  
+
 }

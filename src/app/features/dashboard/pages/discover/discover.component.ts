@@ -4,6 +4,7 @@ import {
   computed,
   effect,
   inject,
+  OnInit,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -17,6 +18,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { AssetdetailsComponent } from '../../components/assetdetails/assetdetails.component';
 import { AssetDiscover } from '../../../../models/asset.model';
+import { WebsocketService } from '../../../../services/websocket.service';
+import { AssetDailyDto } from '../../../../models/assetdto.model';
+import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
 
 @Component({
   selector: 'app-asset-list',
@@ -34,7 +38,7 @@ import { AssetDiscover } from '../../../../models/asset.model';
   ],
   templateUrl: './discover.component.html',
 })
-export class DiscoverComponent {
+export class DiscoverComponent implements OnInit{
   //asset table
   columns = [
     { field: 'logoUrl', label: 'Logo' },
@@ -47,12 +51,32 @@ export class DiscoverComponent {
     { field: 'trend', label: 'Trend' },
     { field: 'actions', label: 'Actions' },
   ];
+  columns1 = [
+    { field: 'logoUrl', label: 'Logo' },
+    { field: 'symbol', label: 'Symbol' },
+    { field: 'open', label: 'Open' },
+    { field: 'high', label: 'High' },
+    { field: 'low', label: 'Low' },
+    { field: 'price', label: 'Price' },
+    { field: 'volume', label: 'Volume' },
+    { field: 'latestTradingDay', label: 'Latest Trading Day' },
+    { field: 'previousClose', label: 'Previous Close' },
+    { field: 'change', label: 'Change' },
+    { field: 'changePercent', label: 'Change Percent' },
+    { field: 'actions', label: 'Actions' },
+  ];
 
+  private webSocketService = inject(WebsocketService);
   private assetservice = inject(AssetService);
+  private yfinanceService = inject(YfinanceService);
+  selectedAsset: AssetStatisticsDto | null = null;
   assetDetailsVisible: { [symbol: string]: boolean } = {};
-  selectedAsset: AssetDiscover | null = null;
+  //selectedAsset: AssetDiscover | null = null;
   displayedColumns = this.columns.map((col) => col.field);
+  stockColumns = this.columns1.map((col) => col.field); // Columns for stock data
   dataSource = new MatTableDataSource<AssetDiscover>();
+  stockDataSource = new MatTableDataSource<AssetDailyDto>(); // DataSource for stock data
+  stockDatas: AssetDailyDto[] = [];
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -77,9 +101,16 @@ export class DiscoverComponent {
   });
 
   constructor() {
-    effect(() => {
-      this.dataSource.data = this.filteredAssets();
+ 
+  }
+
+  ngOnInit() {
+   
+    this.webSocketService.getStockData().subscribe((data: AssetDailyDto[]) => {
+      this.stockDatas = data;
+      this.stockDataSource.data = data; // Set stock data to stockDataSource
     });
+   // this.webSocketService.fetchStockData();
   }
 
   ngAfterViewInit() {
@@ -104,15 +135,13 @@ export class DiscoverComponent {
   //   this.selectedAsset = this.selectedAsset === asset ? null : asset;
   //   this.assetDetailsVisible[asset.symbol] = !this.assetDetailsVisible[asset.symbol];
   // }
-  viewAssetDetails(asset: AssetDiscover) {
-    this.assetservice.selectAsset(asset); // Set selected asset in the service
+  viewAssetDetails(asset: AssetStatisticsDto) {
+    this.yfinanceService.selectAsset(asset); // Set selected asset in the service
     this.selectedAsset = this.selectedAsset === asset ? null : asset;
     this.assetDetailsVisible[asset.symbol] =
       !this.assetDetailsVisible[asset.symbol];
-    console.log('Selected Asset:', this.selectedAsset);
   }
 
-  // Format number for display
   formatNumber(num: number): string {
     return num.toLocaleString();
   }
