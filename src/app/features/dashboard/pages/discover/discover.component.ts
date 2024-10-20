@@ -58,9 +58,12 @@ export class DiscoverComponent {
     { field: 'changePercent', label: 'Change%' },
     { field: 'actions', label: 'Actions' },
   ] as const;
-  selectedAsset: AssetStatisticsDto | null = null;
-  assetDetailsVisible: { [symbol: string]: boolean } = {};
   readonly stockColumns = this.columns.map((col) => col.field);
+
+  selectedAsset = signal<AssetStatisticsDto | null>(null);
+  assetDetailsVisible = signal<{ [symbol: string]: boolean }>({});
+  isLoading = signal(true);
+
   stockDataSource = new MatTableDataSource<AssetDailyDto>();
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -70,32 +73,54 @@ export class DiscoverComponent {
   sectorControl = signal('all');
   trendControl = signal('all');
 
-  assets = this.webSocketService.getStockData();
+  private rawData = signal<AssetDailyDto[]>([]);
 
   filteredAssets = computed(() => {
     const searchTerm = this.searchControl().toLowerCase();
     const sector = this.sectorControl();
     const trend = this.trendControl();
+    const data = this.rawData();
 
-    return this.assets()?.filter(
-      (asset) =>
-        asset.symbol.toLowerCase().includes(searchTerm) &&
-        (sector === 'all' || asset.symbol === sector) &&
-        (trend === 'all' || asset.symbol === trend)
-    ); //symbol & symbol need to be changed with the real filters sector and trend , new API
+    return data.filter(asset => 
+      (searchTerm === '' || asset.symbol.toLowerCase().includes(searchTerm)) &&
+      (sector === 'all' || asset.symbol === sector) &&
+      (trend === 'all' || 
+       (trend === 'up' && asset.change > 0) || 
+       (trend === 'down' && asset.change < 0))
+    );
   });
 
   constructor() {
     effect(() => {
-      this.stockDataSource.data = this.filteredAssets()??[];
-    }); 
+      const wsData = this.webSocketService.getStockData()();
+      this.rawData.set(wsData);
+      this.updateDataSource();
+    }, { allowSignalWrites: true });
+
+    effect(() => {
+      this.updateDataSource();
+    });
   }
 
-  
+  private updateDataSource() {
+    const filteredData = this.filteredAssets();
+    this.stockDataSource.data = filteredData;
+    this.isLoading.set(filteredData.length === 0);
+  }
 
   ngAfterViewInit() {
     this.stockDataSource.sort = this.sort;
     this.stockDataSource.paginator = this.paginator;
+    this.setupSortingAccessor();
+  }
+
+  private setupSortingAccessor() {
+    this.stockDataSource.sortingDataAccessor = (item: AssetDailyDto, property: string) => {
+      const numericProperties = ['change', 'price', 'open', 'high', 'low', 'volume', 'previousClose', 'changePercent'];
+      return numericProperties.includes(property)
+        ? Number(item[property as keyof AssetDailyDto]) || 0
+        : item[property as keyof AssetDailyDto]?.toString() || '';
+    };
   }
 
   onSearchChange(event: Event) {
@@ -111,10 +136,12 @@ export class DiscoverComponent {
   }
 
   viewAssetDetails(asset: AssetStatisticsDto) {
-    this.yfinanceService.selectAsset(asset); // Set selected asset in the service
-    this.selectedAsset = this.selectedAsset === asset ? null : asset;
-    this.assetDetailsVisible[asset.symbol] =
-      !this.assetDetailsVisible[asset.symbol];
+    this.yfinanceService.selectAsset(asset);
+    this.selectedAsset.update(current => current === asset ? null : asset);
+    this.assetDetailsVisible.update(current => ({
+      ...current,
+      [asset.symbol]: !current[asset.symbol]
+    }));
   }
 
   formatNumber(num: number): string {
