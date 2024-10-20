@@ -18,8 +18,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { AssetdetailsComponent } from '../../components/assetdetails/assetdetails.component';
-import { WebsocketService } from '../../../../services/websocket.service';
-import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
 import { Asset } from '../../../../models/asset.model';
 
 @Component({
@@ -41,8 +39,7 @@ import { Asset } from '../../../../models/asset.model';
 
 })
 export class DiscoverComponent {
-  private webSocketService = inject(WebsocketService);
-  private yfinanceService = inject(YfinanceService);
+  private assetService = inject(AssetService);
 
   readonly columns = [
     { field: 'logoUrl', label: 'Logo' },
@@ -61,7 +58,7 @@ export class DiscoverComponent {
 
   readonly stockColumns = this.columns.map((col) => col.field);
 
-  public selectedAsset = signal<AssetStatisticsDto | null>(null);
+  public selectedAsset = signal<Asset | null>(null);
   public isLoading = signal<boolean>(true);
   public stockDataSource = new MatTableDataSource<Asset>();
 
@@ -92,17 +89,17 @@ export class DiscoverComponent {
   constructor() {
     effect(
       () => {
-        const wsData = this.webSocketService.getStockData()();
+        const wsData = this.assetService.getStockData()();
         this.rawData.set(wsData);
       },
-      { allowSignalWrites: true } // Enable signal writes inside this effect
+      { allowSignalWrites: true }
     );
   
     effect(
       () => {
         this.updateDataSource();
       },
-      { allowSignalWrites: true } // Enable signal writes inside this effect
+      { allowSignalWrites: true }
     );
   }
   
@@ -140,11 +137,9 @@ export class DiscoverComponent {
     this.trendControl.set((event.target as HTMLSelectElement).value);
   }
 
-  public viewAssetDetails(asset: AssetStatisticsDto) {
+  public viewAssetDetails(asset: Asset) {
     this.selectedAsset.set(asset);
-    console.log("viewDetails clicked" , this.selectedAsset);
-    console.log("asset for yf" , asset);
-    this.yfinanceService.selectAsset(asset);
+    this.assetService.setSelectedAsset(asset);    
   }
 
   public formatNumber(num: number): string {

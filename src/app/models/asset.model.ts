@@ -10,6 +10,13 @@ export interface Asset {
   change: number;
   changePercent: string;
 
+
+
+
+
+  
+
+
 }
 
 
