@@ -4,8 +4,7 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 rounded-3xl">
             <h2 class="text-2xl font-bold text-blue-950 font-roboto">Market Overview</h2>
             <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-
-                
+                <!-- Search Input -->
                 <div class="relative w-full md:w-80">
                     <input 
                         type="text" 
@@ -16,6 +15,7 @@
                     />
                 </div>
             
+                <!-- Sector Select -->
                 <div class="relative w-full md:w-48">
                     <select 
                         [value]="sectorControl()"
@@ -28,6 +28,7 @@
                     </select>
                 </div>
             
+                <!-- Trend Select -->
                 <div class="relative w-full md:w-48">
                     <select 
                         [value]="trendControl()"
@@ -41,55 +42,78 @@
             </div>
         </div>
         <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 h-full overflow-hidden">
-        <!-- Main Flex Container -->
-        <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 h-full overflow-hidden">
-            <div *ngIf="isLoading()" class="absolute inset-0 bg-white bg-opacity-75 z-50 flex items-center justify-center h-full w-full">
-                <div class="text-center">
-                    <img src="images/LogoMM.png" alt="Logo" class="w-full h-8 mx-auto mb-4 animate-bounce">
-                </div>
-            </div>
-            
             <!-- Asset Table -->
-            <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 h-full overflow-hidden">
-            <div class="flex-grow flex flex-col overflow-hidden rounded-2xl lg:w-2/3 xl:w-3/4">
-                    <div class="flex-grow overflow-auto">
-                        <mat-table [dataSource]="stockDataSource" matSort class="w-full min-w-full table-fixed">
+            <div class="flex-grow flex flex-col overflow-hidden rounded-2xl lg:w-2/3 xl:w-3/4 relative">
+                <div *ngIf="isLoading()" class="absolute inset-0 bg-white bg-opacity-75 z-50 flex items-center justify-center">
+                    <div class="text-center">
+                        <img src="images/LogoMM.png" alt="Logo" class="w-full h-auto mx-auto mb-4 animate-bounce">
+                    </div>
+                </div>
+        
+                <div class="flex-grow overflow-auto">
+                    <mat-table [dataSource]="stockDataSource" matSort class="w-full min-w-full table-fixed">
                         <ng-container *ngFor="let column of columns" [matColumnDef]="column.field">
                             <mat-header-cell 
                                 *matHeaderCellDef 
                                 mat-sort-header
-                                    class="bg-sky-50 text-blue-950 text-left font-semibold sticky top-0 z-10">
+                                class="bg-blue-600 text-blue-950 text-left font-semibold sticky top-0 z-10">
                                 {{ column.label }}
                             </mat-header-cell>
                                 
-                                <mat-cell *matCellDef="let stock" [ngClass]="{'opacity-0': !stock}">
-                                <ng-container [ngSwitch]="column.field">
-                                        <ng-container *ngSwitchCase="'logoUrl'">
-                                            <img 
-                                                [src]="'images/' + stock.symbol + '.png'" 
-                                                [alt]="stock.symbol + ' logo'"
-                                                class="w-6 h-6 rounded-full"
-                                                loading="lazy"
-                                                onerror="this.src='images/default.png'">
-                                        </ng-container>
-                                        
-                                        <span *ngSwitchCase="'price'">
-                                        {{ stock.price | currency:'USD':'symbol':'1.2-2' }}
+                            <mat-cell *matCellDef="let stock" [ngClass]="{'opacity-0': !stock, 'bg-white font-bold': true, 'whitespace-normal': true}" >
+                                <ng-container [ngSwitch]="column.field" >
+                                    <ng-container *ngSwitchCase="'logoUrl'">
+                                        <img 
+                                            [src]="'images/' + stock.symbol + '.png'" 
+                                            [alt]="stock.symbol + ' logo'"
+                                            class="w-6 h-6 rounded-full"
+                                            loading="lazy"
+                                            onerror="this.src='images/default.png'">
+                                    </ng-container>
+                                    
+                                    <span *ngSwitchCase="'price'">
+                                        {{ stock.price | currency:'USD':'symbol':'1.4-4' }}
+                                    </span>
+                                    
+                                    <span *ngSwitchCase="'change'" 
+                                          [ngClass]="{'text-green-500': stock.change > 0, 'text-red-500': stock.change < 0}">
+                                        {{ stock.change | number:'1.4-4' }}
+                                    </span>
+                                    
+                                    <span *ngSwitchCase="'changePercent'">
+                                        <span [ngClass]="{'text-green-500': stock.change > 0, 'text-red-500': stock.change < 0}">
+                                            {{ stock.changePercent }}%
                                         </span>
-                                        
-                                        <span *ngSwitchCase="'change'"
-                                              [ngClass]="{'text-green-500': stock.change > 0, 'text-red-500': stock.change < 0}">
-                                            {{ stock.change | number:'1.2-2' }}
-                                        </span>
-                                        
-                                        <button *ngSwitchCase="'actions'"
-                                                mat-button 
-                                                class="text-blue-950 hover:bg-blue-100 font-medium" 
-                                                (click)="viewAssetDetails(stock)">
-                                            Details
-                                        </button>
-                                        
-                                        <span *ngSwitchDefault>{{ stock[column.field] }}</span>
+                                    </span>
+                                    
+                                    <span *ngSwitchCase="'open'">
+                                        {{ formatNumber(stock.open) }}
+                                    </span>
+        
+                                    <span *ngSwitchCase="'high'">
+                                        {{ formatNumber(stock.high) }}
+                                    </span>
+        
+                                    <span *ngSwitchCase="'low'">
+                                        {{ formatNumber(stock.low) }}
+                                    </span>
+        
+                                    <span *ngSwitchCase="'volume'">
+                                        {{ stock.volume | number:'1.0-0' }} <!-- formatted with commas -->
+                                    </span>
+        
+                                    <span *ngSwitchCase="'latestTradingDay'">
+                                        {{ stock.latestTradingDay | date:'MM/dd/yyyy' }} <!-- formatted date -->
+                                    </span>
+                                    
+                                    <button *ngSwitchCase="'actions'"
+                                            mat-button 
+                                            class="text-blue-950 hover:bg-blue-100 font-medium" 
+                                            (click)="viewAssetDetails(stock)">
+                                        Details
+                                    </button>
+                                    
+                                    <span *ngSwitchDefault>{{ stock[column.field] }}</span>
                                 </ng-container>
                             </mat-cell>
                         </ng-container>
@@ -99,13 +123,12 @@
                         <mat-row *matRowDef="let row; columns: stockColumns;"></mat-row>
                     </mat-table>
                 </div>
-              
-                    <mat-paginator 
-                        [pageSizeOptions]="[10, 25, 50]" 
-                        showFirstLastButtons 
-                        class="bg-sky-50 sticky bottom-0">
-                    </mat-paginator>
-                </div>
+                
+                <mat-paginator 
+                    [pageSizeOptions]="[10, 25, 50]" 
+                    showFirstLastButtons 
+                    class="bg-blue-600 text-blue-950 sticky bottom-0">
+                </mat-paginator>
             </div>
         
             <!-- Asset Detail Component -->
@@ -115,6 +138,5 @@
             </div>
         </div>
         
-</div>
 </div>
 
