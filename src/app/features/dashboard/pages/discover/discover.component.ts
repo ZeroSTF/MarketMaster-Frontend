@@ -42,7 +42,7 @@ import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinan
 })
 export class DiscoverComponent {
   private webSocketService = inject(WebsocketService);
-  private yfinanceService = inject(YfinanceService);
+  // private yfinanceService = inject(YfinanceService);
 
   readonly columns = [
     { field: 'logoUrl', label: 'Logo' },
@@ -58,24 +58,23 @@ export class DiscoverComponent {
     { field: 'changePercent', label: 'Change%' },
     { field: 'actions', label: 'Actions' },
   ] as const;
+
   readonly stockColumns = this.columns.map((col) => col.field);
 
-  selectedAsset = signal<AssetStatisticsDto | null>(null);
-  assetDetailsVisible = signal<{ [symbol: string]: boolean }>({});
-  isLoading = signal(true);
-
-  stockDataSource = new MatTableDataSource<AssetDailyDto>();
+  public selectedAsset = signal<AssetStatisticsDto | null>(null);
+  public isLoading = signal<boolean>(true);
+  public stockDataSource = new MatTableDataSource<AssetDailyDto>();
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  searchControl = signal('');
-  sectorControl = signal('all');
-  trendControl = signal('all');
+  public searchControl = signal<string>('');
+  public sectorControl = signal<string>('all');
+  public trendControl = signal<string>('all');
 
   private rawData = signal<AssetDailyDto[]>([]);
 
-  filteredAssets = computed(() => {
+  public filteredAssets = computed(() => {
     const searchTerm = this.searchControl().toLowerCase();
     const sector = this.sectorControl();
     const trend = this.trendControl();
@@ -84,23 +83,29 @@ export class DiscoverComponent {
     return data.filter(asset => 
       (searchTerm === '' || asset.symbol.toLowerCase().includes(searchTerm)) &&
       (sector === 'all' || asset.symbol === sector) &&
-      (trend === 'all' || 
-       (trend === 'up' && asset.change > 0) || 
+      (trend === 'all' ||
+       (trend === 'up' && asset.change > 0) ||
        (trend === 'down' && asset.change < 0))
     );
   });
 
   constructor() {
-    effect(() => {
-      const wsData = this.webSocketService.getStockData()();
-      this.rawData.set(wsData);
-      this.updateDataSource();
-    }, { allowSignalWrites: true });
-
-    effect(() => {
-      this.updateDataSource();
-    });
+    effect(
+      () => {
+        const wsData = this.webSocketService.getStockData()();
+        this.rawData.set(wsData);
+      },
+      { allowSignalWrites: true } // Enable signal writes inside this effect
+    );
+  
+    effect(
+      () => {
+        this.updateDataSource();
+      },
+      { allowSignalWrites: true } // Enable signal writes inside this effect
+    );
   }
+  
 
   private updateDataSource() {
     const filteredData = this.filteredAssets();
@@ -123,28 +128,24 @@ export class DiscoverComponent {
     };
   }
 
-  onSearchChange(event: Event) {
+  public onSearchChange(event: Event) {
     this.searchControl.set((event.target as HTMLInputElement).value);
   }
 
-  onSectorChange(event: Event) {
+  public onSectorChange(event: Event) {
     this.sectorControl.set((event.target as HTMLSelectElement).value);
   }
 
-  onTrendChange(event: Event) {
+  public onTrendChange(event: Event) {
     this.trendControl.set((event.target as HTMLSelectElement).value);
   }
 
-  viewAssetDetails(asset: AssetStatisticsDto) {
-    this.yfinanceService.selectAsset(asset);
-    this.selectedAsset.update(current => current === asset ? null : asset);
-    this.assetDetailsVisible.update(current => ({
-      ...current,
-      [asset.symbol]: !current[asset.symbol]
-    }));
+  public viewAssetDetails(asset: AssetStatisticsDto) {
+    console.log("viewdetailsclicked");
+    // Add logic for viewing asset details
   }
 
-  formatNumber(num: number): string {
+  public formatNumber(num: number): string {
     return num.toLocaleString();
   }
 }
