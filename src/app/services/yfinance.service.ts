@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 export interface AssetStatisticsDto {
   symbol: string;
@@ -18,7 +18,8 @@ export interface AssetStatisticsDto {
 })
 export class YfinanceService {
  private Url = 'http://localhost:8081/yfinance/stats';
- selectedAssetSignal = signal<AssetStatisticsDto | null>(null);
+selectedAssetSignal = signal<AssetStatisticsDto | null>(null);
+//  readonly selectedAsset = computed(() => this.selectedAssetSignal());
 
   constructor(private http: HttpClient) { }
   getstats(symbol:string):Observable<AssetStatisticsDto> {
@@ -26,5 +27,6 @@ export class YfinanceService {
   }
   selectAsset(asset: AssetStatisticsDto) {
     this.selectedAssetSignal.set(asset);
+    console.log(asset);
   }
 }
