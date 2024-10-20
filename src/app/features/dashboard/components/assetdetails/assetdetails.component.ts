@@ -9,9 +9,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ChartComponent } from "../chart/chart.component";
-import { AssetDailyDto } from '../../../../models/assetdto.model';
-import { WebsocketService } from '../../../../services/websocket.service';
 import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
+import { Asset } from '../../../../models/asset.model';
 
 @Component({
   selector: 'app-asset-details',
@@ -28,22 +27,16 @@ import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinan
   templateUrl: './assetdetails.component.html',
   styleUrl: './assetdetails.component.css'
 })
-export class AssetdetailsComponent implements OnInit {
-  
- 
+export class AssetdetailsComponent {
   private assetService = inject(AssetService);
-  private webSocketService = inject(WebsocketService);
-  private yfinanceService = inject(YfinanceService);
-  // Signal to track the selected asset
-
-  selectedAsset = this.yfinanceService.selectedAssetSignal;
+  public selectedAsset = this.assetService.selectedAsset;
 
   expandedNews: { [key: number]: boolean } = {};
   activeTab: 'overview' | 'financial' | 'news' = 'overview';
-  stockDatas: any[] = [];
-  statistics: AssetStatisticsDto | null = null;
-  symbol: string = '';
-  error: string = '';
+  // stockDatas: any[] = [];
+  // statistics: AssetStatisticsDto | null = null;
+  // symbol: string = '';
+  // error: string = '';
   newsItems = [
     {
       id: 1,
@@ -61,35 +54,8 @@ export class AssetdetailsComponent implements OnInit {
       content: 'Information about the new product launch...'
     }
   ];
-  ngOnInit(): void {
-    const selectedAssetValue = this.selectedAsset();
-    if (selectedAssetValue) {
-      this.symbol = selectedAssetValue.symbol;
-      this.fetchStatistics();
-    } else {
-      console.error('No asset selected');
-      this.error = 'No asset selected. Please select an asset first.';
-    }
-    this.fetchStatistics()
-  }
-  fetchStatistics() {
-    if (!this.symbol) {
-      this.error = 'Please enter a stock symbol';
-      return;
-    }
-
-    this.yfinanceService.getstats(this.symbol).subscribe({
-      next: (data) => {
-        this.statistics = data;
-        this.error = '';
-      },
-      error: (err) => {
-        console.error('Error fetching statistics', err);
-        this.error = 'Failed to fetch statistics. Please try again.';
-        this.statistics = null;
-      }
-    });
-  }
+  
+  
   setActiveTab(tab: 'overview' | 'financial' | 'news') {
     this.activeTab = tab;
   }
