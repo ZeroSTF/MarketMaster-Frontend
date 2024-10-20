@@ -31,7 +31,7 @@ import { DarkModeService } from '../../services/dark-mode.service';
 export class NavBarComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
-  private darkModeService = inject(DarkModeService);
+  darkModeService = inject(DarkModeService);
 
   isOpen = false;
   isOpen2 = false;
