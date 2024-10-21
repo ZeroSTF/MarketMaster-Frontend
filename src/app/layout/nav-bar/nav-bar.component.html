@@ -29,7 +29,7 @@
     <a href="#"
       class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-primary-700">Gamer</a>
     <a routerLink="/learning"
-      class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-primary-700">Learner</a>
+      class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-primary-700">Learn</a>
     <span class="flex items-center gap-2 cursor-pointer transition-colors duration-200 hover:text-primary-700">
       <a href="#" class="text-gray-400 font-semibold no-underline">Quick Links</a>
       <mat-icon>arrow_drop_down</mat-icon>
@@ -54,7 +54,7 @@
       <!-- Dropdown -->
       <div *ngIf="isOpen" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 shadow-lg rounded-lg z-50">
         <ul class="py-1">
-          <li *ngFor="let link of ['Dashboard', 'Trader', 'Gamer', 'Learner']"
+          <li *ngFor="let link of ['Dashboard', 'Trader', 'Gamer', 'Learn']"
             class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all">
             <a href="#" class="block lg:hidden px-4 py-2 text-gray-600 dark:text-gray-300 font-semibold no-underline"
               (click)="toggleMenu()">{{ link }}</a>
@@ -75,7 +75,7 @@
   <div *ngIf="isOpen2"
     class="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-gray-800 shadow-lg rounded-md z-50">
     <ul class="py-2">
-      <li *ngFor="let link of ['Dashboard', 'Trader', 'Gamer', 'Learner']"
+      <li *ngFor="let link of ['Dashboard', 'Trader', 'Gamer', 'Learn']"
         class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all">
         <a href="#" class="block px-4 py-2 text-gray-600 dark:text-gray-300 font-semibold no-underline">{{ link }}</a>
       </li>
