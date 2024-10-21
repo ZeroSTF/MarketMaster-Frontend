@@ -1,7 +1,6 @@
-<nav 
-  (clickOutside)="isOpen ? toggleMenu() : null"
-  class="flex items-center justify-between mx-2 px-4 py-2 max-w-full min-w-72 shadow-[0px_4px_4px_rgba(0,0,0,0.25)] backdrop-blur-[10px] rounded-2xl bg-white">
-  
+<nav (clickOutside)="isOpen ? toggleMenu() : null"
+  class="flex items-center justify-between mx-2 px-4 py-2 max-w-full min-w-72 shadow-[0px_4px_4px_rgba(0,0,0,0.25)] backdrop-blur-[10px] rounded-2xl bg-white dark:bg-gray-800 transition-colors duration-300">
+
   <!-- Logo -->
   <div class="flex items-center min-w-[180px]">
     <svg width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
@@ -14,46 +13,58 @@
 
   <!-- Hamburger Icon (Mobile) -->
   <div class="lg:hidden">
-    <button 
-      (click)="toggleMenu2()" 
-      aria-label="Toggle menu" 
+    <button (click)="toggleMenu2()" aria-label="Toggle menu"
       class="text-gray-600 focus:outline-none transition-transform pt-2 pl-8 duration-300 hover:scale-105">
       <mat-icon>menu</mat-icon>
     </button>
   </div>
 
   <!-- Navigation Menu (Desktop) -->
-  <div class="hidden lg:flex flex-grow items-center ml-16 gap-4 space-x-8 text-base font-roboto-flex text-gray-600 whitespace-nowrap">
-    <a href="#" class="text-[color:var(--Primary-500,#2196F3)] font-semibold no-underline transition-colors duration-200 hover:text-primary-700">Dashboard</a>
-    <a href="#" class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-primary-700">Trader</a>
-    <a href="#" class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-primary-700">Gamer</a>
-    <a href="#" class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-primary-700">Learner</a>
+  <div
+    class="hidden lg:flex flex-grow items-center ml-16 gap-4 space-x-8 text-base font-roboto-flex text-gray-600 dark:text-gray-300 whitespace-nowrap">
+    <a routerLink="/dashboard"
+      class="text-[color:var(--Primary-500,#2196F3)] font-semibold no-underline transition-colors duration-200 hover:text-primary-700">Dashboard</a>
+    <a routerLink="/trader"
+      class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-primary-700">Trader</a>
+    <a href="#"
+      class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-primary-700">Gamer</a>
+    <a href="#"
+      class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-primary-700">Learner</a>
     <span class="flex items-center gap-2 cursor-pointer transition-colors duration-200 hover:text-primary-700">
       <a href="#" class="text-gray-400 font-semibold no-underline">Quick Links</a>
       <mat-icon>arrow_drop_down</mat-icon>
     </span>
   </div>
 
-  <!-- Avatar and Dropdown Menu -->
+  <!-- Dark Mode Toggle Button -->
   <div class="flex items-center space-x-4">
+    <button (click)="toggleDarkMode()"
+      class="p-2 rounded-full bg-gray-200 dark:bg-gray-600 hover:scale-105 transition-all duration-300">
+      @if(darkModeService.isDarkMode()){
+      <mat-icon>light_mode</mat-icon>
+      }@else{
+      <mat-icon>dark_mode</mat-icon>
+      }
+    </button>
+
+    <!-- Avatar and Dropdown Menu -->
     <div class="relative">
-      <img 
-        class="w-9 h-9 rounded-full cursor-pointer transition-transform duration-300 hover:scale-105" 
-        src="images/avaterNav.png" 
-        alt="Avatar" 
-        (click)="toggleMenu()"
-      />
+      <img class="w-9 h-9 rounded-full cursor-pointer transition-transform duration-300 hover:scale-105"
+        src="images/SidebarAvatar.png" alt="Avatar" (click)="toggleMenu()" />
       <!-- Dropdown -->
-      <div 
-        *ngIf="isOpen" 
-        class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-50">
+      <div *ngIf="isOpen" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 shadow-lg rounded-lg z-50">
         <ul class="py-1">
-          <li *ngFor="let link of ['Dashboard', 'Trader', 'Gamer', 'Learner']" class="text-gray-700 hover:bg-gray-100 transition-all">
-            <a href="#" class="block lg:hidden px-4 py-2 text-gray-600 font-semibold no-underline" (click)="toggleMenu()">{{ link }}</a>
+          <li *ngFor="let link of ['Dashboard', 'Trader', 'Gamer', 'Learner']"
+            class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all">
+            <a href="#" class="block lg:hidden px-4 py-2 text-gray-600 dark:text-gray-300 font-semibold no-underline"
+              (click)="toggleMenu()">{{ link }}</a>
           </li>
-          <li class="border-t border-gray-200 block lg:hidden"></li>
+          <li class="border-t border-gray-200 dark:border-gray-600 block lg:hidden"></li>
           <li>
-            <a href="#" class="px-4 py-2 text-gray-600 font-semibold no-underline transition-colors duration-200 hover:bg-gray-100">Log out</a>
+            <button (click)="logout()"
+              class="px-4 py-2 text-gray-600 dark:text-gray-300 font-semibold no-underline transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-600">
+              Log out
+            </button>
           </li>
         </ul>
       </div>
@@ -61,10 +72,12 @@
   </div>
 
   <!-- Mobile Menu -->
-  <div *ngIf="isOpen2" class="lg:hidden absolute top-full left-0 w-full bg-white shadow-lg rounded-md z-50">
+  <div *ngIf="isOpen2"
+    class="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-gray-800 shadow-lg rounded-md z-50">
     <ul class="py-2">
-      <li *ngFor="let link of ['Dashboard', 'Trader', 'Gamer', 'Learner']" class="text-gray-700 hover:bg-gray-100 transition-all">
-        <a href="#" class="block px-4 py-2 text-gray-600 font-semibold no-underline">{{ link }}</a>
+      <li *ngFor="let link of ['Dashboard', 'Trader', 'Gamer', 'Learner']"
+        class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all">
+        <a href="#" class="block px-4 py-2 text-gray-600 dark:text-gray-300 font-semibold no-underline">{{ link }}</a>
       </li>
     </ul>
   </div>
