@@ -61,6 +61,7 @@
 <div *ngIf="isMobile" 
      class="fixed bottom-0 left-0 right-0 bg-white shadow-md p-2 flex justify-around z-50">
   <button *ngFor="let btn of sidebarButtons" 
+          [routerLink]="btn.link"   
           (click)="clickSideButton(btn.name)" 
           class="flex flex-col items-center text-gray-400 hover:text-blue-500">
     <span class="material-icons text-2xl">{{ btn.icon }}</span>

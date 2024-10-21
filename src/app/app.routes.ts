@@ -1,12 +1,13 @@
 import { Routes } from '@angular/router';
-import { DashboardoverviewComponent } from './features/dashboard/pages/dashboardoverview/dashboardoverview.component';
-import { DiscoverComponent } from './features/dashboard/pages/discover/discover.component';
+import { DashboardOverviewComponent } from './features/dashboard/pages/dashboard-overview/dashboard-overview.component';
+import { DashboardExploreComponent } from './features/dashboard/pages/dashboard-explore/dashboard-explore.component';
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
-import { PortfolioComponent } from './features/dashboard/pages/portfolio/portfolio.component';
-import { SettingsComponent } from './features/dashboard/pages/settings/settings.component';
+import { DashboardPortfolioComponent } from './features/dashboard/pages/dashboard-portfolio/dashboard-portfolio.component';
+import { DashboardSettingsComponent } from './features/dashboard/pages/dashboard-settings/dashboard-settings.component';
 import { TraderLayoutComponent } from './layout/trader-layout/trader-layout.component';
-import { CoursesLayoutComponent } from './layout/courses-layout/courses-layout.component';
-import { CoursesoverviewComponent } from './features/dashboard/pages/coursesoverview/coursesoverview.component';
+import { LearningLayoutComponent } from './layout/learning-layout/learning-layout.component';
+import { LearningOverviewComponent } from './features/learning/pages/learning-overview/learning-overview.component';
+import { LearningCalendarComponent } from './features/learning/pages/learning-calendar/learning-calendar.component';
 
 export const routes: Routes = [
   {
@@ -41,20 +42,20 @@ export const routes: Routes = [
       },
       {
         path: 'overview',
-        component: DashboardoverviewComponent,
+        component: DashboardOverviewComponent,
       },
 
       {
         path: 'discover',
-        component: DiscoverComponent,
+        component: DashboardExploreComponent,
       },
       {
         path: 'portfolio',
-        component: PortfolioComponent,
+        component: DashboardPortfolioComponent,
       },
       {
         path: 'settings',
-        component: SettingsComponent,
+        component: DashboardSettingsComponent,
       },
     ],
   },
@@ -75,7 +76,7 @@ export const routes: Routes = [
   // LEARNING ROUTES
   {
     path: 'learning',
-    component: CoursesLayoutComponent,
+    component: LearningLayoutComponent,
     children: [
       {
         path: '',
@@ -84,7 +85,11 @@ export const routes: Routes = [
       },
       {
         path: 'overview',
-        component: CoursesoverviewComponent,
+        component: LearningOverviewComponent,
+      },
+      {
+        path: 'calendar',
+        component: LearningCalendarComponent,
       },
     ],
   },

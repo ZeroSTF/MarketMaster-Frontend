@@ -82,7 +82,8 @@
   </nav>
   <div class="flex flex-wrap">
     <button *ngFor="let btn of sidebarButtons" 
-            (click)="clickSideButton(btn.name)" 
+            [routerLink]="btn.link"   
+           (click)="clickSideButton(btn.name)" 
             class="w-1/2 flex flex-col items-center text-gray-400 hover:text-blue-500 p-2"
             [ngClass]="{'text-blue-500': selectedButton === btn.name}">
       <span class="material-icons text-2xl">{{btn.icon}}</span>
@@ -97,6 +98,7 @@
 <div *ngIf="isMobile" 
      class="fixed bottom-0 left-0 right-0 bg-white shadow-md p-2 flex justify-around z-50">
   <button *ngFor="let btn of sidebarButtons" 
+          [routerLink]="btn.link"   
           (click)="clickSideButton(btn.name)" 
           class="flex flex-col items-center text-gray-400 hover:text-blue-500"
           [ngClass]="{'text-blue-500': selectedButton === btn.name}">

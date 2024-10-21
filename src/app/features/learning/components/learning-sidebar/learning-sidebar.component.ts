@@ -5,13 +5,13 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-courses-sidebar',
+  selector: 'app-learning-sidebar',
   standalone: true,
   imports: [RouterModule, CommonModule, FormsModule],
-  templateUrl: './courses-sidebar.component.html',
-  styleUrl: './courses-sidebar.component.css'
+  templateUrl: './learning-sidebar.component.html',
+  styleUrl: './learning-sidebar.component.css'
 })
-export class CoursesSidebarComponent {
+export class LearningSidebarComponent {
   @Input() hidden = false;
   @Output() toggle = new EventEmitter<void>();
   

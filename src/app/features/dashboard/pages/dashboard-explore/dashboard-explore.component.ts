@@ -34,11 +34,11 @@ import { Asset } from '../../../../models/asset.model';
     MatIconModule,
     AssetdetailsComponent,
   ],
-  templateUrl: './discover.component.html',
+  templateUrl: './dashboard-explore.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class DiscoverComponent {
+export class DashboardExploreComponent {
   private assetService = inject(AssetService);
 
   readonly columns = [

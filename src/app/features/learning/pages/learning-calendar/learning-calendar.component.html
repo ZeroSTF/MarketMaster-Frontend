@@ -1,0 +1,33 @@
+<div class="container mx-auto mt-8 p-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Calendar Section -->
+      <div class="calendar-section bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-4">Learning Calendar</h2>
+        <full-calendar
+          [options]="calendarOptions"
+          class="w-full bg-white rounded-lg shadow-md"
+        ></full-calendar>
+      </div>
+      
+      <!-- Task Section -->
+      <div class="task-section bg-gray-50 shadow-lg rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-4">Upcoming Tasks</h2>
+        <ul class="task-list space-y-4">
+          <!-- Mock task items -->
+          <li class="bg-white p-4 shadow-md rounded-lg">
+            <h3 class="font-semibold">Complete Assignment</h3>
+            <p class="text-gray-600">Due: 2024-10-22</p>
+          </li>
+          <li class="bg-white p-4 shadow-md rounded-lg">
+            <h3 class="font-semibold">Prepare Presentation</h3>
+            <p class="text-gray-600">Due: 2024-10-23</p>
+          </li>
+          <li class="bg-white p-4 shadow-md rounded-lg">
+            <h3 class="font-semibold">Review Course Materials</h3>
+            <p class="text-gray-600">Due: 2024-10-24</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
