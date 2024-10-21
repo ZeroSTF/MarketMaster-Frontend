@@ -1,0 +1,54 @@
+<div class="matches-container p-6">
+    <!-- Tabs -->
+    <div class="tabs flex justify-around mb-4">
+      <button class="tab active" (click)="selectTab('upcoming')">Upcoming</button>
+      <button class="tab" (click)="selectTab('open')">Open</button>
+      <button class="tab" (click)="selectTab('closed')">Closed</button>
+    </div>
+  
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <div *ngIf="selectedTab === 'upcoming'" class="tab-list">
+        <h3 class="tab-title font-bold mb-2">Upcoming Games</h3>
+        <ul>
+          <li class="game-item p-4 mb-4">
+            <h4 class="game-title font-semibold">Future Trader Showdown</h4>
+            <p class="game-date text-gray-400">Starts on: 2024-11-01</p>
+          </li>
+          <li class="game-item p-4 mb-4">
+            <h4 class="game-title font-semibold">Investor's Duel</h4>
+            <p class="game-date text-gray-400">Starts on: 2024-11-15</p>
+          </li>
+        </ul>
+      </div>
+  
+      <div *ngIf="selectedTab === 'open'" class="tab-list">
+        <h3 class="tab-title font-bold mb-2">Open Games</h3>
+        <ul>
+          <li class="game-item p-4 mb-4">
+            <h4 class="game-title font-semibold">Market Madness</h4>
+            <p class="game-date text-gray-400">Ends in: 2 hours</p>
+          </li>
+          <li class="game-item p-4 mb-4">
+            <h4 class="game-title font-semibold">Stock Wars</h4>
+            <p class="game-date text-gray-400">Ends in: 1 day</p>
+          </li>
+        </ul>
+      </div>
+  
+      <div *ngIf="selectedTab === 'closed'" class="tab-list">
+        <h3 class="tab-title font-bold mb-2">Closed Games</h3>
+        <ul>
+          <li class="game-item p-4 mb-4">
+            <h4 class="game-title font-semibold">Trader's Challenge</h4>
+            <p class="game-date text-gray-400">Closed on: 2024-10-20</p>
+          </li>
+          <li class="game-item p-4 mb-4">
+            <h4 class="game-title font-semibold">Bull vs Bear</h4>
+            <p class="game-date text-gray-400">Closed on: 2024-10-15</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  

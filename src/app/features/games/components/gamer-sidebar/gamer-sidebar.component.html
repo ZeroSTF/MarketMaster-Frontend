@@ -1,0 +1,19 @@
+<!-- Desktop Sidebar -->
+<div class="flex flex-col items-center bg-orange-800 h-full w-full rounded-2xl">
+  <div
+    class="flex flex-col items-center justify-between w-20 hover:w-72 transition-all duration-300 ease-in-out"
+    
+  >
+    <!-- Sidebar Icons -->
+    <ul class="flex flex-col items-center pl-0 space-y-8 py-4 text-white">
+      <li class="text-2xl mt-18"><i class="fas fa-home"></i> <span *ngIf="isExpanded" class="ml-4">Home</span></li>
+      <li class="text-2xl mt-17"><i class="fas fa-chart-line"></i> <span *ngIf="isExpanded" class="ml-4">Stats</span></li>
+      <li class="text-2xl mt-17"><i class="fas fa-cogs"></i> <span *ngIf="isExpanded" class="ml-4">Settings</span></li>
+      <li class="text-2xl mt-17"><i class="fas fa-sign-out-alt"></i> <span *ngIf="isExpanded" class="ml-4">Logout</span></li>
+      <li class="text-2xl mt-17"><i class="fas fa-cogs"></i> <span *ngIf="isExpanded" class="ml-4">Settings</span></li>
+      <li class="text-2xl mt-17"><i class="fas fa-home"></i> <span *ngIf="isExpanded" class="ml-4">Home</span></li>
+      <li class="text-2xl mt-17"><i class="fas fa-sign-out-alt"></i> <span *ngIf="isExpanded" class="ml-4">Logout</span></li>
+
+    </ul>
+  </div>
+</div>

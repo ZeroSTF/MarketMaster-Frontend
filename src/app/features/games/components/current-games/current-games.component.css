@@ -1,0 +1,89 @@
+.games-leaderboard-container {
+    background: rgba(255, 255, 255, 0.15); /* Slightly more transparent */
+    backdrop-filter: blur(15px); /* Blurry background */
+    border-radius: 1rem; /* Rounded edges */
+    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); /* Elevated shadow for depth */
+    color: #ffffff;
+    padding: 2rem; /* Generous padding */
+  }
+  
+  /* Header */
+  .header h2 {
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); /* Soft shadow */
+  }
+  
+  /* Current Games Cards */
+  .current-games-list .game-card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    border-radius: 0.75rem;
+    border: 1px solid var(--orange-gaamer, #FB6805);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Soft shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+  }
+  
+  .current-games-list .game-card:hover {
+    transform: translateY(-5px); /* Lift card on hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+  
+  .game-title {
+    color: #ffffff;
+  }
+  
+  .performance-label,
+  .game-status {
+    color: rgba(255, 255, 255, 0.7); /* Subtle text */
+  }
+  
+  /* Performance Scores */
+  .performance-score {
+    font-weight: bold;
+    animation: bounce 1.5s infinite;
+  }
+  
+  /* Global Leaderboard */
+  .leaderboard-section {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 0.75rem;
+    border: 1px solid var(--orange-gaamer, #FB6805);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Soft shadow */
+    padding: 1.5rem;
+  }
+  
+  .leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .leaderboard-item {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 0.75rem;
+    border: 1px solid var(--orange-gaamer, #FB6805);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .leaderboard-item:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .leader-name {
+    font-size: 1.1rem;
+    color: #ffffff;
+  }
+  
+  .leader-score {
+    font-size: 1.75rem;
+    color: #ffffff;
+  }
+  

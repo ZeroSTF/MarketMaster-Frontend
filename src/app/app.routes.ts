@@ -3,6 +3,8 @@ import { OverviewComponent } from './features/dashboard/pages/overview/overview.
 import { DiscoverComponent } from './features/dashboard/pages/discover/discover.component';
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 import { PortfolioComponent } from './features/dashboard/pages/portfolio/portfolio.component';
+import { GamesLayoutComponent } from './layout/games-layout/games-layout.component';
+import { GameOverviewComponent } from './features/games/pages/game-overview/game-overview.component';
 
 export const routes: Routes = [
   {
@@ -10,19 +12,6 @@ export const routes: Routes = [
     redirectTo: 'dashboard/overview',
     pathMatch: 'full',
   },
-
-  // AUTH ROUTES
-  {
-    path: 'login',
-    loadComponent: () =>
-      import('./features/auth/login/login.component').then((m) => m.LoginComponent),
-  }, {
-    path: 'register',
-    loadComponent: () =>
-      import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
-  },
-
-  // DASHBOARD ROUTES
   {
     path: 'dashboard',
     component: DashboardLayoutComponent,
@@ -30,6 +19,25 @@ export const routes: Routes = [
       {
         path: 'overview',
         component: OverviewComponent,
+      },
+
+      {
+        path: 'discover',
+        component: DiscoverComponent,
+      },
+      {
+        path: 'portfolio',
+        component: PortfolioComponent,
+      },
+    ],
+  },
+  {
+    path: 'game',
+    component: GamesLayoutComponent,
+    children: [
+      {
+        path: 'overview',
+        component: GameOverviewComponent,
       },
 
       {

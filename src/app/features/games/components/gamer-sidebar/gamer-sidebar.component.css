@@ -1,0 +1,42 @@
+/* Sidebar container */
+.flex-col {
+    width: 100%;
+    transition: all 0.3s ease-in-out; /* Smooth transition for sidebar width */
+  }
+  
+  /* Sidebar list items */
+  ul li {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    transition: all 0.3s ease-in-out; /* Smooth transition for icon and text */
+  }
+  
+  ul li i {
+    margin-right: 1rem;
+    font-size: 2rem; /* Larger icon size */
+  }
+  
+  /* Text labels */
+  ul li span {
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease-in-out; /* Smooth fade-in effect */
+  }
+  
+  ul li span.opacity-100 {
+    opacity: 1; /* Fully visible when expanded */
+  }
+  
+  ul li span.opacity-0 {
+    opacity: 0; /* Hidden when not expanded */
+  }
+  
+  /* Expanded Sidebar */
+  .w-72 {
+    width: 18rem; /* Expanded width */
+  }
+  
+  .w-20 {
+    width: 5rem; /* Collapsed width */
+  }
+  
