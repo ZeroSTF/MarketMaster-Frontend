@@ -4,13 +4,13 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angul
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-settings',
+  selector: 'app-dashboard-settings',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatIconModule],
-  templateUrl: './settings.component.html',
-  styleUrl: './settings.component.css'
+  templateUrl: './dashboard-settings.component.html',
+  styleUrl: './dashboard-settings.component.css'
 })
-export class SettingsComponent {
+export class DashboardSettingsComponent {
   activeTab: 'account' | 'security' = 'account';
   
  

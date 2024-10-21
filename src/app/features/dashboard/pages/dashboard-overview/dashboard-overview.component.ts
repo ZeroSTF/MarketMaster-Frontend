@@ -10,14 +10,14 @@ import { WatchlistComponent } from '../../components/watchlist/watchlist.compone
 
 
 @Component({
-  selector: 'app-overview',
+  selector: 'app-dashboard-overview',
   standalone: true,
   imports: [CommonModule,OverviewdetailsComponent,NewsComponent,TradesoverviewComponent,WatchlistComponent,ChartComponent,CoursComponent],
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.css'],
+  templateUrl: './dashboard-overview.component.html',
+  styleUrls: ['./dashboard-overview.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class OverviewComponent {
+export class DashboardOverviewComponent {
   // Component logic goes here
 }

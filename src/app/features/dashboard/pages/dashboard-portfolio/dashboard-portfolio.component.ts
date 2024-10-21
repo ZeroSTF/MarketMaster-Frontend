@@ -7,15 +7,15 @@ import { WatchlistComponent } from '../../components/watchlist/watchlist.compone
 import { AssetService } from '../../../../services/asset.service';
 
 @Component({
-  selector: 'app-portfolio',
+  selector: 'app-dashboard-portfolio',
   standalone: true,
   imports: [CommonModule, ChartComponent, DragDropModule, WatchlistComponent ],
-  templateUrl: './portfolio.component.html',
-  styleUrl: './portfolio.component.css',
+  templateUrl: './dashboard-portfolio.component.html',
+  styleUrl: './dashboard-portfolio.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class PortfolioComponent  {
+export class DashboardPortfolioComponent  {
   isExpanded = true;
   selectedAsset: AssetPortfolio | null = null;
   private assetService = inject(AssetService);

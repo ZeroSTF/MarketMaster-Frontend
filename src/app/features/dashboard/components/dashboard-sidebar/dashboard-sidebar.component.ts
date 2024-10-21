@@ -19,7 +19,7 @@ export class DashboardSidebarComponent {
   isMobile = false;
 
   sidebarButtons = [
-    { name: 'overview', label: 'Overview', icon: 'home', link: '/dashboard/overview', badge: '' },
+    { name: 'overview', label: 'Overview', icon: 'home', link: '/dashboard/overview'},
     { name: 'explore', label: 'Explore', icon: 'explore', link: '/dashboard/discover' },
     { name: 'portfolio', label: 'Portfolio', icon: 'account_balance_wallet', link: '/dashboard/portfolio' },
     { name: 'settings', label: 'Settings', icon: 'settings', link: '/dashboard/settings' },

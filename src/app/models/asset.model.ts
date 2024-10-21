@@ -9,15 +9,7 @@ export interface Asset {
   previousClose: number;
   change: number;
   changePercent: string;
-
-
-
-
-
-  
-
-
-}
+  }
 
 
 

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DiscoverComponent } from './discover.component';
+import { LearningLayoutComponent } from './learning-layout.component';
 
-describe('DiscoverComponent', () => {
-  let component: DiscoverComponent;
-  let fixture: ComponentFixture<DiscoverComponent>;
+describe('LearningLayoutComponent', () => {
+  let component: LearningLayoutComponent;
+  let fixture: ComponentFixture<LearningLayoutComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DiscoverComponent]
+      imports: [LearningLayoutComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DiscoverComponent);
+    fixture = TestBed.createComponent(LearningLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
