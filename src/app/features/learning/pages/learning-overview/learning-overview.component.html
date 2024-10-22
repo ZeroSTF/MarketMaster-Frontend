@@ -1,42 +1,152 @@
 <div class="h-screen w-full flex flex-wrap">
-    <!-- Left column: Contains the top-left and bottom-left stacked -->
-    <div class="w-full md:w-1/4 flex flex-col">
-      <!-- Top left section: 1/4 width, 1/3 height, 4 boxes -->
-      <div class="h-1/3 p-2">
-       
-          <app-overviewdetails ></app-overviewdetails>
-        
-      </div>
-  
-      <!-- Bottom left section: 1/4 width, 2/3 height -->
-      <div class="h-2/3 p-2">
-        <app-cours></app-cours>
-      </div>
+  <div class="w-full h-44 overflow-hidden rounded-2xl relative">
+    <!-- Background image with blur and darkening -->
+    <div class="relative w-full h-full rounded-2xl">
+      <img
+        src="images/SideHEader.png"
+        alt="Background"
+        class="w-full h-full object-cover rounded-2xl filter blur-sm brightness-50"
+      />
     </div>
-  
-    <!-- Second column -->
-    <div class="w-full md:w-1/4 flex flex-col">
-      <!-- Top second section next to top-left: 1/4 width, 1/3 height -->
-      <div class="h-1/3 p-2">
-<app-news></app-news>      </div>
-  
-      <!-- Bottom second section -->
-      <div class="h-2/3 p-2">
-        <app-watchListoverview></app-watchListoverview>
-      </div>
+
+    <!-- Logo, Line, and Text -->
+    <div class="absolute inset-0 flex flex-col items-center justify-center">
+      <!-- Logo -->
+      <img
+        src="images/LogoMMWhite.png"
+        alt="Logo"
+        class="w-60 h-16 mb-1 object-cover"
+      />
+
+      <!-- Text and Link -->
+      <p class="text-white text-lg">Welcome Back!</p>
     </div>
-  
-    <!-- Right column -->
-    <div class="w-full md:w-1/2 flex flex-col">
-      <!-- Top right section: 2/3 height -->
-      <div class="h-3/5 p-2">
-        <app-chart></app-chart>
-      </div>
-  
-      <!-- Bottom right section: 1/3 height -->
-      <div class="h-2/5 p-2">
-        <app-tradesoverview></app-tradesoverview>
+  </div>
+  <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg -mt-8 mb-3">
+      <div class="flex items-center justify-between p-6">
+        <div class="flex items-center space-x-4">
+          <img
+            src="images/SidebarAvatar.png"
+            alt="Adela Parkson"
+            class="w-16 h-16 rounded-full border-4 border-white"
+          />
+          <div>
+            <h2 class="text-xl font-medium">Adela Parkson</h2>
+            <p class="text-sm text-gray-500">estherasimmmple.com</p>
+          </div>
+        </div>
+        <div class="flex space-x-4">
+          <button
+            class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
+            [ngClass]="{ 'text-blue-600': activeTab === 'completed' }"
+            (click)="activeTab = 'completed'"
+          >
+            <span>Completed Courses</span>
+            <span
+              class="bg-green-600 text-white px-2 py-1 rounded-full text-xs"
+              >{{ completedCoursesList().length }}</span
+            >
+          </button>
+
+          <!-- Ongoing Courses Button -->
+          <button
+            class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
+            [ngClass]="{ 'text-blue-600': activeTab === 'ongoing' }"
+            (click)="activeTab = 'ongoing'"
+          >
+            <span>Ongoing Courses</span>
+            <span
+              class="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs"
+              >{{ ongoingCoursesList().length }}</span
+            >
+          </button>
+
+          <!-- Pending Tasks Button -->
+          <button
+            class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
+            [ngClass]="{ 'text-blue-600': activeTab === 'pending' }"
+            (click)="activeTab = 'pending'"
+          >
+            <span>Pending</span>
+            <span
+              class="bg-red-500 text-white px-2 py-1 rounded-full text-xs"
+              >{{ pendingTasks() }}</span
+            >
+          </button>
+        </div>
+
       </div>
     </div>
   </div>
-  
+
+  <!-- Course List -->
+<div class="h-full w-full mx-auto px-4 sm:px-6 lg:px-8">
+  <div>
+
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Your Courses</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        *ngFor="
+          let course of activeTab === 'completed'
+            ? completedCoursesList()
+            : activeTab === 'ongoing'
+            ? ongoingCoursesList()
+            : courses()
+        "
+        class="flex w-auto h-auto flex-col justify-between items-start bg-white shadow-md p-3 rounded-lg space-y-2"
+      >
+        <!-- Course Image -->
+        <img
+          [src]="course.thumbnailUrl"
+          [alt]="course.title"
+          class="rounded-lg w-full h-40 object-cover mb-3"
+        />
+
+        <!-- Header Section with TimeLeft and Actions -->
+        <div class="flex items-center justify-between w-full">
+          <!-- Progress or Time Left -->
+          <div class="flex justify-center items-center bg-black text-white text-xs rounded-md px-2 py-1">
+            {{ course.progress }}% Completed
+          </div>
+
+          <!-- Edit and More Options Buttons -->
+          <div class="flex space-x-1">
+            <button class="text-gray-400 hover:text-gray-600">
+              <span class="material-icons text-base">edit</span>
+            </button>
+            <button class="text-gray-400 hover:text-gray-600">
+              <span class="material-icons text-base">more_vert</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Course Title -->
+        <h3 class="font-semibold text-sm text-gray-800 truncate">
+          {{ course.title }}
+        </h3>
+
+        <!-- Course Description -->
+        <p class="text-xs text-gray-500 leading-tight truncate">
+          {{ course.description }}
+        </p>
+
+        <!-- Footer with Date and Time -->
+        <div class="flex justify-between w-full text-xs text-gray-500">
+          <!-- Release Date -->
+          <div class="flex items-center space-x-1">
+            <span class="material-icons text-blue-500 text-base">calendar_today</span>
+            <span>{{ course.releaseDate | date: 'shortDate' }}</span>
+          </div>
+          <!-- Duration -->
+          <div class="flex items-center space-x-1">
+            <span class="material-icons text-orange-500 text-base">access_time</span>
+            <span>{{ course.duration }} hours</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

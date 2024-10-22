@@ -8,6 +8,7 @@ import { TraderLayoutComponent } from './layout/trader-layout/trader-layout.comp
 import { LearningLayoutComponent } from './layout/learning-layout/learning-layout.component';
 import { LearningOverviewComponent } from './features/learning/pages/learning-overview/learning-overview.component';
 import { LearningCalendarComponent } from './features/learning/pages/learning-calendar/learning-calendar.component';
+import { LearningTestComponent } from './features/learning/components/learning-test/learning-test.component';
 
 export const routes: Routes = [
   {
@@ -90,6 +91,10 @@ export const routes: Routes = [
       {
         path: 'calendar',
         component: LearningCalendarComponent,
+      },
+      {
+        path: 'test',
+        component: LearningTestComponent,
       },
     ],
   },
