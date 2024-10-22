@@ -1,123 +1,101 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { Asset, AssetPortfolio, WatchlistItem } from '../models/asset.model';
-import SockJS from 'sockjs-client';
-import * as Stomp from 'stompjs';
+import {
+  Asset,
+  AssetPortfolio,
+  PageResponse,
+  WatchlistItem,
+} from '../models/asset.model';
 import { environment } from '../../environments/environment';
-
+import { Socket } from 'socket.io-client';
+import { io } from 'socket.io-client';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AssetService {
-private selectedAssetSignal = signal<Asset | null>(null);
-readonly selectedAsset = computed(() => this.selectedAssetSignal()); 
-  
-readonly watchlist = computed(() => this.watchlistSignal());
-readonly bestWinners = computed(() => this.bestWinnersSignal());
-readonly userAssets = computed(() => this.userAssetsSignal());
+  private selectedAssetSignal = signal<Asset | null>(null);
+  private watchlistSignal = signal<any[]>([]);
+  private bestWinnersSignal = signal<any[]>([]);
+  private userAssetsSignal = signal<AssetPortfolio[]>([]);
+  private assetsSignal = signal<Asset[]>([]);
 
+  readonly selectedAsset = computed(() => this.selectedAssetSignal());
+  readonly watchlist = computed(() => this.watchlistSignal());
+  readonly bestWinners = computed(() => this.bestWinnersSignal());
+  readonly userAssets = computed(() => this.userAssetsSignal());
+  readonly assets = computed(() => this.assetsSignal());
 
-private stompClient: Stomp.Client | null = null;
-private readonly serverUrl = `${environment.apiUrl}/ws`;
-private stockDataSignal = signal<Asset[]>([]);
+  private readonly apiUrl = `${environment.apiUrl}/asset`;
+  socket: Socket;
 
-constructor() {
-  this.connect();
-}
-
-private connect(): void {
-  const socket = new SockJS(this.serverUrl);
-  this.stompClient = Stomp.over(socket);
- this.stompClient.connect({}, 
-    () => this.onConnect(),
-    (error) => this.onError(error)
-  );
-}
-
-private onConnect(): void {
-  this.subscribeToStockData();
-}
-
-private subscribeToStockData(): void {
-  if (!this.stompClient) {
-    console.error('STOMP client not initialized.');
-    return;
-  }
-
-  this.stompClient.subscribe('/topic/market', (message) => {
-    this.handleMessage(message);
-  });
-}
-
-private handleMessage(message: Stomp.Message): void {
-  try {
-    const newData: Asset[] = JSON.parse(message.body);
-    this.stockDataSignal.set(newData);
-  } catch (error) {
-    console.error('Error parsing message:', error);
-  }
-}
-
-getStockData() {
-  return this.stockDataSignal.asReadonly();
-}
-
-private onError(error: string | Stomp.Frame): void {
-  console.error('WebSocket Error:', error);
-}
-
-ngOnDestroy(): void {
-  this.disconnect();
-}
-
-private disconnect(): void {
-  if (this.stompClient) {
-    this.stompClient.disconnect(() => {
-      console.log('Disconnected from WebSocket');
+  constructor(private http: HttpClient) {
+    // Initialize Socket.IO connection
+    this.socket = io(environment.flaskUrl);
+    // Listen for real-time updates
+    this.socket.on('asset_update', (data: Asset) => {
+      console.log('Real-time update:', data);
+      this.updateAssetData(data);
     });
   }
-}
-setSelectedAsset(asset: Asset): void {
-  this.selectedAssetSignal.set(asset);
-}
-// updateWatchlist(newWatchlist: WatchlistItem[]) {
-//   this.watchlistSignal.set(newWatchlist);
-// }
 
-// updateBestWinners(newBestWinners: WatchlistItem[]) {
-//   this.bestWinnersSignal.set(newBestWinners);
-// }
+  // Get paginated asset data
+  getAllAssets(page: number = 0, size: number = 20): void {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    this.http
+      .get<PageResponse<Asset>>(`${this.apiUrl}/getAll`, { params })
+      .subscribe((response) => {
+        // Update signals with new data
+        this.assetsSignal.set(response.content);
+      });
+  }
 
-  // Mock Data
-  private watchlistSignal = signal<WatchlistItem[]| null>([
-  { symbol: 'CMPA', performance: 15.2, category: 'Tech', trend: 'up' },
-  { symbol: 'CMPB', performance: 8.5, category: 'Finance', trend: 'down' },
-  { symbol: 'CMPA', performance: 15.2, category: 'Tech', trend: 'up' },
-  { symbol: 'CMPB', performance: 8.5, category: 'Finance', trend: 'down' },
-  { symbol: 'WNRB', performance: 14.3, category: 'Healthcare', trend: 'up' },
-  { symbol: 'WNRA', performance: 18.7, category: 'Tech', trend: 'up' },
-  { symbol: 'WNRB', performance: 14.3, category: 'Healthcare', trend: 'up' },
-  
-  ]);
+  // Update individual asset data
+  private updateAssetData(updatedAsset: Asset) {
+    this.assetsSignal.update((current) => {
+      const index = current.findIndex(
+        (asset) => asset.symbol === updatedAsset.symbol
+      );
+      if (index !== -1) {
+        const updated = [...current];
+        updated[index] = { ...current[index], ...updatedAsset };
+        return updated;
+      }
+      return current;
+    });
+    // Update selected asset if it matches
+    if (this.selectedAsset()?.symbol === updatedAsset.symbol) {
+      this.selectedAssetSignal.update((current) => ({
+        ...current!,
+        ...updatedAsset,
+      }));
+    }
+    // Update watchlist if asset is in watchlist
+    this.watchlistSignal.update((current) => {
+      const index = current.findIndex(
+        (item) => item.symbol === updatedAsset.symbol
+      );
+      if (index !== -1) {
+        const updated = [...current];
+        // updated[index] = {
+        //   ...current[index],
+        //   currentPrice: updatedAsset.currentPrice,
+        // };
+        return updated;
+      }
+      return current;
+    });
+  }
 
-  private bestWinnersSignal = signal<WatchlistItem[]| null>([
-  { symbol: 'WNRA', performance: 18.7, category: 'Tech', trend: 'up' },
-  { symbol: 'WNRB', performance: 14.3, category: 'Healthcare', trend: 'up' },
-  { symbol: 'WNRA', performance: 18.7, category: 'Tech', trend: 'up' },
-  ]);
+  ngOnDestroy() {
+    if (this.socket) {
+      this.socket.disconnect();
+    }
+  }
 
-  private userAssetsSignal = signal<AssetPortfolio[] | null>([
-    { name: 'Apple Inc', symbol: 'AAPL', percentChange: 0.66, portfolioValue: 15215.70, trendImageUrl: 'images/upTrend.png' },
-    { name: 'Microsoft Corp', symbol: 'MSFT', percentChange: -0.32, portfolioValue: 12500.50, trendImageUrl: 'images/downTrend.png' },
-    { name: 'Amazon.com Inc', symbol: 'AMZN', percentChange: 1.25, portfolioValue: 9800.30, trendImageUrl: 'images/upTrend.png' },
-    { name: 'Alphabet Inc', symbol: 'GOOGL', percentChange: 0.88, portfolioValue: 11300.20, trendImageUrl: 'images/upTrend.png' },
-    { name: 'Meta Platforms Inc', symbol: 'META', percentChange: -0.75, portfolioValue: 8700.60, trendImageUrl: 'images/downTrend.png' },
-    { name: 'Tesla Inc', symbol: 'TSLA', percentChange: 2.10, portfolioValue: 7500.40, trendImageUrl: 'images/upTrend.png' },
-    { name: 'NVIDIA Corp', symbol: 'NVDA', percentChange: 1.50, portfolioValue: 10200.80, trendImageUrl: 'images/upTrend.png' },
-    { name: 'JPMorgan Chase & Co', symbol: 'JPM', percentChange: -0.20, portfolioValue: 6800.90, trendImageUrl: 'images/downTrend.png' },
-    { name: 'JPMorgan Chase & Co', symbol: 'JPM', percentChange: -0.20, portfolioValue: 6800.90, trendImageUrl: 'images/downTrend.png' },
-    { name: 'JPMorgan Chase & Co', symbol: 'JPM', percentChange: -0.20, portfolioValue: 6800.90, trendImageUrl: 'images/downTrend.png' },
-    { name: 'JPMorgan Chase & Co', symbol: 'JPM', percentChange: -0.20, portfolioValue: 6800.90, trendImageUrl: 'images/downTrend.png' },
-
-  ])
+  setSelectedAsset(asset: Asset): void {
+    this.selectedAssetSignal.set(asset);
+  }
 }

@@ -35,8 +35,7 @@ import { Asset } from '../../../../models/asset.model';
     AssetdetailsComponent,
   ],
   templateUrl: './discover.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
-
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DiscoverComponent {
   private assetService = inject(AssetService);
@@ -44,15 +43,14 @@ export class DiscoverComponent {
   readonly columns = [
     { field: 'logoUrl', label: 'Logo' },
     { field: 'symbol', label: 'Symbol' },
-    { field: 'open', label: 'Open' },
-    { field: 'high', label: 'High' },
-    { field: 'low', label: 'Low' },
-    { field: 'price', label: 'Price' },
+    { field: 'openPrice', label: 'Open' },
+    { field: 'dayHigh', label: 'High' },
+    { field: 'dayLow', label: 'Low' },
+    { field: 'currentPrice', label: 'Price' },
     { field: 'volume', label: 'Volume' },
-    { field: 'latestTradingDay', label: 'Latest' },
     { field: 'previousClose', label: 'Previous Close' },
-    { field: 'change', label: 'Change' },
-    { field: 'changePercent', label: 'Change%' },
+    { field: 'priceChange', label: 'Change' },
+    { field: 'priceChangePercent', label: 'Change%' },
     { field: 'actions', label: 'Actions' },
   ] as const;
 
@@ -60,7 +58,8 @@ export class DiscoverComponent {
 
   public selectedAsset = signal<Asset | null>(null);
   public isLoading = signal<boolean>(true);
-  public stockDataSource = new MatTableDataSource<Asset>();
+  public stockDataSource: MatTableDataSource<Asset> =
+    new MatTableDataSource<Asset>();
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -69,32 +68,41 @@ export class DiscoverComponent {
   public sectorControl = signal<string>('all');
   public trendControl = signal<string>('all');
 
-  private rawData = signal<Asset[]>([]);
+  private assets = signal<Asset[]>([]);
 
   public filteredAssets = computed(() => {
     const searchTerm = this.searchControl().toLowerCase();
     const sector = this.sectorControl();
     const trend = this.trendControl();
-    const data = this.rawData();
+    const data = this.assets();
 
-    return data.filter(asset => 
-      (searchTerm === '' || asset.symbol.toLowerCase().includes(searchTerm)) &&
-      (sector === 'all' || asset.symbol === sector) &&
-      (trend === 'all' ||
-       (trend === 'up' && asset.change > 0) ||
-       (trend === 'down' && asset.change < 0))
-    );
+    return data.filter((asset) => {
+      const matchesSearch =
+        searchTerm === '' || asset.symbol.toLowerCase().includes(searchTerm);
+      const matchesSector = sector === 'all' || asset.symbol === sector;
+      const matchesTrend =
+        trend === 'all' ||
+        (trend === 'up' ? asset.priceChange > 0 : asset.priceChange < 0);
+
+      return matchesSearch && matchesSector && matchesTrend;
+    });
   });
 
   constructor() {
+    // Subscribe to the assets signal from the service
     effect(
       () => {
-        const wsData = this.assetService.getStockData()();
-        this.rawData.set(wsData);
+        const assets = this.assetService.assets();
+        if (assets.length === 0) {
+          // Initial load of assets if empty
+          this.assetService.getAllAssets();
+        }
+        this.assets.set(assets);
       },
       { allowSignalWrites: true }
     );
-  
+
+    // Effect for updating the data source when filters change
     effect(
       () => {
         this.updateDataSource();
@@ -102,7 +110,6 @@ export class DiscoverComponent {
       { allowSignalWrites: true }
     );
   }
-  
 
   private updateDataSource() {
     const filteredData = this.filteredAssets();
@@ -117,8 +124,20 @@ export class DiscoverComponent {
   }
 
   private setupSortingAccessor() {
-    this.stockDataSource.sortingDataAccessor = (item: Asset, property: string) => {
-      const numericProperties = ['change', 'price', 'open', 'high', 'low', 'volume', 'previousClose', 'changePercent'];
+    this.stockDataSource.sortingDataAccessor = (
+      item: Asset,
+      property: string
+    ) => {
+      const numericProperties = [
+        'open',
+        'dayHigh',
+        'dayLow',
+        'currentPrice',
+        'volume',
+        'previousClose',
+        'priceChange',
+        'priceChangePercent',
+      ];
       return numericProperties.includes(property)
         ? Number(item[property as keyof Asset]) || 0
         : item[property as keyof Asset]?.toString() || '';
@@ -139,7 +158,7 @@ export class DiscoverComponent {
 
   public viewAssetDetails(asset: Asset) {
     this.selectedAsset.set(asset);
-    this.assetService.setSelectedAsset(asset);    
+    this.assetService.setSelectedAsset(asset);
   }
 
   public formatNumber(num: number): string {

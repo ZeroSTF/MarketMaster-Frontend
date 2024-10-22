@@ -18,7 +18,6 @@ export class SignupComponent {
   private router = inject(Router);
   showPassword = false;
 
-
   signupForm = this.fb.nonNullable.group(
     {
       email: ['', [Validators.required, Validators.email]],
@@ -37,7 +36,7 @@ export class SignupComponent {
         this.signupForm.getRawValue();
       console.log('SIGNUP REQUEST IS: ', signupRequest);
       this.authService.signup(signupRequest as SignupRequest).subscribe({
-        next: () => this.router.navigate(['/dashboard']),
+        next: () => this.router.navigate(['/login']),
         error: (error) => {
           console.error('Signup failed', error);
         },
