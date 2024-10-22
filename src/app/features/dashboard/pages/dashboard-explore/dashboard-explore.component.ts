@@ -34,10 +34,11 @@ import { Asset } from '../../../../models/asset.model';
     MatIconModule,
     AssetdetailsComponent,
   ],
-  templateUrl: './discover.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './dashboard-explore.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
+
 })
-export class DiscoverComponent {
+export class DashboardExploreComponent {
   private assetService = inject(AssetService);
 
   readonly columns = [
@@ -129,7 +130,7 @@ export class DiscoverComponent {
       property: string
     ) => {
       const numericProperties = [
-        'open',
+        'openPrice',
         'dayHigh',
         'dayLow',
         'currentPrice',

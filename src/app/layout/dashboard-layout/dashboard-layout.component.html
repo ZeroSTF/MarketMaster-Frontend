@@ -1,16 +1,10 @@
 <div class="flex h-screen overflow-hidden bg-transparent">
   <!-- Sidebar Container -->
-  <aside
-    
-  >
+  <aside>
     <app-dashboard-sidebar [hidden]="hidden" (toggle)="toggleSidebar()"></app-dashboard-sidebar>
-
-    <!-- Toggle Button Container -->
-    
   </aside>
-
   <!-- Main Content -->
-  <main class="flex-grow overflow-auto bg-transparent ml-0 mr-2 scrollbar-hide transition-all duration-500 ease-in-out">
+  <main class="flex-grow overflow-hidden bg-transparent ml-0 mr-2 scrollbar-hide transition-all duration-500 ease-in-out">
     <div class="h-full mt-2 bg-transparent">
       <router-outlet></router-outlet>
     </div>
