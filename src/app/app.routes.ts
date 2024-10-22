@@ -60,17 +60,7 @@ export const routes: Routes = [
   },
 
   // TRADER ROUTES
-  {
-    path: 'trader',
-    component: TraderLayoutComponent,
-    children: [
-      {
-        path: '',
-        redirectTo: '',
-        pathMatch: 'full',
-      },
-    ],
-  },
+
   {
     path: 'game',
     component: GamesLayoutComponent,
@@ -107,23 +97,5 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: 'game',
-    component: GamesLayoutComponent,
-    children: [
-      {
-        path: 'overview',
-        component: GameOverviewComponent,
-      },
-
-      {
-        path: 'discover',
-        component: DiscoverComponent,
-      },
-      {
-        path: 'portfolio',
-        component: PortfolioComponent,
-      },
-    ],
-  },
+  
 ];
