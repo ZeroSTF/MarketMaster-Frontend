@@ -1,27 +1,31 @@
 <div class="flex h-full bg-transparent">
   <!-- Calendar Section -->
-  <div class="flex-grow pr-4">
+  <div class="flex-grow pr-2">
     <div class="bg-white shadow-lg rounded-lg p-4 h-full flex flex-col overflow-hidden">
       <h2 class="text-2xl font-bold mb-4">Learning Calendar</h2>
-      <div class="flex justify-between items-center mb-4">
-        <div class="flex space-x-2">
-          <button class="px-3 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300">&lt;</button>
-          <button class="px-3 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300">&gt;</button>
-          <button class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600">today</button>
-        </div>
-        <h3 class="text-xl font-semibold">October 2024</h3>
-        <div class="flex space-x-2">
-          <button class="px-3 py-1 bg-gray-800 text-white rounded-md hover:bg-gray-700">month</button>
-          <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">week</button>
-          <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">day</button>
-        </div>
+      <!-- <div class="flex justify-between items-center mb-4"> -->
+        <!-- <div class="flex space-x-1">
+          <button class="px-2 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 transition duration-200">&lt;</button>
+          <button class="px-2 py-1 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 transition duration-200">&gt;</button>
+          <button class="px-2 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">Today</button>
+        </div> -->
+        <!-- <h3 class="text-lg font-semibold text-center">October 2024</h3> -->
+        <!-- <div class="flex space-x-1">
+          <button class="px-2 py-1 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition duration-200">Month</button>
+          <button class="px-2 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition duration-200">Week</button>
+          <button class="px-2 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition duration-200">Day</button>
+        </div> -->
+      <!-- </div> -->
+      <div class="flex-grow bg-white rounded-lg shadow-md overflow-auto">
+        <full-calendar 
+          [options]="calendarOptions"
+          class="w-full h-full"
+        ></full-calendar>
       </div>
-      <full-calendar
-        [options]="calendarOptions"
-        class="flex-grow bg-white rounded-lg shadow-md"
-      ></full-calendar>
+      
     </div>
   </div>
+  
 
   <!-- Courses Section -->
   <div class="w-80 flex-shrink-0">
