@@ -79,10 +79,10 @@ export class AssetService {
       );
       if (index !== -1) {
         const updated = [...current];
-        // updated[index] = {
-        //   ...current[index],
-        //   currentPrice: updatedAsset.currentPrice,
-        // };
+        updated[index] = {
+          ...current[index],
+          currentPrice: updatedAsset.currentPrice,
+        };
         return updated;
       }
       return current;
