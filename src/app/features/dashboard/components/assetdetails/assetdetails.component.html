@@ -1,77 +1,77 @@
 @if (selectedAsset(); as asset) {
-  <div class="scrollbar-hide p-4 rounded-lg ">
-    <!-- Header Section -->
-    <div class="flex items-center gap-3 mb-4">
-      <div class="asset-logo w-8 h-8 bg-navy-blue rounded-lg flex items-center justify-center">
-        <img [src]="'images/' + asset.symbol + '.png'" [alt]="asset.symbol" class="w-6 h-6" />
-      </div>
-      <div>
-        <h2 class="text-lg font-bold">{{ asset.symbol }}</h2>
-        <p class="text-sm text-gray-600">Latest Trading Day: {{ asset.latestTradingDay }}</p>
-      </div>
+<div class="scrollbar-hide p-4 rounded-lg ">
+  <!-- Header Section -->
+  <div class="flex items-center gap-3 mb-4">
+    <div class="asset-logo w-8 h-8 bg-navy-blue rounded-lg flex items-center justify-center">
+      <img [src]="'images/' + asset.symbol + '.png'" [alt]="asset.symbol" class="w-6 h-6" />
     </div>
-
-    <!-- Price Section -->
-    <div class="mb-4">
-      <div class="flex items-baseline">
-        <span class="text-2xl font-bold">${{ asset.price.toFixed(2) }}</span>
-        <span class="text-sm text-gray-600 ml-2" 
-              [ngClass]="{'text-green-600': asset.change >= 0, 'text-red-600': asset.change < 0}">
-          ({{ asset.change > 0 ? '+' : '' }}{{ asset.change.toFixed(2) }} 
-          {{ asset.changePercent }}%)
-        </span>
-      </div>
-    </div>
-
-    <!-- Price Range Section -->
-    <div class="mb-4">
-      <p class="text-xs text-gray-600">Price Range: ${{ asset.low.toFixed(2) }} - ${{ asset.high.toFixed(2) }}</p>
-    </div>
-
-    <!-- Volume Section -->
-    <div class="mb-4">
-      <p class="text-xs text-gray-600">Volume: {{ asset.volume | number }}</p>
-    </div>
-
-    <!-- Key Metrics -->
-    <div class="grid grid-cols-2 gap-2 mb-4">
-      <div class="p-2 bg-gray-50 rounded">
-        <p class="text-xs text-gray-600">Open Price</p>
-        <p class="text-sm font-semibold">${{ asset.open.toFixed(2) }}</p>
-      </div>
-      <div class="p-2 bg-gray-50 rounded">
-        <p class="text-xs text-gray-600">Previous Close</p>
-        <p class="text-sm font-semibold">${{ asset.previousClose.toFixed(2) }}</p>
-      </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="grid grid-cols-3 gap-2 mb-4">
-      <button class="bg-blue-600 text-white py-1 px-2 rounded text-sm font-medium hover:bg-blue-700">
-        Buy
-      </button>
-      <button class="border border-blue-600 text-blue-600 py-1 px-2 rounded text-sm font-medium hover:bg-blue-50">
-        Trade
-      </button>
-      <button class="border border-gray-300 text-gray-700 py-1 px-2 rounded text-sm font-medium hover:bg-gray-50">
-        Watch
-      </button>
-    </div>
-
-    <!-- Recent News Section -->
-    <div class="border-t border-gray-200 pt-2">
-      <h3 class="text-sm font-semibold mb-2">Recent News</h3>
-      <div class="space-y-2">
-        @for (newsItem of newsItems.slice(0, 3); track newsItem.id) {
-          <div class="p-2 bg-gray-50 rounded text-xs">
-            <p class="font-medium line-clamp-2">{{ newsItem.headline }}</p>
-          </div>
-        }
-      </div>
+    <div>
+      <h2 class="text-lg font-bold">{{ asset.symbol }}</h2>
+      <!-- <p class="text-sm text-gray-600">Latest Trading Day: {{ asset.latestTradingDay }}</p> -->
     </div>
   </div>
+
+  <!-- Price Section -->
+  <div class="mb-4">
+    <div class="flex items-baseline">
+      <span class="text-2xl font-bold">${{ asset.currentPrice.toFixed(2) }}</span>
+      <span class="text-sm text-gray-600 ml-2"
+        [ngClass]="{'text-green-600': asset.priceChange >= 0, 'text-red-600': asset.priceChange < 0}">
+        ({{ asset.priceChange > 0 ? '+' : '' }}{{ asset.priceChange.toFixed(2) }}
+        {{ asset.priceChangePercent }}%)
+      </span>
+    </div>
+  </div>
+
+  <!-- Price Range Section -->
+  <div class="mb-4">
+    <p class="text-xs text-gray-600">Price Range: ${{ asset.dayLow.toFixed(2) }} - ${{ asset.dayHigh.toFixed(2) }}</p>
+  </div>
+
+  <!-- Volume Section -->
+  <div class="mb-4">
+    <p class="text-xs text-gray-600">Volume: {{ asset.volume | number }}</p>
+  </div>
+
+  <!-- Key Metrics -->
+  <div class="grid grid-cols-2 gap-2 mb-4">
+    <div class="p-2 bg-gray-50 rounded">
+      <p class="text-xs text-gray-600">Open Price</p>
+      <p class="text-sm font-semibold">${{ asset.openPrice.toFixed(2) }}</p>
+    </div>
+    <div class="p-2 bg-gray-50 rounded">
+      <p class="text-xs text-gray-600">Previous Close</p>
+      <p class="text-sm font-semibold">${{ asset.previousClose.toFixed(2) }}</p>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="grid grid-cols-3 gap-2 mb-4">
+    <button class="bg-blue-600 text-white py-1 px-2 rounded text-sm font-medium hover:bg-blue-700">
+      Buy
+    </button>
+    <button class="border border-blue-600 text-blue-600 py-1 px-2 rounded text-sm font-medium hover:bg-blue-50">
+      Trade
+    </button>
+    <button class="border border-gray-300 text-gray-700 py-1 px-2 rounded text-sm font-medium hover:bg-gray-50">
+      Watch
+    </button>
+  </div>
+
+  <!-- Recent News Section -->
+  <div class="border-t border-gray-200 pt-2">
+    <h3 class="text-sm font-semibold mb-2">Recent News</h3>
+    <div class="space-y-2">
+      @for (newsItem of newsItems.slice(0, 3); track newsItem.id) {
+      <div class="p-2 bg-gray-50 rounded text-xs">
+        <p class="font-medium line-clamp-2">{{ newsItem.headline }}</p>
+      </div>
+      }
+    </div>
+  </div>
+</div>
 } @else {
-  <div class="flex items-center justify-center h-full">
-    <p class="text-gray-500">Select an asset to view details</p>
-  </div>
+<div class="flex items-center justify-center h-full">
+  <p class="text-gray-500">Select an asset to view details</p>
+</div>
 }
