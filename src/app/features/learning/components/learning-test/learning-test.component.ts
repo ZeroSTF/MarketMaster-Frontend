@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { LearningService } from '../../../../services/learning.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
@@ -15,12 +15,11 @@ export class LearningTestComponent {
   questions = ['What is a stock?', 'Explain market trends.'];
   capturedAnswer: string = ''; 
   isRecording: boolean = false;
-  retryCount: number = 0; 
 
-  constructor(private learningService: LearningService) {}
+  private learningService =inject(LearningService);
 
   startTest() {
-    this.askQuestion(0);
+    this.askQuestion(1);
   }
 
   askQuestion(index: number) {
@@ -30,21 +29,19 @@ export class LearningTestComponent {
 
   startRecording() {
     this.isRecording = true;
-    this.retryCount = 0;
     this.listenForAnswer();
   }
 
   stopRecording() {
     this.isRecording = false;
     this.learningService.stopListening();
-    console.log('Captured Answer:', this.capturedAnswer);
   }
 
   listenForAnswer() {
     this.learningService.startListening((answer) => {
       console.log('Captured Answer:', answer);
       this.capturedAnswer = answer;
-      this.stopRecording(); // Stop listening after answer is captured
+      this.stopRecording();
     });
   }
 }

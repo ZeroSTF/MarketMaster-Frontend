@@ -1,4 +1,4 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { LearningService } from '../../../../services/learning.service';
 import { Module } from '../../../../models/learning.model';
 import { CommonModule } from '@angular/common';
@@ -19,8 +19,8 @@ import { LearningTestComponent } from "../../components/learning-test/learning-t
   styleUrl: './learning-overview.component.css'
 })
 export class LearningOverviewComponent {
-  activeTab: string = 'completed'; // Default tab
-
+  activeTab: string = 'completed';
+  private courseService = inject(LearningService);
   courses = this.courseService.courses; 
 
   completedCoursesList = computed(() =>
@@ -39,11 +39,5 @@ export class LearningOverviewComponent {
     )
   );
 
-  constructor(private courseService: LearningService) {}
-
-  ngOnInit(): void {
-    console.log('Courses:', this.courses());
-  }
-
-  
+ 
 }
