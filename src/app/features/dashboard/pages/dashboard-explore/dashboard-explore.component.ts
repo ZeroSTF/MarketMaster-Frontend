@@ -5,6 +5,7 @@ import {
   computed,
   effect,
   inject,
+  OnDestroy,
   OnInit,
   signal,
   ViewChild,
@@ -35,10 +36,9 @@ import { Asset } from '../../../../models/asset.model';
     AssetdetailsComponent,
   ],
   templateUrl: './dashboard-explore.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
-
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardExploreComponent {
+export class DashboardExploreComponent implements OnDestroy {
   private assetService = inject(AssetService);
 
   readonly columns = [
@@ -164,5 +164,9 @@ export class DashboardExploreComponent {
 
   public formatNumber(num: number): string {
     return num.toLocaleString();
+  }
+
+  ngOnDestroy(): void {
+    this.assetService.ngOnDestroy();
   }
 }
