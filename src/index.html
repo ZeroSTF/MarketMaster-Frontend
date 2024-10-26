@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>MarketMasterFrontend</title>
@@ -16,11 +17,24 @@
   <script type="application/javascript">
     var global = window;
   </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
-<script src="https://code.responsivevoice.org/responsivevoice.js?key=RUxWdLwJ"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+  <script src="https://code.responsivevoice.org/responsivevoice.js?key=RUxWdLwJ"></script>
 
 </head>
+
 <body>
   <app-root class="font-roboto-flex "></app-root>
 </body>
+
+<script>
+  const theme = localStorage.getItem('theme');
+  const browserDark = window.matchMedia('(prefers-color-scheme: dark)').matches; if (theme !== null) {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  } else if (browserDark) {
+    document.documentElement.classList.add('dark');
+  }
+</script>
+
 </html>
