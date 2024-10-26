@@ -44,10 +44,6 @@ export class NavBarComponent {
     this.isOpen2 = !this.isOpen2;
   }
 
-  toggleDarkMode() {
-    this.darkModeService.toggleDarkMode();
-  }
-
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

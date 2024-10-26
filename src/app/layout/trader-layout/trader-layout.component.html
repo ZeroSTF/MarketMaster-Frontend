@@ -1,13 +1,7 @@
-<div class="flex h-screen overflow-hidden bg-gray-900 text-white">
-  <app-trader-sidebar
-    (changeTimeFrame)="onChangeTimeFrame($event)"
-    (changeChartType)="onChangeChartType($event)"
-    (toggleIndicators)="onToggleIndicators()"
-    (placeBuyOrder)="onPlaceBuyOrder()"
-    (placeSellOrder)="onPlaceSellOrder()"
-    (zoomChart)="onZoomChart($event)"
-    (resetSimulation)="onResetSimulation()"
-  ></app-trader-sidebar>
+<div class="flex h-screen overflow-hidden dark:!bg-gray-900 transition-colors duration-300 text-white">
+  <app-trader-sidebar (changeTimeFrame)="onChangeTimeFrame($event)" (changeChartType)="onChangeChartType($event)"
+    (toggleIndicators)="onToggleIndicators()" (placeBuyOrder)="onPlaceBuyOrder()" (placeSellOrder)="onPlaceSellOrder()"
+    (zoomChart)="onZoomChart($event)" (resetSimulation)="onResetSimulation()"></app-trader-sidebar>
 
   <main class="flex-grow overflow-auto">
     <div class="min-h-full h-full p-4 lg:p-6">
