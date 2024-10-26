@@ -162,8 +162,8 @@ export class DashboardExploreComponent implements OnDestroy {
     this.assetService.setSelectedAsset(asset);
   }
 
-  public formatNumber(num: number): string {
-    return num.toLocaleString();
+  public formatNumber(num: number | undefined): string {
+    return num !== undefined ? num.toLocaleString() : '';
   }
 
   ngOnDestroy(): void {
