@@ -7,6 +7,7 @@ import { GamesLayoutComponent } from './layout/games-layout/games-layout.compone
 import { GameOverviewComponent } from './features/games/pages/game-overview/game-overview.component';
 import { SettingsComponent } from './features/dashboard/pages/settings/settings.component';
 import { TraderLayoutComponent } from './layout/trader-layout/trader-layout.component';
+import { GamePortfolioComponent } from './features/games/pages/game-portfolio/game-portfolio.component';
 
 export const routes: Routes = [
   {
@@ -76,6 +77,10 @@ export const routes: Routes = [
       {
         path: 'overview',
         component: GameOverviewComponent,
+      },
+      {
+        path: 'portfolio',
+        component: GamePortfolioComponent,
       },
     ],
   },

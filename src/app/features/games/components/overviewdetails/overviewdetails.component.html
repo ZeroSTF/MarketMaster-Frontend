@@ -11,43 +11,40 @@
 
     <!-- Portfolio Value -->
     <div class="portfolio-value text-right">
-      <p class="text-sm">Total Earnings</p>
-      <h3 class="text-xl font-bold">$12,500</h3>
+      <p class="text-sm">Total Profit</p>
+      <h3 class="text-xl font-bold">{{ playerPerformance?.totalProfit | currency }}</h3>
     </div>
   </div>
 
   <!-- Performance Metrics -->
   <div class="grid grid-cols-3 gap-4 mb-4">
     <div class="metric-box p-4">
-      <p class="text-sm">Total Returns</p>
-      <h3 class="text-2xl font-bold text-green-400">+15%</h3>
+      <p class="text-sm">Average Profit</p>
+      <h3 class="text-2xl font-bold text-green-400">{{ playerPerformance?.averageProfit | percent }}</h3>
     </div>
     <div class="metric-box p-4">
-      <p class="text-sm">Trades</p>
-      <h3 class="text-2xl font-bold">45</h3>
+      <p class="text-sm">Games Played</p>
+      <h3 class="text-2xl font-bold">{{ playerPerformance?.gamesPlayed }}</h3>
     </div>
     <div class="metric-box p-4">
-      <p class="text-sm">Win/Loss Ratio</p>
-      <h3 class="text-2xl font-bold text-blue-400">70/30</h3>
+      <p class="text-sm">Win rate</p>
+      <h3 class="text-2xl font-bold text-blue-400">{{ playerPerformance?.winRate | percent }}</h3>
     </div>
   </div>
 
   <!-- Achievements/Badges -->
-  <div class="achievements flex justify-around ">
+  <div class="achievements flex justify-around">
     <div class="achievement-badge text-center">
       <i class="fas mb-2 fa-trophy text-2xl text-yellow-400"></i>
-      <p class="text-sm ">Top Trader</p>
+      <p class="text-sm">Top Trader</p>
     </div>
     <div class="achievement-badge text-center">
       <i class="fas mb-2 fa-chart-line text-2xl text-green-400"></i>
       <p class="text-sm">Consistent Gains</p>
     </div>
     <div class="achievement-badge text-center">
-      <i class="fas  mb-2 fa-star text-2xl text-red-400"></i>
+      <i class="fas mb-2 fa-star text-2xl text-red-400"></i>
       <p class="text-sm">Risk Taker</p>
     </div>
   </div>
-
-  <!-- Mini Graph (Recent Performance) -->
-  
 </div>

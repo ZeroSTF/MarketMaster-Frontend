@@ -1,0 +1,26 @@
+<div class="holdings-container p-4">
+    <h2 class="text-lg font-semibold mb-4">Current Holdings</h2>
+  
+    <div class="holding-list grid grid-cols-1 gap-4">
+      <div *ngFor="let holding of holdings" class="holding-item p-4 rounded shadow flex justify-between items-center">
+        <div class="holding-info flex items-center">
+          <div class="holding-symbol bg-blue-500 text-white p-2 rounded-full mr-4">
+            {{ holding.name }}
+          </div>
+          <div>
+            <p class="text-sm font-semibold">{{ holding.name }}</p>
+            <p class="text-xs text-gray-400">Quantity: {{ holding.quantity }}</p>
+            <p class="text-xs text-gray-400">Price: ${{ holding.price }}</p>
+          </div>
+        </div>
+  
+        <div class="holding-value text-right">
+          <p class="text-sm font-semibold">${{ holding.value }}</p>
+          <p class="text-xs" [ngClass]="{'text-green-400': holding.change.includes('+'), 'text-red-400': holding.change.includes('-')}">
+            {{ holding.change }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

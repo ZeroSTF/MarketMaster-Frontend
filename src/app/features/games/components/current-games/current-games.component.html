@@ -1,61 +1,44 @@
 <div class="games-leaderboard-container p-6">
-    <!-- Section Header -->
-    <div class="header flex justify-between items-center mb-6">
-      <h2 class="text-xl font-bold">Current Games</h2>
-      <i class="fas fa-trophy text-3xl"></i> <!-- Trophy Icon -->
-    </div>
-  
-    <!-- Current Games List -->
-    <div class="current-games-list mb-8">
-      <div class="game-card p-6 mb-6">
-        <div class="flex justify-between items-center">
-          <h3 class="game-title font-semibold text-xl">Stock Market Mayhem</h3>
-          <span class="game-status text-sm uppercase text-gray-400">In Progress</span>
-        </div>
-        <div class="flex justify-between items-center mt-4">
-          <p class="performance-label text-sm text-gray-400">Your Performance</p>
-          <p class="performance-score text-lg font-bold text-green-400 animate-bounce">+18%</p>
-        </div>
+  <!-- Section Header -->
+  <div class="header flex justify-between items-center mb-6">
+    <h2 class="text-xl font-bold">Current Games</h2>
+    <i class="fas fa-trophy text-3xl"></i> <!-- Trophy Icon -->
+  </div>
+
+  <!-- Current Games List -->
+  <div class="current-games-list mb-8">
+    <div *ngFor="let game of currentGames" class="game-card p-6 mb-6">
+      <div class="flex justify-between items-center">
+        <h3 class="game-title font-semibold text-xl">{{ game.title }}</h3>
+        <span class="game-status text-sm uppercase text-gray-400">In Progress</span>
       </div>
   
-      <div class="game-card p-6 mb-6">
-        <div class="flex justify-between items-center">
-          <h3 class="game-title font-semibold text-xl">Tech Titans Tournament</h3>
-          <span class="game-status text-sm uppercase text-gray-400">In Progress</span>
-        </div>
-        <div class="flex justify-between items-center mt-4">
-          <p class="performance-label text-sm text-gray-400">Your Performance</p>
-          <p class="performance-score text-lg font-bold text-red-400 animate-pulse">-3%</p>
-        </div>
-      </div>
-    </div>
-  
-    <!-- Leaderboard Section -->
-    <div class="leaderboard-section p-6">
-      <h2 class="text-xl font-bold mb-4">Global Leaderboard</h2>
-      <ul class="leaderboard-list">
-        <li class="leaderboard-item p-4 flex justify-between items-center mb-4">
-          <div class="leader-info">
-            <h4 class="leader-name font-semibold text-lg">John Trader</h4>
-            <p class="leader-rank text-sm text-gray-400">Rank 1</p>
-          </div>
-          <span class="leader-score text-2xl font-bold text-green-400">+45%</span>
-        </li>
-        <li class="leaderboard-item p-4 flex justify-between items-center mb-4">
-          <div class="leader-info">
-            <h4 class="leader-name font-semibold text-lg">Sophia Investor</h4>
-            <p class="leader-rank text-sm text-gray-400">Rank 2</p>
-          </div>
-          <span class="leader-score text-2xl font-bold text-green-400">+38%</span>
-        </li>
-        <li class="leaderboard-item p-4 flex justify-between items-center">
-          <div class="leader-info">
-            <h4 class="leader-name font-semibold text-lg">Alex Stockman</h4>
-            <p class="leader-rank text-sm text-gray-400">Rank 3</p>
-          </div>
-          <span class="leader-score text-2xl font-bold text-blue-400">+30%</span>
-        </li>
-      </ul>
+      <!-- Join Game Button -->
+      <button class="join-btn mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+              (click)="onJoinGame(game.id)">
+        Join Game
+      </button>
     </div>
   </div>
   
+  
+
+  <!-- Leaderboard Section -->
+  <div class="leaderboard-section p-6">
+    <h2 class="text-xl font-bold mb-4">Global Leaderboard</h2>
+    <ul class="leaderboard-list">
+      <li *ngFor="let leader of leaderboard; let i = index" class="leaderboard-item p-4 flex justify-between items-center mb-4">
+        <div class="leader-info flex items-center">
+          <span class="rank-number font-bold text-gray-500 mr-3">{{ i + 1 }}.</span> <!-- Display rank number -->
+          <h4 class="leader-name font-semibold text-lg">{{ leader.username }}</h4>
+        </div>
+        <span class="leader-score text-2x font-light" 
+              [class.text-green-400]="leader.profit > 0" 
+              [class.text-red-400]="leader.profit < 0">
+          {{ leader.profit  }} $
+        </span>
+      </li>
+    </ul>
+  </div>
+  
+</div>

@@ -1,0 +1,73 @@
+<!-- create-match-dialog.component.html -->
+<h2 mat-dialog-title>Create a New Game</h2>
+<mat-dialog-content>
+  <form [formGroup]="createMatchForm" (ngSubmit)="onSubmit()">
+    <mat-card>
+      <mat-card-content>
+        <mat-form-field appearance="fill">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" placeholder="Enter game description" />
+            <mat-error *ngIf="createMatchForm.get('title')?.hasError('required')">
+              Title is required.
+            </mat-error>
+          </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" placeholder="Enter game description" />
+          <mat-error *ngIf="createMatchForm.get('description')?.hasError('required')">
+            Description is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" placeholder="Choose a start date" />
+          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker></mat-datepicker>
+          <mat-error *ngIf="createMatchForm.get('startDate')?.hasError('required')">
+            Start date is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Start Time</mat-label>
+          <input matInput type="time" formControlName="startTime" placeholder="Choose a start time" />
+          <mat-error *ngIf="createMatchForm.get('startTime')?.hasError('required')">
+            Start time is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" placeholder="Choose an end date" />
+          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+          <mat-error *ngIf="createMatchForm.get('endDate')?.hasError('required')">
+            End date is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>End Time</mat-label>
+          <input matInput type="time" formControlName="endTime" placeholder="Choose an end time" />
+          <mat-error *ngIf="createMatchForm.get('endTime')?.hasError('required')">
+            End time is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Max Play Time (hours)</mat-label>
+          <input matInput type="number" formControlName="maxPlayTime" placeholder="Enter max play time" />
+          <mat-error *ngIf="createMatchForm.get('maxPlayTime')?.hasError('required')">
+            Max play time is required.
+          </mat-error>
+        </mat-form-field>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" type="submit">Create Game</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</mat-dialog-content>

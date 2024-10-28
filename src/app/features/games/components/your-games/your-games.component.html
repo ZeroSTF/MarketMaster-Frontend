@@ -1,54 +1,58 @@
 <div class="matches-container p-6">
-    <!-- Tabs -->
-    <div class="tabs flex justify-around mb-4">
-      <button class="tab active" (click)="selectTab('upcoming')">Upcoming</button>
-      <button class="tab" (click)="selectTab('open')">Open</button>
-      <button class="tab" (click)="selectTab('closed')">Closed</button>
+  <h3 class="tab-title font-bold mb-2">Your Games</h3>
+
+  <!-- Tabs -->
+  <div class="tabs flex justify-around mb-4">
+    <button class="tab" [class.active]="selectedTab === 'UPCOMING'" (click)="selectTab('UPCOMING')">Upcoming</button>
+    <button class="tab" [class.active]="selectedTab === 'ACTIVE'" (click)="selectTab('ACTIVE')">Open</button>
+    <button class="tab" [class.active]="selectedTab === 'COMPLETED'" (click)="selectTab('COMPLETED')">Closed</button>
+    <button class="tab" [class.active]="selectedTab === 'CANCELLED'" (click)="selectTab('CANCELLED')">Cancelled</button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Upcoming Games -->
+    <div *ngIf="selectedTab === 'UPCOMING'" class="tab-list">
+      <h3 class="font-bold mt-2 mb-3">Upcoming Games</h3>
+      <ul>
+        <li *ngFor="let game of upcomingGames" class="game-item p-4 mb-4">
+          <h4 class="game-title font-semibold">{{ game.title }}</h4>
+          <p class="game-date text-gray-400">Starts on: {{ game.simulationStartDate | date }}</p>
+        </li>
+      </ul>
     </div>
-  
-    <!-- Tab Content -->
-    <div class="tab-content">
-      <div *ngIf="selectedTab === 'upcoming'" class="tab-list">
-        <h3 class="tab-title font-bold mb-2">Upcoming Games</h3>
-        <ul>
-          <li class="game-item p-4 mb-4">
-            <h4 class="game-title font-semibold">Future Trader Showdown</h4>
-            <p class="game-date text-gray-400">Starts on: 2024-11-01</p>
-          </li>
-          <li class="game-item p-4 mb-4">
-            <h4 class="game-title font-semibold">Investor's Duel</h4>
-            <p class="game-date text-gray-400">Starts on: 2024-11-15</p>
-          </li>
-        </ul>
-      </div>
-  
-      <div *ngIf="selectedTab === 'open'" class="tab-list">
-        <h3 class="tab-title font-bold mb-2">Open Games</h3>
-        <ul>
-          <li class="game-item p-4 mb-4">
-            <h4 class="game-title font-semibold">Market Madness</h4>
-            <p class="game-date text-gray-400">Ends in: 2 hours</p>
-          </li>
-          <li class="game-item p-4 mb-4">
-            <h4 class="game-title font-semibold">Stock Wars</h4>
-            <p class="game-date text-gray-400">Ends in: 1 day</p>
-          </li>
-        </ul>
-      </div>
-  
-      <div *ngIf="selectedTab === 'closed'" class="tab-list">
-        <h3 class="tab-title font-bold mb-2">Closed Games</h3>
-        <ul>
-          <li class="game-item p-4 mb-4">
-            <h4 class="game-title font-semibold">Trader's Challenge</h4>
-            <p class="game-date text-gray-400">Closed on: 2024-10-20</p>
-          </li>
-          <li class="game-item p-4 mb-4">
-            <h4 class="game-title font-semibold">Bull vs Bear</h4>
-            <p class="game-date text-gray-400">Closed on: 2024-10-15</p>
-          </li>
-        </ul>
-      </div>
+
+    <!-- Active Games -->
+    <div *ngIf="selectedTab === 'ACTIVE'" class="tab-list">
+      <h3 class="font-bold mt-2 mb-3">Open Games</h3>
+      <ul>
+        <li *ngFor="let game of activeGames" class="game-item p-4 mb-4">
+          <h4 class="game-title font-semibold">{{ game.title }}</h4>
+          <p class="game-date text-gray-400">Ends in: {{ game.simulationEndDate | date }}</p>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Completed Games -->
+    <div *ngIf="selectedTab === 'COMPLETED'" class="tab-list">
+      <h3 class="font-bold mt-2 mb-3">Closed Games</h3>
+      <ul>
+        <li *ngFor="let game of completedGames" class="game-item p-4 mb-4">
+          <h4 class="game-title font-semibold">{{ game.title }}</h4>
+          <p class="game-date text-gray-400">Closed on: {{ game.simulationEndDate | date }}</p>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Cancelled Games -->
+    <div *ngIf="selectedTab === 'CANCELLED'" class="tab-list">
+      <h3 class="font-bold mt-2 mb-3">Cancelled Games</h3>
+      <ul>
+        <li *ngFor="let game of cancelledGames" class="game-item p-4 mb-4">
+          <h4 class="game-title font-semibold">{{ game.title }}</h4>
+          <p class="game-date text-gray-400">Cancelled on: {{ game.simulationEndDate | date }}</p>
+        </li>
+      </ul>
     </div>
   </div>
-  
+</div>
