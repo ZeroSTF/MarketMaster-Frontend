@@ -1,6 +1,6 @@
 import { Component, inject, OnInit} from '@angular/core';
 import { AssetService } from '../../../../services/asset.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -11,6 +11,8 @@ import { MatTableModule } from '@angular/material/table';
 import { ChartComponent } from "../chart/chart.component";
 import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
 import { Asset } from '../../../../models/asset.model';
+import { Router } from '@angular/router';
+import { state } from '@angular/animations';
 
 @Component({
   selector: 'app-asset-details',
@@ -27,10 +29,12 @@ import { Asset } from '../../../../models/asset.model';
   templateUrl: './assetdetails.component.html',
   styleUrl: './assetdetails.component.css'
 })
-export class AssetdetailsComponent {
+export class AssetdetailsComponent implements OnInit {
   private assetService = inject(AssetService);
   public selectedAsset = this.assetService.selectedAsset;
-
+  
+  constructor(private router:Router){}
+  ngOnInit() {}
   expandedNews: { [key: number]: boolean } = {};
   activeTab: 'overview' | 'financial' | 'news' = 'overview';
   // stockDatas: any[] = [];
@@ -64,4 +68,15 @@ export class AssetdetailsComponent {
     this.expandedNews[id] = !this.expandedNews[id];
   }
 
+  navigateToBuySell() {
+    const asset = this.selectedAsset();
+    if (asset) {
+      this.router.navigate(['/buysell'], {
+        queryParams: {
+          symbol: asset.symbol,
+          price: asset.currentPrice
+        }
+      });
+    }
+  }
 }

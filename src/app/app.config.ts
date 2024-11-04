@@ -10,6 +10,6 @@ export const appConfig: ApplicationConfig = {
     provideExperimentalZonelessChangeDetection(),//Signals+Angular 18=Zoneless Application 
     provideRouter(routes),
     provideHttpClient(withInterceptors([jwtInterceptor])),
-    provideAnimationsAsync(),
+    provideAnimationsAsync(), provideAnimationsAsync(),
   ],
 };
