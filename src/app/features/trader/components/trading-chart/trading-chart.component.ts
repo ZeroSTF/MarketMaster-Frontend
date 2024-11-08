@@ -4,24 +4,26 @@ import {
   ElementRef,
   ViewChild,
   effect,
-  DestroyRef,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AssetService } from '../../../../services/asset.service';
 import { ChartService } from '../../../../services/chart.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   createChart,
   IChartApi,
   ISeriesApi,
   CandlestickData,
   Time,
+  HistogramData,
 } from 'lightweight-charts';
 import { Asset } from '../../../../models/asset.model';
+import { AssetSelectorComponent } from '../asset-selector/asset-selector.component';
 
 @Component({
   selector: 'app-trading-chart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatProgressSpinnerModule, AssetSelectorComponent],
   templateUrl: './trading-chart.component.html',
   styleUrls: ['./trading-chart.component.scss'],
 })
@@ -31,16 +33,53 @@ export class TradingChartComponent implements OnInit {
   private chart?: IChartApi;
   private candlestickSeries?: ISeriesApi<'Candlestick'>;
   private volumeSeries?: ISeriesApi<'Histogram'>;
+  loading = signal(false);
+  error = signal<string | null>(null);
 
-  constructor(
-    private assetService: AssetService,
-    private chartService: ChartService,
-    private destroyRef: DestroyRef
-  ) {
+  async loadData(symbol: string) {
+    try {
+      this.loading.set(true);
+      this.error.set(null);
+      await this.chartService.loadHistoricalData(symbol);
+    } catch (err) {
+      this.error.set('Failed to load chart data');
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  constructor(private chartService: ChartService) {
     effect(() => {
-      const asset = this.assetService.selectedAsset();
+      const asset = this.chartService.selectedAsset();
       if (asset) {
+        this.chartService.loadHistoricalData(asset.symbol);
+
         this.updateChartData(asset);
+      }
+    });
+
+    effect(() => {
+      const historicalData = this.chartService.historicalData();
+      if (this.candlestickSeries && historicalData.length > 0) {
+        const candleData: CandlestickData<Time>[] = historicalData.map((d) => ({
+          time: d.time as Time,
+          open: d.open,
+          high: d.high,
+          low: d.low,
+          close: d.close,
+        }));
+
+        this.candlestickSeries.setData(candleData);
+
+        if (this.volumeSeries) {
+          const volumeData: HistogramData<Time>[] = historicalData.map((d) => ({
+            time: d.time as Time,
+            value: d.volume,
+            color: d.close >= d.open ? '#26a69a' : '#ef5350',
+          }));
+
+          this.volumeSeries.setData(volumeData);
+        }
       }
     });
   }
@@ -74,7 +113,6 @@ export class TradingChartComponent implements OnInit {
       },
     });
 
-    // Add candlestick series
     this.candlestickSeries = this.chart.addCandlestickSeries({
       upColor: '#26a69a',
       downColor: '#ef5350',
@@ -83,16 +121,14 @@ export class TradingChartComponent implements OnInit {
       wickDownColor: '#ef5350',
     });
 
-    // Add volume series
     this.volumeSeries = this.chart.addHistogramSeries({
       color: '#26a69a',
       priceFormat: {
         type: 'volume',
       },
-      priceScaleId: '', // Set to empty to create a new scale
+      priceScaleId: '',
     });
 
-    // Handle window resize
     window.addEventListener('resize', () => {
       if (this.chart) {
         this.chart.applyOptions({

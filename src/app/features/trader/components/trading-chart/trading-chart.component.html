@@ -1,3 +1,16 @@
-<div class="w-full h-[600px] bg-white dark:bg-gray-800">
-  <div #chartContainer class="w-full h-full"></div>
+<div class="w-full space-y-4">
+  <app-asset-selector />
+  <div class="w-full h-[600px] bg-white dark:bg-gray-800 relative">
+    @if (loading()) {
+    <div class="absolute inset-0 flex items-center justify-center">
+      <mat-spinner></mat-spinner>
+    </div>
+    }
+    @if (error()) {
+    <div class="absolute inset-0 flex items-center justify-center">
+      <p class="text-red-500">{{error()}}</p>
+    </div>
+    }
+    <div #chartContainer class="w-full h-full"></div>
+  </div>
 </div>
