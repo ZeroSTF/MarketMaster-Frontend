@@ -38,19 +38,19 @@
             <th class="px-6 py-3 text-xs font-medium text-gray-500 whitespace-nowrap">Type</th>
             <th class="px-6 py-3 text-xs font-medium text-gray-500 whitespace-nowrap">Amount</th>
             <th class="px-6 py-3 text-xs font-medium text-gray-500 whitespace-nowrap">Price</th>
-            <th class="px-6 py-3 text-xs font-medium text-gray-500 whitespace-nowrap">Status</th>
+            <th class="px-6 py-3 text-xs font-medium text-gray-500 whitespace-nowrap">Quantity</th>
           </tr>
         </thead>
         <tbody>
           <tr
-            *ngFor="let trade of getTradesForSelectedTab()"
+            *ngFor="let transaction of getTransactionsForSelectedTab()"
             class="border-b hover:bg-[#f0f7ff]"
           >
-            <td class="px-6 py-2 text-gray-700">{{ trade.symbol }}</td>
-            <td class="px-6 py-2 text-gray-700">{{ trade.type }}</td>
-            <td class="px-6 py-2 text-gray-700">{{ trade.amount }}</td>
-            <td class="px-6 py-2 text-gray-700">{{ trade.price }}</td>
-            <td class="px-6 py-2 text-gray-700">{{ trade.status }}</td>
+            <td class="px-6 py-2 text-gray-700">{{ transaction.symbol }}</td>
+            <td class="px-6 py-2 text-gray-700">{{ transaction.type }}</td>
+            <td class="px-6 py-2 text-gray-700">{{ transaction.quantity }}</td>
+            <td class="px-6 py-2 text-gray-700">{{ transaction.quantity*transaction.price }}</td>
+            <td class="px-6 py-2 text-gray-700">{{ transaction.price }}</td>
           </tr>
         </tbody>
       </table>

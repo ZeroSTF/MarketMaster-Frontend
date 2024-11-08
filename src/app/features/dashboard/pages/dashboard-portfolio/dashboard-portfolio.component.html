@@ -5,8 +5,8 @@
       <div class="grid grid-cols-2 grid-rows-2 gap-2 h-full bg-transparent">
         <div class="bg-white rounded-lg shadow p-1 flex flex-col items-center justify-center border-b-4 border-green-500">
           <div class="text-sm text-gray-500">Portfolio Value</div>
-          <div class="text-lg font-bold text-gray-800">$120K</div>
-          <div class="text-green-500 text-xs">+5.2%</div>
+          <div class="text-lg font-bold text-gray-800">{{overviewData?.totalValue | number: '1.2-2'}}</div>
+          <div class="text-green-500 text-xs">{{overviewData?.totalValuePercentage | number: '1.2-2'}}</div>
         </div>
         <div class="bg-white rounded-lg shadow p-1 flex flex-col items-center justify-center border-b-4 border-green-500">
           <div class="text-sm text-gray-500">Estimated Value</div>
@@ -15,13 +15,13 @@
         </div>
         <div class="bg-white rounded-lg shadow p-1 flex flex-col items-center justify-center border-b-4 border-green-500">
           <div class="text-sm text-gray-500">Cash Balance</div>
-          <div class="text-lg font-bold text-gray-800">$1.2K</div>
-          <div class="text-green-500 text-xs">+1.1%</div>
+          <div class="text-lg font-bold text-gray-800">{{overviewData?.cash | number: '1.2-2'}}</div>
+          <div class="text-green-500 text-xs">{{overviewData?.cashPercentage | number: '1.2-2'}}</div>
         </div>
         <div class="bg-white rounded-lg shadow p-1 flex flex-col items-center justify-center border-b-4 border-red-500">
           <div class="text-sm text-gray-500">Annual Return</div>
-          <div class="text-lg font-bold text-gray-800">15</div>
-          <div class="text-red-500 text-xs">-0.8%</div>
+          <div class="text-lg font-bold text-gray-800">{{overviewData?.annualReturn | number: '1.2-2'}}</div>
+          <!--<div class="text-red-500 text-xs">-0.8%</div> -->
         </div>
       </div>
     </div>
@@ -30,19 +30,39 @@
     <div
       class="  lg:col-span-3 bg-transparent rounded-lg shadow-[0px_2px_7px_0px_rgba(33,150,243,0.5)] backdrop-blur-[4px] full h-auto rounded-tl-[10px]"
     >
-    <!-- <div
-    class="  lg:col-span-3 rounded-lg shadow-[0px_2px_7px_0px_rgba(33,150,243,0.5)] backdrop-blur-[4px] bg-white full h-auto mr-1 rounded-tl-[10px]"
-  > -->
       <div class="scrollbar-hide px-4 py-2 max-h-[40vh] overflow-y-auto">
         <div class="flex justify-between items-start">
           <div>
             <h2 class="text-2xl font-bold">Holdings</h2>
-
-          </div>
-          <div class="text-right">
-            <p class="text-base font-semibold"></p>
           </div>
         </div>
+        <!-- Table begins here -->
+        <table class="min-w-full table-auto border-collapse mt-4">
+          <thead>
+            <tr>
+              <th class="px-4 py-2 border-b text-left">Asset Symbol</th>
+              <th class="px-4 py-2 border-b text-left">Asset Name</th>
+              <th class="px-4 py-2 border-b text-left">Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let holding of holdingData">
+              <td class="px-4 py-2 border-b">{{ holding.assetSymbol }}</td>
+              <td class="px-4 py-2 border-b">{{ holding.assetName | uppercase }}</td>
+              <td class="px-4 py-2 border-b">{{ holding.quantity }}</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <!-- Message if holdingData is empty -->
+        <div *ngIf="holdingData?.length === 0" class="text-center text-gray-500 mt-4">
+          No holdings to display
+        </div>
+        
+        <div class="text-right">
+          <p class="text-base font-semibold"></p>
+        </div>
+        
         <div
           class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
           cdkDropList
@@ -53,7 +73,6 @@
             *ngFor="let asset of firstRowAssets; let i = index"
             class="asset-item"
             (click)="selectAsset(asset)"
-
             cdkDrag
           >
             <div class="p-2 bg-white rounded-2xl min-w-[160px] max-w-full mb-4">
@@ -94,7 +113,6 @@
           </div>
         </div>
 
-      
         <div
           class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 transition-all"
           *ngIf="isExpanded"
@@ -107,7 +125,6 @@
             *ngFor="let asset of expandableAssets; let i = index"
             class="asset-item"
             (click)="selectAsset(asset)"
-
             cdkDrag
           >
             <div class="p-2 bg-white rounded-2xl min-w-[160px] max-w-full mb-4">
@@ -149,8 +166,6 @@
         </div>
       </div>
       <div class="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white rounded-b-lg to-transparent pointer-events-none"></div>
-
-    
     </div>
   </div>
   
@@ -166,7 +181,6 @@
       <div class="h-auto flex-1">
         @if (!selectedAsset) {
           <div class="h-full flex-1">
-            
             <app-chart></app-chart>
           </div>
         } @else {

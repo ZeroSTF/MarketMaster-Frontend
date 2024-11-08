@@ -49,7 +49,7 @@ export class PreviewOrderComponent implements OnInit {
             (error) => console.error('Error confirming order', error)
         );
     }
-    this.router.navigate(['/trader']);
+    this.router.navigate(['/dashboard/discover']);
 }
 
   onBack(): void {

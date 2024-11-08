@@ -13,7 +13,9 @@ import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinan
 import { Asset } from '../../../../models/asset.model';
 import { Router } from '@angular/router';
 import { state } from '@angular/animations';
-
+import { TransactionService } from '../../../../services/transaction.service';
+import { WatchListDTO } from '../../../../models/watchlist.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-asset-details',
   standalone: true,
@@ -32,8 +34,10 @@ import { state } from '@angular/animations';
 export class AssetdetailsComponent implements OnInit {
   private assetService = inject(AssetService);
   public selectedAsset = this.assetService.selectedAsset;
-  
-  constructor(private router:Router){}
+  private transactionService= inject(TransactionService);
+  public watchlist : WatchListDTO | null=null;
+  username: string = 'zerostf';
+  constructor(private router:Router,private snackBar:MatSnackBar){}
   ngOnInit() {}
   expandedNews: { [key: number]: boolean } = {};
   activeTab: 'overview' | 'financial' | 'news' = 'overview';
@@ -75,6 +79,29 @@ export class AssetdetailsComponent implements OnInit {
         queryParams: {
           symbol: asset.symbol,
           price: asset.currentPrice
+        }
+      });
+    }
+  }
+  addWatchList(): void {
+    const asset = this.selectedAsset();
+    if (asset) {
+      this.transactionService.addWatchList(this.username, asset.symbol).subscribe({
+        next: (watchlist) => {
+          console.log('Watchlist added:', watchlist);
+          this.snackBar.open('Asset added to watchlist successfully!', 'Close', {
+            duration: 3000, 
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        },
+        error: (err) => {
+          console.error('Error adding to watchlist:', err);
+          this.snackBar.open('Failed to add asset to watchlist.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
         }
       });
     }

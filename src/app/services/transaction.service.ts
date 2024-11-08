@@ -5,7 +5,9 @@ import { catchError, tap } from 'rxjs/operators';
 import { Transaction } from '../models/Transaction.model'; 
 import { LimitOrder } from '../models/limitOrder.model';
 import { environment } from '../../environments/environment';
-
+import { HoldingDTO } from '../models/holding.model';
+import { OverviewDTO } from '../models/overview.model';
+import { WatchListDTO } from '../models/watchlist.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -14,7 +16,9 @@ export class TransactionService {
 
   private readonly recentTransactionSignal = signal<Transaction | null>(null);
   private readonly recentOrderSignal = signal<LimitOrder | null>(null);
+  private readonly recentWatchListSignal = signal<WatchListDTO | null>(null);
 
+  public readonly recentWatchList: Signal<WatchListDTO | null> = computed(() => this.recentWatchListSignal?.());
   public readonly recentTransaction: Signal<Transaction | null> = computed(() => this.recentTransactionSignal?.());
   public readonly recentOrder: Signal<LimitOrder | null> = computed(() => this.recentOrderSignal?.());
 
@@ -47,5 +51,44 @@ export class TransactionService {
     console.error(errorMessage);
     return throwError(() => new Error(errorMessage));
   }
+  getHolding(username: string): Observable<HoldingDTO[]> {
+    const url = `${this.API_URL}/portf/holding/${username}`;
+    return this.http.get<HoldingDTO[]>(url).pipe(
+      tap((holdings) => console.log('Fetched holdings:', holdings)), 
+      catchError(this.handleError)
+    );
+  }
+
+  getTransaction(username: string): Observable<Transaction[]> {
+    const url = `${this.API_URL}/portf/transaction/${username}`;
+    return this.http.get<Transaction[]>(url).pipe(
+      tap((transaction) => console.log('Fetched holdings:', transaction)), 
+      catchError(this.handleError)
+    );
+  }
+
+  getOverviewData(username: string): Observable<OverviewDTO> {
+    const url = `${this.API_URL}/portf/overview/${username}`;
+    return this.http.get<OverviewDTO>(url).pipe(
+      tap((overview) => {
+        console.log('Fetched overview data:', overview);
+      }),
+      catchError(this.handleError)
+    );
+  }
+  getWatchList(username: string): Observable<WatchListDTO[]> {
+    const url = `${this.API_URL}/portf/watchlist/${username}`;
+    return this.http.get<WatchListDTO[]>(url).pipe(
+      tap((watchlist) => console.log('Fetched holdings:', watchlist)), 
+      catchError(this.handleError)
+    );
+  } 
+  addWatchList(username: string, symbol: string): Observable<WatchListDTO> {
+    const url = `${this.API_URL}/portf/addwatchlist/${username}/${symbol}`;
+    return this.http.post<WatchListDTO>(url, {}).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 }
 

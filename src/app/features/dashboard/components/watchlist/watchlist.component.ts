@@ -10,7 +10,7 @@ import { AssetService } from '../../../../services/asset.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class WatchlistComponent {
+export class WatchlistComponent  {
   private assetService = inject(AssetService);
 
   watchList = this.assetService.watchlist;
