@@ -8,6 +8,8 @@ import {
   tap,
   throwError,
 } from 'rxjs';
+import { jwtDecode } from "jwt-decode";
+
 import {
   SignupRequest,
   LoginRequest,
@@ -82,12 +84,22 @@ export class AuthService {
     this.tokenResponseSignal.set(null);
     localStorage.removeItem('tokenResponse');
   }
+ public username(): string | null{
+  const storedToken = localStorage.getItem('tokenResponse');
+  if (storedToken) {
+    const DecodedToken : any = jwtDecode(storedToken);
+    console.log(DecodedToken);
+    return DecodedToken.sub;
+   
+  }
+  return null
+ }
 
   private loadUserFromStorage(): void {
     const storedToken = localStorage.getItem('tokenResponse');
     if (storedToken) {
       this.tokenResponseSignal.set(JSON.parse(storedToken));
-      // TODO validate the token here or fetch user details
+     
     }
   }
 
@@ -101,4 +113,10 @@ export class AuthService {
     console.error(errorMessage);
     return throwError(() => new Error(errorMessage));
   }
+}
+interface DecodedToken {
+  username?: string;
+  sub?: string;
+  email?: string;
+  // Add other expected token claims
 }

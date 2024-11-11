@@ -5,6 +5,8 @@ import { ChartComponent } from '../../components/chart/chart.component';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { WatchlistComponent } from '../../components/watchlist/watchlist.component';
 import { AssetService } from '../../../../services/asset.service';
+import { PortfolioService } from '../../../../services/portfolio.service';
+import { HoldingDto } from '../../../../models/holdingDto.model';
 
 @Component({
   selector: 'app-dashboard-portfolio',
@@ -19,10 +21,11 @@ export class DashboardPortfolioComponent  {
   isExpanded = true;
   selectedAsset: AssetPortfolio | null = null;
   private assetService = inject(AssetService);
+  private portfolioService = inject(PortfolioService);
   userAssets = this.assetService.userAssets;
   firstRowAssets = this.assetService.userAssets()?.slice(0, 4);
   expandableAssets = this.assetService.userAssets()?.slice(4);
-
+  holdings : HoldingDto[] =[];
   drop(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -43,7 +46,16 @@ export class DashboardPortfolioComponent  {
   clearSelectedAsset() {
     this.selectedAsset = null;
   }
-  
+  loadHoldings(): void {
+    this.portfolioService.getHolding().subscribe({
+      next: data => { 
+        this.holdings = data;
+      },
+      error: (err) => {
+        console.error('Error fetching holdings', err); 
+      }
+    });
+  }
 }
 
  

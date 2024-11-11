@@ -47,7 +47,7 @@
 
   <!-- Action Buttons -->
   <div class="grid grid-cols-3 gap-2 mb-4">
-    <button class="bg-blue-600 text-white py-1 px-2 rounded text-sm font-medium hover:bg-blue-700">
+    <button class="bg-blue-600 text-white py-1 px-2 rounded text-sm font-medium hover:bg-blue-700" (click)="openBuyForm()">
       Buy
     </button>
     <button class="border border-blue-600 text-blue-600 py-1 px-2 rounded text-sm font-medium hover:bg-blue-50">
@@ -57,7 +57,32 @@
       Watch
     </button>
   </div>
-
+  <!-- Buy Form (Hidden initially) -->
+  <div *ngIf="showBuyForm" class="mt-4 p-4 bg-white shadow-md rounded-lg">
+    <form (ngSubmit)="submitBuyTransaction()" #buyForm="ngForm">
+      <div class="mb-4">
+        <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
+        <input 
+          type="number" 
+          id="quantity" 
+          name="quantity" 
+          [(ngModel)]="buyTransaction.quantity" 
+          required 
+          class="w-full px-3 py-2 border border-gray-300 rounded-md" 
+        />
+      </div>
+      
+      <div class="flex justify-end">
+        <button 
+          type="submit" 
+          [disabled]="buyForm.invalid" 
+          class="bg-blue-600 text-white py-1 px-4 rounded text-sm font-medium hover:bg-blue-700"
+        >
+          Confirm Buy
+        </button>
+      </div>
+    </form>
+  </div>
   <!-- Recent News Section -->
   <div class="border-t border-gray-200 pt-2">
     <h3 class="text-sm font-semibold mb-2">Recent News</h3>
