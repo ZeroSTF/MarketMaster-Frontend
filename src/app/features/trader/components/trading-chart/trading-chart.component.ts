@@ -18,7 +18,6 @@ import {
   TVChartGroupDirective,
 } from 'ngx-lightweight-charts';
 
-import { Time } from 'lightweight-charts';
 import { Asset } from '../../../../models/asset.model';
 import { ChartService } from '../../../../services/chart.service';
 
