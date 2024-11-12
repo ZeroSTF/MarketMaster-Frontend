@@ -1,16 +1,26 @@
-<div class="w-full space-y-4">
-  <app-asset-selector />
-  <div class="w-full h-[600px] bg-white dark:bg-gray-800 relative">
-    @if (loading()) {
-    <div class="absolute inset-0 flex items-center justify-center">
-      <mat-spinner></mat-spinner>
+<div class="trading-chart-container">
+  <!-- Main Chart Group -->
+  <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)" class="chart-group">
+    <!-- Main Candlestick Chart -->
+    <tv-candlestick-chart id="main-chart" [data]="candlestickData()" [options]="mainChartOptions">
+    </tv-candlestick-chart>
+
+    <!-- Volume Chart -->
+    <tv-histogram-chart id="volume-chart" [data]="volumeData()" [options]="volumeChartOptions">
+    </tv-histogram-chart>
+  </div>
+
+  <!-- Crosshair Data Display -->
+  <div class="crosshair-data" *ngIf="currentCrosshairData()">
+    <div class="price-data">
+      O: {{formatPrice(currentCrosshairData()?.['main-chart']?.open)}}
+      H: {{formatPrice(currentCrosshairData()?.['main-chart']?.high)}}
+      L: {{formatPrice(currentCrosshairData()?.['main-chart']?.low)}}
+      C: {{formatPrice(currentCrosshairData()?.['main-chart']?.close)}}
     </div>
-    }
-    @if (error()) {
-    <div class="absolute inset-0 flex items-center justify-center">
-      <p class="text-red-500">{{error()}}</p>
+    <div class="volume-data">
+      Vol: {{formatVolume(currentCrosshairData()?.['volume-chart']?.value)}}
     </div>
-    }
-    <div #chartContainer class="w-full h-full"></div>
   </div>
 </div>
+`
