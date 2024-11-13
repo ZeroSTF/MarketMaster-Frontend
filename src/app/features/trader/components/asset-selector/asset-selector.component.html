@@ -1,10 +1,27 @@
-<mat-form-field class="w-full">
-  <mat-label>Select Asset</mat-label>
-  <mat-select [value]="selectedAsset()" (selectionChange)="onAssetSelected($event)">
-    @for (asset of assets(); track asset.symbol) {
-    <mat-option [value]="asset">
-      {{asset.symbol}} - {{asset.name}}
-    </mat-option>
-    }
-  </mat-select>
-</mat-form-field>
+<div class="p-4">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label class="mr-56 dark:text-gray-300">Select Asset</mat-label>
+    <mat-select [value]="selectedAsset()" (selectionChange)="onAssetSelected($event)" class="dark:bg-gray-900"
+      panelClass="dark:bg-gray-900">
+
+      <!-- Search Input -->
+      <mat-select-trigger class="dark:text-gray-200">
+        {{selectedAsset()?.symbol}} - {{selectedAsset()?.name}}
+      </mat-select-trigger>
+
+      <div class="sticky top-0 z-10 bg-white dark:!bg-gray-900 p-3">
+        <input matInput [formControl]="searchControl" placeholder="Search assets..." class="w-full p-2 border rounded dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 
+                 focus:outline-none focus:ring-2 focus:ring-primary-500">
+      </div>
+
+      @for (asset of filteredAssets(); track asset.symbol) {
+      <mat-option [value]="asset" class="dark:text-gray-200 dark:hover:bg-gray-700">
+        <div class="flex items-center justify-between">
+          <span class="font-medium mr-2">{{asset.symbol}}</span>
+          <span class="text-sm text-gray-600 dark:text-gray-400">{{asset.name}}</span>
+        </div>
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>

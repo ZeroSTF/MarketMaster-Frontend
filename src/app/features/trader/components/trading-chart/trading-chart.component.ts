@@ -1,4 +1,3 @@
-// trading-chart.component.ts
 import {
   Component,
   OnInit,
@@ -38,7 +37,6 @@ import { ChartService } from '../../../../services/chart.service';
   styleUrl: './trading-chart.component.scss',
 })
 export class TradingChartComponent implements OnInit, OnDestroy {
-  // Input for the asset
   asset = input.required<Asset>();
 
   // Signals for chart data
@@ -71,7 +69,6 @@ export class TradingChartComponent implements OnInit, OnDestroy {
   };
 
   constructor(private chartService: ChartService) {
-    // Effect to handle asset changes
     effect(() => {
       const currentAsset = this.asset();
       if (currentAsset) {
@@ -128,7 +125,5 @@ export class TradingChartComponent implements OnInit, OnDestroy {
     return volume?.toLocaleString() ?? '-';
   }
 
-  ngOnDestroy() {
-    // Cleanup if needed
-  }
+  ngOnDestroy() {}
 }

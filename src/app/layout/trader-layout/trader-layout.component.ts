@@ -1,10 +1,12 @@
+// trader-layout.component.ts
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ChartToolbarComponent } from '../../features/trader/components/chart-toolbar/chart-toolbar.component';
 import { TradingChartComponent } from '../../features/trader/components/trading-chart/trading-chart.component';
 import { AssetSelectorComponent } from '../../features/trader/components/asset-selector/asset-selector.component';
-import { Asset, AssetType } from '../../models/asset.model';
+import { ChartService } from '../../services/chart.service';
+import { Asset } from '../../models/asset.model';
 
 @Component({
   selector: 'app-trader-layout',
@@ -20,25 +22,24 @@ import { Asset, AssetType } from '../../models/asset.model';
   styleUrl: './trader-layout.component.css',
 })
 export class TraderLayoutComponent {
-  selectedAsset: Asset = {
-    symbol: 'AAPL',
-    name: 'Apple Inc.',
-    type: AssetType.STOCK,
-    openPrice: 0,
-    dayHigh: 0,
-    dayLow: 0,
-    currentPrice: 0,
-    volume: 0,
-    previousClose: 0,
-    priceChange: 0,
-    priceChangePercent: 0,
-    marketCap: 0,
-    peRatio: 0,
-    dividendYieldPercent: 0,
-    beta: 0,
-    yearHigh: 0,
-    yearLow: 0,
-    averageVolume: 0,
-    sector: 'Technology',
-  };
+  private chartService = inject(ChartService);
+
+  selectedAsset = this.chartService.selectedAsset;
+
+  constructor() {
+    effect(() => {
+      const asset = this.selectedAsset();
+      if (asset) {
+        this.loadAssetData(asset);
+      }
+    });
+  }
+
+  private async loadAssetData(asset: Asset) {
+    try {
+      await this.chartService.loadHistoricalData(asset.symbol);
+    } catch (error) {
+      console.error('Error loading asset data:', error);
+    }
+  }
 }
