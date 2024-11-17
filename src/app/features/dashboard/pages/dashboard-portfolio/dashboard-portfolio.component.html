@@ -5,7 +5,7 @@
       <div class="grid grid-cols-2 grid-rows-2 gap-2 h-full bg-transparent">
         <div class="bg-white rounded-lg shadow p-1 flex flex-col items-center justify-center border-b-4 border-green-500">
           <div class="text-sm text-gray-500">Portfolio Value</div>
-          <div class="text-lg font-bold text-gray-800">{{overviewData?.totalValue | number: '1.2-2'}}</div>
+          <div class="text-lg font-bold text-gray-800">{{overviewData?.totalValue | currency: 'USD': 'symbol' : '1.2-2'}}</div>
           <div class="text-green-500 text-xs">{{overviewData?.totalValuePercentage | number: '1.2-2'}}</div>
         </div>
         <div class="bg-white rounded-lg shadow p-1 flex flex-col items-center justify-center border-b-4 border-green-500">
@@ -15,12 +15,12 @@
         </div>
         <div class="bg-white rounded-lg shadow p-1 flex flex-col items-center justify-center border-b-4 border-green-500">
           <div class="text-sm text-gray-500">Cash Balance</div>
-          <div class="text-lg font-bold text-gray-800">{{overviewData?.cash | number: '1.2-2'}}</div>
+          <div class="text-lg font-bold text-gray-800">{{overviewData?.cash | currency: 'USD': 'symbol' : '1.2-2'}}</div>
           <div class="text-green-500 text-xs">{{overviewData?.cashPercentage | number: '1.2-2'}}</div>
         </div>
         <div class="bg-white rounded-lg shadow p-1 flex flex-col items-center justify-center border-b-4 border-red-500">
           <div class="text-sm text-gray-500">Annual Return</div>
-          <div class="text-lg font-bold text-gray-800">{{overviewData?.annualReturn | number: '1.2-2'}}</div>
+          <div class="text-lg font-bold text-gray-800">{{overviewData?.annualReturn | currency: 'USD': 'symbol' : '1.2-2'}}</div>
           <!--<div class="text-red-500 text-xs">-0.8%</div> -->
         </div>
       </div>
@@ -43,6 +43,7 @@
               <th class="px-4 py-2 border-b text-left">Asset Symbol</th>
               <th class="px-4 py-2 border-b text-left">Asset Name</th>
               <th class="px-4 py-2 border-b text-left">Quantity</th>
+              <th class="px-4 py-2 border-b text-left">Average Price</th>
             </tr>
           </thead>
           <tbody>
@@ -50,6 +51,7 @@
               <td class="px-4 py-2 border-b">{{ holding.assetSymbol }}</td>
               <td class="px-4 py-2 border-b">{{ holding.assetName | uppercase }}</td>
               <td class="px-4 py-2 border-b">{{ holding.quantity }}</td>
+              <td class="px-4 py-2 border-b">{{ holding.price }}</td>
             </tr>
           </tbody>
         </table>

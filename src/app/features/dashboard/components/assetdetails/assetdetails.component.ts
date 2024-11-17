@@ -90,20 +90,33 @@ export class AssetdetailsComponent implements OnInit {
         next: (watchlist) => {
           console.log('Watchlist added:', watchlist);
           this.snackBar.open('Asset added to watchlist successfully!', 'Close', {
-            duration: 3000, 
+            duration: 3000,
             horizontalPosition: 'right',
             verticalPosition: 'top'
           });
         },
         error: (err) => {
           console.error('Error adding to watchlist:', err);
-          this.snackBar.open('Failed to add asset to watchlist.', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top'
-          });
+  
+          // Use the custom message from the backend if available
+          if (err.status === 409 && err.error.message) {
+            this.snackBar.open(err.error.message, 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top'
+            });
+          } else {
+            this.snackBar.open('Failed to add asset to watchlist.', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'right',
+              verticalPosition: 'top'
+            });
+          }
         }
       });
     }
   }
-}
+  
+  
+  
+  }  

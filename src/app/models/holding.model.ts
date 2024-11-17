@@ -5,4 +5,5 @@ export interface HoldingDTO {
     assetSymbol: string;
     assetName: string;
     quantity: number;
+    price: number;
   }

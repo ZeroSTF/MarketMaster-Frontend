@@ -35,7 +35,18 @@ export class TradesoverviewComponent implements OnInit {
   selectTab(tab: string) {
     this.selectedTab = tab;
   }
-
+  getRowBackground(index: number) {
+    const baseColor = '#1E88E5'; // A fixed blue base color
+    // Generate a unique shade of blue for each row by modifying the lightness using HSL
+    const lightness = 95 - (index % 10) * 5;  // Vary lightness for each row
+    
+    return {
+      'background': `hsl(210, 100%, ${lightness}%)` // Use HSL for dynamic lightness
+    };
+  }
+  
+  
+  
   getTransactionsForSelectedTab(): Transaction[] {
     if (this.transactionData === null || this.transactionData.length === 0) {
       return [];

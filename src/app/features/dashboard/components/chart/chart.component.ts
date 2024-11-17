@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js/auto';  // Import Chart.js
+import { PortfolioService } from '../../../../services/portfolio.service';
 
 @Component({
   selector: 'app-chart',
@@ -9,92 +10,156 @@ import { Chart } from 'chart.js/auto';  // Import Chart.js
   styleUrls: ['./chart.component.css']
 })
 export class ChartComponent implements OnInit {
-
   performanceChart: any;  // Reference for the chart
   selectedPeriod: string = '1m';  // Default period is 1 month
+  username: string = 'zerostf'; 
+  totalValues: { key: string, value: number }[] = []; 
+
+  constructor(private portfolioService: PortfolioService) {}
 
   ngOnInit(): void {
-    this.initializeChart();  // Initialize the chart on component load
+    this.fetchTotalValues();  // Initialize the chart on component load
   }
 
-  // Function to initialize the Chart.js chart
-  initializeChart() {
+  fetchTotalValues() {
+    this.portfolioService.getTotalValues(this.username).subscribe(
+      (data) => {
+        console.log('API Data:', data);
+
+        // Parse API response to ensure proper formatting
+        this.totalValues = data.map(item => ({
+          key: Object.keys(item)[0],  // Extract date
+          value: parseFloat(Object.values(item)[0] as string)  // Extract and parse value
+        }));
+
+        console.log('Parsed Total Values:', this.totalValues);
+
+        // Initialize the chart with all data
+        const labels = this.totalValues.map(item => item.key);
+        const values = this.totalValues.map(item => item.value);
+
+        this.initializeChart(labels, values);
+      },
+      (error) => {
+        console.error('Error fetching total values:', error);
+      }
+    );
+  }
+
+  initializeChart(labels: string[], values: number[]) {
     const ctx = document.getElementById('performanceChart') as HTMLCanvasElement;
-    this.performanceChart = new Chart(ctx, {
+
+    if (!ctx) {
+      console.error('Canvas element not found');
+      return;
+    }
+
+    const canvasContext = ctx.getContext('2d');
+    if (!canvasContext) {
+      console.error('Canvas context not found');
+      return;
+    }
+
+    // Destroy the existing chart instance, if any
+    if (this.performanceChart) {
+      this.performanceChart.destroy();
+    }
+
+    // Initialize the chart
+    this.performanceChart = new Chart(canvasContext, {
       type: 'line',
       data: {
-        labels: this.getLabelsForPeriod(this.selectedPeriod),
-        datasets: [{
-          label: 'Portfolio Performance',
-          data: this.getDataForPeriod(this.selectedPeriod),
-          backgroundColor: 'rgba(30, 136, 229, 0.2)',  // Color #1E88E5 with transparency for fill
-          borderColor: '#1E88E5',  // Border color #1E88E5
-          borderWidth: 2,
-          fill: true
-        }]
+        labels, // x-axis labels (dates)
+        datasets: [
+          {
+            label: 'Portfolio Value',
+            data: values, // y-axis data points
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderWidth: 2,
+            tension: 0.4, // Smooth line
+          },
+        ],
       },
       options: {
         responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+          },
+        },
         scales: {
           x: {
-            display: true,
             title: {
               display: true,
               text: 'Date',
-              color: '#666'
-            }
+            },
           },
           y: {
-            display: true,
             title: {
               display: true,
-              text: 'Performance (%)',
-              color: '#666'
-            }
-          }
-        }
-      }
+              text: 'Value',
+            },
+          },
+        },
+      },
     });
   }
 
-  // Function to get labels based on the selected period
-  getLabelsForPeriod(period: string): string[] {
-    switch (period) {
-      case '5d': return ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'];
-      case '10d': return ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7', 'Day 8', 'Day 9', 'Day 10'];
-      case '1m': return this.getDaysInMonth();
-      case '6m': return this.getMonths(6);
-      case '1y': return this.getMonths(12);
-      default: return [];
-    }
-  }
-
-  // Function to get data based on the selected period
-  getDataForPeriod(period: string): number[] {
-    switch (period) {
-      case '5d': return [2, 4, 6, 5, 8];  // Example data for 5 days
-      case '10d': return [2, 4, 6, 5, 8, 7, 3, 6, 4, 9];  // Example data for 10 days
-      case '1m': return Array(30).fill(0).map(() => Math.floor(Math.random() * 10) + 1);  // Random data for 30 days
-      case '6m': return Array(6).fill(0).map(() => Math.floor(Math.random() * 10) + 1);  // Random data for 6 months
-      case '1y': return Array(12).fill(0).map(() => Math.floor(Math.random() * 10) + 1);  // Random data for 12 months
-      default: return [];
-    }
-  }
-
-  // Helper functions
-  getDaysInMonth(): string[] {
-    return Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`);
-  }
-
-  getMonths(months: number): string[] {
-    return Array.from({ length: months }, (_, i) => `Month ${i + 1}`);
-  }
-
-  // Function to handle the filter selection and update the chart
   filterData(period: string) {
     this.selectedPeriod = period;
-    this.performanceChart.data.labels = this.getLabelsForPeriod(period);
-    this.performanceChart.data.datasets[0].data = this.getDataForPeriod(period);
-    this.performanceChart.update();  // Update the chart with new data
+
+    // Current date
+    const now = new Date();
+    let comparisonDate = new Date();
+
+    // Adjust comparison date based on the selected period
+    switch (period) {
+      case '5d':
+        comparisonDate.setDate(now.getDate() - 5);
+        break;
+      case '10d':
+        comparisonDate.setDate(now.getDate() - 10);
+        break;
+      case '1m':
+        comparisonDate.setMonth(now.getMonth() - 1);
+        break;
+      case '6m':
+        comparisonDate.setMonth(now.getMonth() - 6);
+        break;
+      case '1y':
+        comparisonDate.setFullYear(now.getFullYear() - 1);
+        break;
+      default:
+        console.error('Invalid period:', period);
+        return;
+    }
+
+    console.log('Comparison Date:', comparisonDate);
+
+    // Filter data based on the comparison date
+    const filteredData = this.totalValues.filter(item => {
+      const itemDate = new Date(item.key);
+      if (isNaN(itemDate.getTime())) {
+        console.error('Invalid date format in totalValues:', item.key);
+        return false;
+      }
+      return itemDate >= comparisonDate;
+    });
+
+    const filteredLabels = filteredData.map(item => item.key);
+    const filteredValues = filteredData.map(item => item.value);
+
+    console.log('Filtered Labels:', filteredLabels);
+    console.log('Filtered Values:', filteredValues);
+
+    // Update chart data
+    if (this.performanceChart) {
+      this.performanceChart.data.labels = filteredLabels;
+      this.performanceChart.data.datasets[0].data = filteredValues;
+      this.performanceChart.update();
+    } else {
+      console.error('Chart not initialized');
+    }
   }
 }
