@@ -7,7 +7,8 @@
   </div>
 
   @if (currentCrosshairData()) {
-  <div class="crosshair-tooltip" [style.left.px]="crosshairPosition()!.x + 15" [style.top.px]="crosshairPosition()!.y">
+  <div class="crosshair-tooltip" [style.left.px]="crosshairPosition()!.x + 15"
+    [style.top.px]="crosshairPosition()!.y-350">
     <div class="grid gap-1">
       <div class="flex justify-between gap-4">
         <span>O</span>
