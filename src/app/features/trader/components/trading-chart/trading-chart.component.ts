@@ -5,6 +5,7 @@ import {
   effect,
   input,
   signal,
+  computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -40,58 +41,18 @@ import {
   templateUrl: './trading-chart.component.html',
   styleUrl: './trading-chart.component.scss',
 })
-export class TradingChartComponent implements OnInit, OnDestroy {
+export class TradingChartComponent implements OnDestroy {
   asset = input.required<Asset>();
   candlestickData = signal<any[]>([]);
   volumeData = signal<any[]>([]);
   selectedTimeframe = signal<string>('D');
   currentCrosshairData = signal<any>(null);
-  crosshairPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
+  crosshairPosition = signal<{ x: number; y: number } | null>(null);
 
-  chartOptions = signal({
-    layout: {
-      background: { color: '#ffffff' },
-      textColor: '#333',
-    },
-    grid: {
-      vertLines: { color: '#f0f0f0' },
-      horzLines: { color: '#f0f0f0' },
-    },
-    rightPriceScale: {
-      borderVisible: false,
-    },
-    timeScale: {
-      borderVisible: false,
-    },
-  });
-
-  volumeOptions = signal({
-    ...this.chartOptions(),
-    height: 200,
-  });
-
-  constructor(
-    private chartService: ChartService,
-    private darkModeService: DarkModeService
-  ) {
-    // Effect for asset changes
-    effect(() => {
-      const currentAsset = this.asset();
-      if (currentAsset) {
-        this.loadChartData(currentAsset.symbol);
-      }
-    });
-
-    // Effect for theme changes
-    effect(() => {
-      const isDark = this.darkModeService.currentTheme() === AppTheme.DARK;
-      this.updateChartTheme(isDark);
-    });
-  }
-
-  private updateChartTheme(isDark: boolean) {
-    console.log('updateChartTheme');
-    const newOptions = {
+  // Compute chart options based on theme
+  chartOptions = computed(() => {
+    const isDark = this.darkModeService.currentTheme() === AppTheme.DARK;
+    return {
       layout: {
         background: { color: isDark ? '#1e1e1e' : '#ffffff' },
         textColor: isDark ? '#e0e0e0' : '#333',
@@ -109,25 +70,30 @@ export class TradingChartComponent implements OnInit, OnDestroy {
         textColor: isDark ? '#e0e0e0' : '#333',
       },
     };
+  });
 
-    this.chartOptions.set(newOptions);
-    this.volumeOptions.set({
-      ...newOptions,
-      height: 200,
+  volumeOptions = computed(() => ({
+    ...this.chartOptions(),
+    height: 200,
+  }));
+
+  constructor(
+    private chartService: ChartService,
+    private darkModeService: DarkModeService
+  ) {
+    effect(() => {
+      const currentAsset = this.asset();
+      if (currentAsset) {
+        this.loadChartData(currentAsset.symbol);
+      }
     });
-  }
-
-  ngOnInit() {
-    const initialAsset = this.asset();
-    if (initialAsset) {
-      this.loadChartData(initialAsset.symbol);
-    }
   }
 
   async loadChartData(symbol: string) {
     try {
       await this.chartService.loadHistoricalData(symbol);
       const historicalData = this.chartService.historicalData();
+      const isDark = this.darkModeService.currentTheme() === AppTheme.DARK;
 
       this.candlestickData.set(
         historicalData.map((d) => ({
@@ -145,10 +111,10 @@ export class TradingChartComponent implements OnInit, OnDestroy {
           value: d.volume,
           color:
             d.close >= d.open
-              ? this.darkModeService.currentTheme() === AppTheme.DARK
+              ? isDark
                 ? '#2e7d32'
                 : '#26a69a'
-              : this.darkModeService.currentTheme() === AppTheme.DARK
+              : isDark
               ? '#c62828'
               : '#ef5350',
         }))
