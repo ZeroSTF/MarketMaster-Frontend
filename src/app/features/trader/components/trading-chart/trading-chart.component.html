@@ -1,25 +1,36 @@
-<div class="trading-chart-container">
-  <!-- Main Chart Group -->
+<div class="trading-chart-container relative" (mousemove)="onChartMouseMove($event)">
   <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)" class="chart-group">
-    <!-- Main Candlestick Chart -->
-    <tv-candlestick-chart id="main-chart" [data]="candlestickData()" [options]="mainChartOptions">
+    <tv-candlestick-chart id="main-chart" [data]="candlestickData()" [options]="chartOptions()">
     </tv-candlestick-chart>
-
-    <!-- Volume Chart -->
-    <tv-histogram-chart id="volume-chart" [data]="volumeData()" [options]="volumeChartOptions">
+    <tv-histogram-chart id="volume-chart" [data]="volumeData()" [options]="volumeOptions()">
     </tv-histogram-chart>
   </div>
 
-  <!-- Crosshair Data Display -->
-  <div class="crosshair-data" *ngIf="currentCrosshairData()">
-    <div class="price-data">
-      O: {{formatPrice(currentCrosshairData()?.['main-chart']?.open)}}
-      H: {{formatPrice(currentCrosshairData()?.['main-chart']?.high)}}
-      L: {{formatPrice(currentCrosshairData()?.['main-chart']?.low)}}
-      C: {{formatPrice(currentCrosshairData()?.['main-chart']?.close)}}
-    </div>
-    <div class="volume-data">
-      Vol: {{formatVolume(currentCrosshairData()?.['volume-chart']?.value)}}
+  @if (currentCrosshairData()) {
+  <div class="crosshair-tooltip" [style.left.px]="crosshairPosition().x + 15"
+    [style.top.px]="crosshairPosition().y + 15">
+    <div class="grid gap-1">
+      <div class="flex justify-between gap-4">
+        <span>O</span>
+        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.open) }}</span>
+      </div>
+      <div class="flex justify-between gap-4">
+        <span>H</span>
+        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.high) }}</span>
+      </div>
+      <div class="flex justify-between gap-4">
+        <span>L</span>
+        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.low) }}</span>
+      </div>
+      <div class="flex justify-between gap-4">
+        <span>C</span>
+        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.close) }}</span>
+      </div>
+      <div class="flex justify-between gap-4">
+        <span>Vol</span>
+        <span class="font-medium">{{ formatVolume(currentCrosshairData()?.['volume-chart']?.value) }}</span>
+      </div>
     </div>
   </div>
+  }
 </div>
