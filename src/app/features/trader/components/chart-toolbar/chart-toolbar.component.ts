@@ -24,7 +24,13 @@ interface TimeFrame {
   label: string;
 }
 
-export type ChartType = 'Candlestick' | 'Line' | 'Area' | 'Bar';
+export type ChartType =
+  | 'Candlestick'
+  | 'Line'
+  | 'Area'
+  | 'Bar'
+  | 'Baseline'
+  | 'Area';
 
 @Component({
   selector: 'app-chart-toolbar',
@@ -55,6 +61,11 @@ export class ChartToolbarComponent {
     { name: 'Line', value: 'Line' as ChartType, icon: 'show_chart' },
     { name: 'Area', value: 'Area' as ChartType, icon: 'area_chart' },
     { name: 'Bar', value: 'Bar' as ChartType, icon: 'bar_chart' },
+    {
+      name: 'Baseline',
+      value: 'Baseline' as ChartType,
+      icon: 'stacked_line_chart',
+    },
   ];
 
   chartType: ChartType = 'Candlestick';

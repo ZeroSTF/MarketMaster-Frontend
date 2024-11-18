@@ -10,15 +10,18 @@
     </div>
     }
     @case ('Area') {
-    <div tvChart="Area" id="main-chart" [data]="lineChartData()" [options]="chartOptions()">
-    </div>
+    <tv-area-chart id="main-chart" [data]="areaChartData()" [options]="chartOptions()">
+    </tv-area-chart>
     }
     @case ('Bar') {
     <div tvChart="Bar" id="main-chart" [data]="candlestickData()" [options]="chartOptions()">
     </div>
     }
+    @case ('Baseline') {
+    <tv-baseline-chart id="main-chart" [data]="baselineChartData()" [options]="chartOptions()">
+    </tv-baseline-chart>
     }
-
+    }
     <tv-histogram-chart id="volume-chart" [data]="volumeData()" [options]="volumeOptions()">
     </tv-histogram-chart>
   </div>
@@ -49,6 +52,12 @@
         <span>Price</span>
         <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.value) }}</span>
       </div>
+      @if (chartService.chartType() === 'Baseline') {
+      <div class="flex justify-between gap-4">
+        <span>Baseline</span>
+        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.baseline) }}</span>
+      </div>
+      }
       }
       <div class="flex justify-between gap-4">
         <span>Vol</span>

@@ -44,6 +44,8 @@ import {
     TVChartGroupDirective,
     TVChartDirective,
     TVHistogramChartComponent,
+    TVAreaChartComponent,
+    TVBaselineChartComponent,
   ],
   templateUrl: './trading-chart.component.html',
   styleUrl: './trading-chart.component.scss',
@@ -57,7 +59,7 @@ export class TradingChartComponent implements OnDestroy {
   crosshairPosition = signal<{ x: number; y: number } | null>(null);
   chartService = inject(ChartService);
 
-  // Compute chart options based on theme
+  // Chart options, computed based on theme
   chartOptions = computed(() => {
     const isDark = this.darkModeService.currentTheme() === AppTheme.DARK;
     return {
@@ -86,6 +88,21 @@ export class TradingChartComponent implements OnDestroy {
   }));
 
   lineChartData = computed(() => {
+    return this.candlestickData().map((d) => ({
+      time: d.time,
+      value: d.close,
+    }));
+  });
+
+  baselineChartData = computed(() => {
+    return this.candlestickData().map((d) => ({
+      time: d.time,
+      value: d.close,
+      baseline: d.open, // Using open price as baseline
+    }));
+  });
+
+  areaChartData = computed(() => {
     return this.candlestickData().map((d) => ({
       time: d.time,
       value: d.close,
