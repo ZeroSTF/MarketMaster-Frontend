@@ -1,12 +1,10 @@
 import {
   Component,
-  OnInit,
   OnDestroy,
   effect,
   input,
   signal,
   computed,
-  Inject,
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
