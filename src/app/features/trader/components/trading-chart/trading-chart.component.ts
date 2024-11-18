@@ -6,6 +6,8 @@ import {
   input,
   signal,
   computed,
+  Inject,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +18,9 @@ import {
   TVChartSyncDirective,
   TVChartCrosshairDataDirective,
   TVChartGroupDirective,
+  TVBaselineChartComponent,
+  TVAreaChartComponent,
+  TVBarChartDirective,
 } from 'ngx-lightweight-charts';
 
 import { Asset } from '../../../../models/asset.model';
@@ -37,6 +42,9 @@ import {
     TVChartSyncDirective,
     TVChartCrosshairDataDirective,
     TVChartGroupDirective,
+    TVBaselineChartComponent,
+    TVAreaChartComponent,
+    TVBarChartDirective,
   ],
   templateUrl: './trading-chart.component.html',
   styleUrl: './trading-chart.component.scss',
@@ -48,6 +56,7 @@ export class TradingChartComponent implements OnDestroy {
   selectedTimeframe = signal<string>('D');
   currentCrosshairData = signal<any>(null);
   crosshairPosition = signal<{ x: number; y: number } | null>(null);
+  chartService = inject(ChartService);
 
   // Compute chart options based on theme
   chartOptions = computed(() => {
@@ -77,10 +86,14 @@ export class TradingChartComponent implements OnDestroy {
     height: 200,
   }));
 
-  constructor(
-    private chartService: ChartService,
-    private darkModeService: DarkModeService
-  ) {
+  lineChartData = computed(() => {
+    return this.candlestickData().map((d) => ({
+      time: d.time,
+      value: d.close,
+    }));
+  });
+
+  constructor(private darkModeService: DarkModeService) {
     effect(() => {
       const currentAsset = this.asset();
       if (currentAsset) {

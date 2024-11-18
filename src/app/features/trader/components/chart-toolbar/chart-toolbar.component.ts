@@ -24,6 +24,8 @@ interface TimeFrame {
   label: string;
 }
 
+export type ChartType = 'Candlestick' | 'Line' | 'Area' | 'Bar';
+
 @Component({
   selector: 'app-chart-toolbar',
   standalone: true,
@@ -36,7 +38,7 @@ interface TimeFrame {
     MatTooltipModule,
   ],
   templateUrl: './chart-toolbar.component.html',
-  styleUrls: ['./chart-toolbar.component.scss']
+  styleUrls: ['./chart-toolbar.component.scss'],
 })
 export class ChartToolbarComponent {
   @Output() chartTypeChange = new EventEmitter<string>();
@@ -44,8 +46,19 @@ export class ChartToolbarComponent {
   @Output() indicatorAdd = new EventEmitter<Indicator>();
   @Output() indicatorRemove = new EventEmitter<string>();
 
-  chartType = 'candlestick';
-  
+  chartTypes = [
+    {
+      name: 'Candlestick',
+      value: 'Candlestick' as ChartType,
+      icon: 'candlestick_chart',
+    },
+    { name: 'Line', value: 'Line' as ChartType, icon: 'show_chart' },
+    { name: 'Area', value: 'Area' as ChartType, icon: 'area_chart' },
+    { name: 'Bar', value: 'Bar' as ChartType, icon: 'bar_chart' },
+  ];
+
+  chartType: ChartType = 'Candlestick';
+
   timeframes: TimeFrame[] = [
     { name: '1m', value: '1', label: '1 min' },
     { name: '5m', value: '5', label: '5 min' },
@@ -55,7 +68,7 @@ export class ChartToolbarComponent {
     { name: '4h', value: '240', label: '4 hour' },
     { name: '1D', value: 'D', label: 'Day' },
     { name: '1W', value: 'W', label: 'Week' },
-    { name: '1M', value: 'M', label: 'Month' }
+    { name: '1M', value: 'M', label: 'Month' },
   ];
 
   indicators: Indicator[] = [
@@ -64,18 +77,14 @@ export class ChartToolbarComponent {
       type: 'MA',
       icon: 'show_chart',
       active: false,
-      parameters: [
-        { name: 'length', default: 20 }
-      ]
+      parameters: [{ name: 'length', default: 20 }],
     },
     {
       name: 'RSI',
       type: 'RSI',
       icon: 'analytics',
       active: false,
-      parameters: [
-        { name: 'length', default: 14 }
-      ]
+      parameters: [{ name: 'length', default: 14 }],
     },
     {
       name: 'MACD',
@@ -85,8 +94,8 @@ export class ChartToolbarComponent {
       parameters: [
         { name: 'fastLength', default: 12 },
         { name: 'slowLength', default: 26 },
-        { name: 'signalLength', default: 9 }
-      ]
+        { name: 'signalLength', default: 9 },
+      ],
     },
     {
       name: 'Bollinger Bands',
@@ -95,29 +104,23 @@ export class ChartToolbarComponent {
       active: false,
       parameters: [
         { name: 'length', default: 20 },
-        { name: 'stdDev', default: 2 }
-      ]
+        { name: 'stdDev', default: 2 },
+      ],
     },
     {
       name: 'Volume',
       type: 'VOL',
       icon: 'bar_chart',
       active: true,
-      parameters: []
-    }
-  ];
-
-  chartTypes = [
-    { name: 'Candlestick', value: 'candlestick', icon: 'candlestick_chart' },
-    { name: 'Line', value: 'line', icon: 'show_chart' },
-    { name: 'Area', value: 'area', icon: 'area_chart' },
-    { name: 'Bar', value: 'bar', icon: 'bar_chart' }
+      parameters: [],
+    },
   ];
 
   constructor(public chartService: ChartService) {}
 
-  onChartTypeChange(type: string) {
+  onChartTypeChange(type: ChartType) {
     this.chartType = type;
+    this.chartService.setChartType(type);
     this.chartTypeChange.emit(type);
   }
 

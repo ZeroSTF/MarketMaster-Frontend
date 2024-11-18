@@ -3,6 +3,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { Asset } from '../models/asset.model';
 import { catchError, firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { ChartType } from '../features/trader/components/chart-toolbar/chart-toolbar.component';
 
 interface ChartDataPoint {
   time: number;
@@ -34,11 +35,13 @@ export class ChartService {
   private timeframeSignal = signal<string>('D');
   private indicatorsSignal = signal<string[]>([]);
   private selectedAssetSignal = signal<Asset | null>(null);
+  private chartTypeSignal = signal<ChartType>('Candlestick');
 
   readonly historicalData = computed(() => this.historicalDataSignal());
   readonly timeframe = computed(() => this.timeframeSignal());
   readonly indicators = computed(() => this.indicatorsSignal());
   readonly selectedAsset = computed(() => this.selectedAssetSignal());
+  readonly chartType = computed(() => this.chartTypeSignal());
 
   private readonly apiUrl = environment.flaskUrl;
 
@@ -115,5 +118,9 @@ export class ChartService {
 
   setSelectedAsset(asset: Asset): void {
     this.selectedAssetSignal.set(asset);
+  }
+
+  setChartType(type: ChartType) {
+    this.chartTypeSignal.set(type);
   }
 }
