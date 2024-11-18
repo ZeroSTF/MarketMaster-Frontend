@@ -30,6 +30,7 @@ import {
   DarkModeService,
   AppTheme,
 } from '../../../../services/dark-mode.service';
+import { IndicatorUtils } from '../../../../utils/indicators.utils';
 
 @Component({
   selector: 'app-trading-chart',
@@ -54,9 +55,55 @@ export class TradingChartComponent implements OnDestroy {
   asset = input.required<Asset>();
   volumeData = signal<any[]>([]);
   selectedTimeframe = signal<string>('D');
-  currentCrosshairData = signal<any>(null);
   crosshairPosition = signal<{ x: number; y: number } | null>(null);
   chartService = inject(ChartService);
+  currentCrosshairData = signal<any>(null);
+  indicatorData = signal<Map<string, any[]>>(new Map());
+
+  // Chart data, computed based on selected timeframe
+  candlestickData = signal<any[]>([]);
+  lineChartData = computed(() => {
+    return this.candlestickData().map((d) => ({
+      time: d.time,
+      value: d.close,
+    }));
+  });
+
+  baselineChartData = computed(() => {
+    return this.candlestickData().map((d) => ({
+      time: d.time,
+      value: d.close,
+      baseline: d.open,
+    }));
+  });
+
+  areaChartData = computed(() => {
+    return this.candlestickData().map((d) => ({
+      time: d.time,
+      value: d.close,
+    }));
+  });
+
+  // Indicator data, computed based on selected indicators
+  smaData = computed(() => {
+    const data = this.candlestickData();
+    return data.length ? IndicatorUtils.calculateSMA(data, 20) : [];
+  });
+
+  rsiData = computed(() => {
+    const data = this.candlestickData();
+    return data.length ? IndicatorUtils.calculateRSI(data, 14) : [];
+  });
+
+  macdData = computed(() => {
+    const data = this.candlestickData();
+    return data.length ? IndicatorUtils.calculateMACD(data) : [];
+  });
+
+  bbData = computed(() => {
+    const data = this.candlestickData();
+    return data.length ? IndicatorUtils.calculateBollingerBands(data) : [];
+  });
 
   // Chart options, computed based on theme
   chartOptions = computed(() => {
@@ -86,36 +133,17 @@ export class TradingChartComponent implements OnDestroy {
     height: 200,
   }));
 
-  candlestickData = signal<any[]>([]);
-
-  lineChartData = computed(() => {
-    return this.candlestickData().map((d) => ({
-      time: d.time,
-      value: d.close,
-    }));
-  });
-
-  baselineChartData = computed(() => {
-    return this.candlestickData().map((d) => ({
-      time: d.time,
-      value: d.close,
-      baseline: d.open,
-    }));
-  });
-
-  areaChartData = computed(() => {
-    return this.candlestickData().map((d) => ({
-      time: d.time,
-      value: d.close,
-    }));
-  });
-
   constructor(private darkModeService: DarkModeService) {
     effect(() => {
       const currentAsset = this.asset();
       if (currentAsset) {
         this.loadChartData(currentAsset.symbol);
       }
+    });
+
+    effect(() => {
+      const indicators = this.chartService.indicators();
+      this.updateIndicators(indicators);
     });
   }
 
@@ -152,6 +180,29 @@ export class TradingChartComponent implements OnDestroy {
     } catch (error) {
       console.error('Error loading chart data:', error);
     }
+  }
+
+  private updateIndicators(indicators: string[]) {
+    const newData = new Map<string, any[]>();
+
+    indicators.forEach((indicator) => {
+      switch (indicator) {
+        case 'MA':
+          newData.set('MA', this.smaData());
+          break;
+        case 'RSI':
+          newData.set('RSI', this.rsiData());
+          break;
+        case 'MACD':
+          newData.set('MACD', this.macdData());
+          break;
+        case 'BB':
+          newData.set('BB', this.bbData());
+          break;
+      }
+    });
+
+    this.indicatorData.set(newData);
   }
 
   onCrosshairData(data: any) {
