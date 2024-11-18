@@ -21,6 +21,7 @@ import {
   TVBaselineChartComponent,
   TVAreaChartComponent,
   TVBarChartDirective,
+  TVChartDirective,
 } from 'ngx-lightweight-charts';
 
 import { Asset } from '../../../../models/asset.model';
@@ -42,9 +43,7 @@ import {
     TVChartSyncDirective,
     TVChartCrosshairDataDirective,
     TVChartGroupDirective,
-    TVBaselineChartComponent,
-    TVAreaChartComponent,
-    TVBarChartDirective,
+    TVChartDirective,
   ],
   templateUrl: './trading-chart.component.html',
   styleUrl: './trading-chart.component.scss',
