@@ -52,7 +52,6 @@ import {
 })
 export class TradingChartComponent implements OnDestroy {
   asset = input.required<Asset>();
-  candlestickData = signal<any[]>([]);
   volumeData = signal<any[]>([]);
   selectedTimeframe = signal<string>('D');
   currentCrosshairData = signal<any>(null);
@@ -87,6 +86,8 @@ export class TradingChartComponent implements OnDestroy {
     height: 200,
   }));
 
+  candlestickData = signal<any[]>([]);
+
   lineChartData = computed(() => {
     return this.candlestickData().map((d) => ({
       time: d.time,
@@ -98,7 +99,7 @@ export class TradingChartComponent implements OnDestroy {
     return this.candlestickData().map((d) => ({
       time: d.time,
       value: d.close,
-      baseline: d.open, // Using open price as baseline
+      baseline: d.open,
     }));
   });
 
