@@ -1,5 +1,5 @@
 .trading-chart-container {
-  @apply w-full h-[600px] flex flex-col;
+  @apply w-full h-[600px] flex flex-col relative;
 
   .chart-group {
     @apply flex-1 grid;
@@ -12,17 +12,6 @@
     @apply text-gray-900 dark:text-gray-100;
     @apply border border-gray-200 dark:border-gray-700;
     @apply backdrop-blur-sm bg-opacity-95 dark:bg-opacity-95;
-    transform: translate(0, -50%);
+    transform: translate(-50%, -50%);
   }
-}
-
-.controls {
-  padding: 10px;
-  background: #f5f5f5;
-}
-
-.chart-group {
-  flex: 1;
-  display: grid;
-  grid-template-rows: 70% 30%;
 }
