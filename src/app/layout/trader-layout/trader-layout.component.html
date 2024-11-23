@@ -1,11 +1,16 @@
-<div class="flex h-screen overflow-hidden dark:!bg-gray-900 transition-colors duration-300 text-white">
-  <app-trader-sidebar (changeTimeFrame)="onChangeTimeFrame($event)" (changeChartType)="onChangeChartType($event)"
-    (toggleIndicators)="onToggleIndicators()" (placeBuyOrder)="onPlaceBuyOrder()" (placeSellOrder)="onPlaceSellOrder()"
-    (zoomChart)="onZoomChart($event)" (resetSimulation)="onResetSimulation()"></app-trader-sidebar>
+<!-- trader-layout.component.html -->
+<div class="flex flex-col h-full bg-white dark:!bg-gray-900">
+  <app-chart-toolbar />
 
-  <main class="flex-grow overflow-auto">
-    <div class="min-h-full h-full p-4 lg:p-6">
-      <router-outlet></router-outlet>
+  <div class="flex flex-col flex-grow">
+    <div class="border-b border-gray-200 dark:!border-gray-700">
+      <app-asset-selector />
     </div>
-  </main>
+
+    <div class="flex-grow">
+      @if (selectedAsset(); as asset) {
+      <app-trading-chart [asset]="asset" class="h-full w-full" />
+      }
+    </div>
+  </div>
 </div>
