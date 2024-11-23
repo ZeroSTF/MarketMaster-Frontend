@@ -1,0 +1,69 @@
+<div class="trading-chart-container relative" (mousemove)="onChartMouseMove($event)">
+  <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)" class="chart-group">
+    @switch (chartService.chartType()) {
+    @case ('Candlestick') {
+    <tv-candlestick-chart id="main-chart" [data]="candlestickData()" [options]="chartOptions()">
+    </tv-candlestick-chart>
+    }
+    @case ('Line') {
+    <div tvChart="Line" id="main-chart" [data]="lineChartData()" [options]="chartOptions()">
+    </div>
+    }
+    @case ('Area') {
+    <tv-area-chart id="main-chart" [data]="areaChartData()" [options]="chartOptions()">
+    </tv-area-chart>
+    }
+    @case ('Bar') {
+    <div tvChart="Bar" id="main-chart" [data]="candlestickData()" [options]="chartOptions()">
+    </div>
+    }
+    @case ('Baseline') {
+    <tv-baseline-chart id="main-chart" [data]="baselineChartData()" [options]="chartOptions()">
+    </tv-baseline-chart>
+    }
+    }
+    <tv-histogram-chart id="volume-chart" [data]="volumeData()" [options]="volumeOptions()">
+    </tv-histogram-chart>
+  </div>
+
+  @if (currentCrosshairData()) {
+  <div class="crosshair-tooltip" [style.left.px]="crosshairPosition()?.x! + 15"
+    [style.top.px]="crosshairPosition()?.y! - 350">
+    <div class="grid gap-1">
+      @if (chartService.chartType() === 'Candlestick' || chartService.chartType() === 'Bar') {
+      <div class="flex justify-between gap-4">
+        <span>O</span>
+        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.open) }}</span>
+      </div>
+      <div class="flex justify-between gap-4">
+        <span>H</span>
+        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.high) }}</span>
+      </div>
+      <div class="flex justify-between gap-4">
+        <span>L</span>
+        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.low) }}</span>
+      </div>
+      <div class="flex justify-between gap-4">
+        <span>C</span>
+        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.close) }}</span>
+      </div>
+      } @else {
+      <div class="flex justify-between gap-4">
+        <span>Price</span>
+        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.value) }}</span>
+      </div>
+      @if (chartService.chartType() === 'Baseline') {
+      <div class="flex justify-between gap-4">
+        <span>Baseline</span>
+        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.baseline) }}</span>
+      </div>
+      }
+      }
+      <div class="flex justify-between gap-4">
+        <span>Vol</span>
+        <span class="font-medium">{{ formatVolume(currentCrosshairData()?.['volume-chart']?.value) }}</span>
+      </div>
+    </div>
+  </div>
+  }
+</div>
