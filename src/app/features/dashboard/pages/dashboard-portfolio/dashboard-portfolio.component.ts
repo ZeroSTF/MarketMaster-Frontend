@@ -7,11 +7,12 @@ import { WatchlistComponent } from '../../components/watchlist/watchlist.compone
 import { AssetService } from '../../../../services/asset.service';
 import { PortfolioService } from '../../../../services/portfolio.service';
 import { HoldingDto } from '../../../../models/holdingDto.model';
+import { InsuranceComponent } from "../../components/insurance/insurance.component";
 
 @Component({
   selector: 'app-dashboard-portfolio',
   standalone: true,
-  imports: [CommonModule, ChartComponent, DragDropModule, WatchlistComponent ],
+  imports: [CommonModule, ChartComponent, DragDropModule, WatchlistComponent, InsuranceComponent],
   templateUrl: './dashboard-portfolio.component.html',
   styleUrl: './dashboard-portfolio.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
