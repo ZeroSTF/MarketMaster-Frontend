@@ -8,12 +8,17 @@ import { environment } from '../../environments/environment';
 import { HoldingDTO } from '../models/holding.model';
 import { OverviewDTO } from '../models/overview.model';
 import { WatchListDTO } from '../models/watchlist.model';
+import { BehaviorSubject} from 'rxjs';
+import { Asset, PageResponse } from '../models/asset.model';
+import { BestWinner } from '../models/BestWinner.model';
 @Injectable({
   providedIn: 'root',
 })
 export class TransactionService {
   private readonly API_URL = `${environment.apiUrl}`;
-
+  private readonly apiUrl = `${environment.apiUrl}/watchlist`
+  private watchlistSubject = new BehaviorSubject<Asset[]>([]); // Holds current list of assets
+  public watchlist$ = this.watchlistSubject.asObservable();
   private readonly recentTransactionSignal = signal<Transaction | null>(null);
   private readonly recentOrderSignal = signal<LimitOrder | null>(null);
   private readonly recentWatchListSignal = signal<WatchListDTO | null>(null);
@@ -83,6 +88,34 @@ export class TransactionService {
       catchError(this.handleError)
     );
   } 
+
+  getUserWatchlist(userId: string): Observable<PageResponse<Asset>> {
+    return this.http.get<PageResponse<Asset>>(`${this.apiUrl}/${userId}`);
+  }
+  // Add asset to the watchlist
+  addAssetToWatchlist(asset: Asset): void {
+    const currentWatchlist = this.watchlistSubject.value;
+    if (!currentWatchlist.find(item => item.symbol === asset.symbol)) {
+      this.watchlistSubject.next([...currentWatchlist, asset]);
+    }
+  }
+
+  // Remove asset from the watchlist
+  removeAssetFromWatchlist(symbol: string): void {
+    const updatedWatchlist = this.watchlistSubject.value.filter(item => item.symbol !== symbol);
+    this.watchlistSubject.next(updatedWatchlist);
+  }
+
+  // Get the assets in the watchlist
+  getWatchlist(): Asset[] {
+    return this.watchlistSubject.value;
+  }
+
+  // Set the watchlist (e.g., after fetching from the backend)
+  setWatchlist(assets: Asset[]): void {
+    this.watchlistSubject.next(assets);
+  }
+
   addWatchList(username: string, symbol: string): Observable<WatchListDTO> {
     const url = `${this.API_URL}/portf/addwatchlist/${username}/${symbol}`;
     return this.http.post<WatchListDTO>(url, {}).pipe(
@@ -90,5 +123,11 @@ export class TransactionService {
     );
   }
 
+  getBestWinners(): Observable<BestWinner[]> {
+    return this.http.get<BestWinner[]>(`${this.API_URL}/portf/bestWinner`);
+  }
+  getLimitOrders(username: string): Observable<LimitOrder[]> {
+    return this.http.get<LimitOrder[]>(`${this.API_URL}/portf/LimitOrder/${username}`);
+  }
 }
 

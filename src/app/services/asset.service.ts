@@ -8,7 +8,9 @@ import {
 import { environment } from '../../environments/environment';
 import { Socket } from 'socket.io-client';
 import { io } from 'socket.io-client';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { catchError, map, Observable, of } from 'rxjs';
+import { StockPredictionResponse } from '../models/StockPredictionResponse.model';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +27,7 @@ export class AssetService {
   readonly bestWinners = computed(() => this.bestWinnersSignal());
   readonly userAssets = computed(() => this.userAssetsSignal());
   readonly assets = computed(() => this.assetsSignal());
-
+  private readonly apiFlask = `${environment.flaskUrl}`;
   private readonly apiUrl = `${environment.apiUrl}/asset`;
   socket: Socket;
 
@@ -38,6 +40,8 @@ export class AssetService {
       this.updateAssetData(data);
     });
   }
+
+  
 
   // Get paginated asset data
   getAllAssets(page: number = 0, size: number = 20): void {
@@ -52,6 +56,9 @@ export class AssetService {
       });
   }
 
+  predictStock(symbol: string, train: boolean): Observable<StockPredictionResponse> {
+    return this.http.post<StockPredictionResponse>(`${this.apiUrl}/predict`, { symbol, train });
+  }
   // Update individual asset data
   private updateAssetData(updatedAsset: Asset) {
     this.assetsSignal.update((current) => {

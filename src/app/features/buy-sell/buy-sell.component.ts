@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NgIf } from '@angular/common';
 import { Transaction } from '../../models/Transaction.model';
-import { LimitOrder } from '../../models/limitOrder.model';
+import { LimitOrder, OrderStatus } from '../../models/limitOrder.model';
 import { TransactionService } from '../../services/transaction.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -86,7 +86,8 @@ export class BuySellComponent implements OnInit {
           type: this.tradeForm.get('action')?.value.toUpperCase(),
           quantity: this.tradeForm.get('quantity')?.value,
           symbol: this.symbol ?? '',       
-          limitPrice: this.tradeForm.get('price')?.value
+          limitPrice: this.tradeForm.get('price')?.value,
+          status: OrderStatus.PENDING
         };
         console.log("Limit Order:", limitOrder);
         this.router.navigate(['/preview-order'], { state: { limitOrder } });

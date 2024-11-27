@@ -1,13 +1,13 @@
-@if (selectedAsset(); as asset) {
-<div class="scrollbar-hide p-4 rounded-lg ">
+<div *ngIf="selectedAsset() as asset" class="scrollbar-hide p-4 rounded-lg">
   <!-- Header Section -->
   <div class="flex items-center gap-3 mb-4">
     <div class="asset-logo w-8 h-8 bg-navy-blue rounded-lg flex items-center justify-center">
-      <img [src]="'images/' + asset.symbol + '.png'" [alt]="asset.symbol" class="w-6 h-6" />
+      <img [src]="'images/' + asset.symbol + '.png'" [alt]="asset.symbol + ' logo'"
+           class="w-6 h-6 rounded-full" loading="lazy"
+           onerror="this.src='images/default.png'">
     </div>
     <div>
       <h2 class="text-lg font-bold">{{ asset.symbol }}</h2>
-      <!-- <p class="text-sm text-gray-600">Latest Trading Day: {{ asset.latestTradingDay }}</p> -->
     </div>
   </div>
 
@@ -15,8 +15,13 @@
   <div class="mb-4">
     <div class="flex items-baseline">
       <span class="text-2xl font-bold">${{ asset.currentPrice.toFixed(2) }}</span>
-      <span class="text-sm text-gray-600 ml-2"
-        [ngClass]="{'text-green-600': asset.priceChange >= 0, 'text-red-600': asset.priceChange < 0}">
+      <span
+        class="text-sm ml-2"
+        [ngClass]="{
+          'text-green-600': asset.priceChange >= 0,
+          'text-red-600': asset.priceChange < 0
+        }"
+      >
         ({{ asset.priceChange > 0 ? '+' : '' }}{{ asset.priceChange.toFixed(2) }}
         {{ asset.priceChangePercent }}%)
       </span>
@@ -56,22 +61,68 @@
     <button (click)="addWatchList()" class="border border-gray-300 text-gray-700 py-1 px-2 rounded text-sm font-medium hover:bg-gray-50">
       Watch
     </button>
+    <button (click)="openPredictWidget(asset.symbol)" class="bg-green-600 text-white py-1 px-2 rounded text-sm font-medium hover:bg-green-700">
+      Predict
+    </button>
+  </div>
+
+  <!-- Predict Widget -->
+  <div *ngIf="showPredictionWidget" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div class="bg-white rounded-lg p-4 w-1/3 shadow-lg">
+      <h3 class="text-lg font-bold mb-2">Predict Price</h3>
+      <div class="asset-logo w-8 h-8 bg-navy-blue rounded-lg flex items-center justify-center">
+        <img [src]="'images/' + selectedSymbol + '.png'" [alt]="selectedSymbol + ' logo'"
+             class="w-6 h-6 rounded-full" loading="lazy"
+             onerror="this.src='images/default.png'">
+      </div>
+      <div>
+        <p class="text-sm text-gray-600 mb-4">Symbol: {{ selectedSymbol }}</p>
+      </div>
+      <div class="mb-4">
+        <label for="duration" class="block text-sm font-medium text-gray-700">Duration (in days)</label>
+        <input id="duration" type="number" [(ngModel)]="predictionDuration" 
+               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+
+      <!-- Loading Effect -->
+      <div *ngIf="isLoadingPrediction" class="flex justify-center items-center mb-4">
+        <div class="loader border-t-4 border-blue-500 border-solid rounded-full w-8 h-8 animate-spin"></div>
+        <p class="ml-4 text-sm font-medium text-gray-600">Predicting...</p>
+      </div>
+
+      <!-- Prediction Result -->
+      <div *ngIf="!isLoadingPrediction">
+        <div class="flex items-center gap-4">
+          <button (click)="confirmPrediction()" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+            Confirm
+          </button>
+          <button (click)="closePredictWidget()" class="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400">
+            Cancel
+          </button>
+        </div>
+
+        <div *ngIf="predictedPrice !== null" class="mt-4 p-2 bg-gray-50 rounded">
+          <p class="text-sm text-gray-600">Predicted Price:</p>
+          <p class="text-xl font-semibold text-green-600">${{ predictedPrice.toFixed(2) }}</p>
+          <p class="text-sm text-gray-600">Change: {{ predictedChange?.toFixed(2) }}%</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Recent News Section -->
   <div class="border-t border-gray-200 pt-2">
     <h3 class="text-sm font-semibold mb-2">Recent News</h3>
     <div class="space-y-2">
-      @for (newsItem of newsItems.slice(0, 3); track newsItem.id) {
-      <div class="p-2 bg-gray-50 rounded text-xs">
+      <div *ngFor="let newsItem of newsItems.slice(0, 3)" class="p-2 bg-gray-50 rounded text-xs">
         <p class="font-medium line-clamp-2">{{ newsItem.headline }}</p>
       </div>
-      }
     </div>
   </div>
 </div>
-} @else {
-<div class="flex items-center justify-center h-full">
+
+<div *ngIf="!selectedAsset()" class="flex items-center justify-center h-full">
   <p class="text-gray-500">Select an asset to view details</p>
 </div>
-}
+
+

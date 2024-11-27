@@ -1,0 +1,53 @@
+/* Centering the widget using flexbox */
+.fixed {
+    position: fixed;
+    inset: 0; /* Fullscreen overlay */
+    display: flex;
+    align-items: center; /* Vertically center */
+    justify-content: center; /* Horizontally center */
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent background */
+    z-index: 50; /* Ensure it's above other elements */
+  }
+  
+  /* Widget styling */
+  .relative {
+    position: relative;
+  }
+  .bg-white {
+    background-color: #ffffff;
+  }
+  .shadow-lg {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+  .rounded-lg {
+    border-radius: 0.5rem;
+  }
+  .p-6 {
+    padding: 1.5rem;
+  }
+  .w-96 {
+    width: 24rem; /* Set a fixed width for the widget */
+  }
+  .z-50 {
+    z-index: 50;
+  }
+  .table-compact th,
+.table-compact td {
+  padding: 0.5rem; /* Reduce cell padding */
+  font-size: 0.875rem; /* Slightly smaller font size */
+}
+
+.table-compact th {
+  font-weight: bold; /* Keep headers bold for readability */
+  text-align: left; /* Align text to the left */
+}
+
+.table-compact {
+  border-collapse: collapse; /* Remove extra spacing between cells */
+  width: 100%; /* Ensure the table spans its container */
+}
+
+.table-compact tbody tr:hover {
+  background-color: #f9f9f9; /* Add a subtle hover effect */
+}
+  

@@ -9,6 +9,7 @@ import { TransactionService } from '../../../../services/transaction.service';
 import { HoldingDTO } from '../../../../models/holding.model';
 import { OverviewDTO } from '../../../../models/overview.model';
 import { ChangeDetectorRef } from '@angular/core';
+import { LimitOrder } from '../../../../models/limitOrder.model';
 
 @Component({
   selector: 'app-dashboard-portfolio',
@@ -16,7 +17,7 @@ import { ChangeDetectorRef } from '@angular/core';
   imports: [CommonModule, ChartComponent, DragDropModule, WatchlistComponent ],
   templateUrl: './dashboard-portfolio.component.html',
   styleUrl: './dashboard-portfolio.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 
 })
 export class DashboardPortfolioComponent implements OnInit  {
@@ -30,8 +31,11 @@ export class DashboardPortfolioComponent implements OnInit  {
   expandableAssets = this.assetService.userAssets()?.slice(4);
   overviewData: OverviewDTO | null = null; 
   holdingData : HoldingDTO[] | null =null;
+  limitOrders: LimitOrder[] = [];
+  selectedOrder: LimitOrder | null = null;
   username: string = 'zerostf'; 
   ngOnInit(): void {
+    this.fetchLimitOrders();
     this.transactionService.getOverviewData(this.username).subscribe(
       (data: OverviewDTO) => {
         this.overviewData = data; 
@@ -73,7 +77,24 @@ export class DashboardPortfolioComponent implements OnInit  {
   clearSelectedAsset() {
     this.selectedAsset = null;
   }
-  
+  fetchLimitOrders(): void {
+    this.transactionService.getLimitOrders(this.username).subscribe(
+      (data: LimitOrder[]) => {
+        this.limitOrders = data;
+      },
+      (error) => {
+        console.error('Error fetching limit orders:', error);
+      }
+    );
+  }
+  showOrderDetails(order: LimitOrder): void {
+    this.selectedOrder = order;
+  }
+
+
+  closeOrderDetails(): void {
+    this.selectedOrder = null;
+  }
 }
 
  

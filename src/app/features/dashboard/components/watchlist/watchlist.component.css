@@ -30,4 +30,29 @@ table {
   h2 {
     font-size: 0.875rem; /* Smaller heading size */
   }
+  .trend-up {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .trend-down {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .watchlist-container {
+    padding: 16px;
+  }
+  
+  .watchlist-header {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  .asset-details {
+    margin-top: 24px;
+    border: 1px solid #ccc;
+    padding: 16px;
+    border-radius: 8px;
+  }
   

@@ -3,6 +3,7 @@ export interface LimitOrder {
     quantity: number;
     limitPrice: number;
     type: TransactionType;
+    status: OrderStatus;
   }
   
   // Enum for TransactionType (based on Java enum)
@@ -10,3 +11,9 @@ export interface LimitOrder {
     BUY = 'BUY',
     SELL = 'SELL'
   }
+  export enum OrderStatus {
+    PENDING = 'PENDING',
+    EXECUTED = 'EXECUTED',
+    CANCELLED = 'CANCELLED'
+  }
+ 
