@@ -9,6 +9,8 @@ import { LearningLayoutComponent } from './layout/learning-layout/learning-layou
 import { LearningOverviewComponent } from './features/learning/pages/learning-overview/learning-overview.component';
 import { LearningCalendarComponent } from './features/learning/pages/learning-calendar/learning-calendar.component';
 import { LearningTestComponent } from './features/learning/components/learning-test/learning-test.component';
+import { BuySellComponent } from './features/buy-sell/buy-sell.component';
+import { PreviewOrderComponent } from './features/preview-order/preview-order.component';
 
 export const routes: Routes = [
   {
@@ -29,6 +31,12 @@ export const routes: Routes = [
       import('./features/signup/signup.component').then(
         (m) => m.SignupComponent
       ),
+  },{
+    path: 'buysell',
+    component: BuySellComponent,
+  },{
+    path: 'preview-order',
+    component: PreviewOrderComponent,
   },
 
   // DASHBOARD ROUTES
