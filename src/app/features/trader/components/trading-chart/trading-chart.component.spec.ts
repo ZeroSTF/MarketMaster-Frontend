@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TraderSidebarComponent } from './trader-sidebar.component';
+import { TradingChartComponent } from './trading-chart.component';
 
-describe('TraderSidebarComponent', () => {
-  let component: TraderSidebarComponent;
-  let fixture: ComponentFixture<TraderSidebarComponent>;
+describe('TradingChartComponent', () => {
+  let component: TradingChartComponent;
+  let fixture: ComponentFixture<TradingChartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TraderSidebarComponent]
+      imports: [TradingChartComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TraderSidebarComponent);
+    fixture = TestBed.createComponent(TradingChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
