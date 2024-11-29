@@ -84,7 +84,7 @@ export class TransactionService {
   getWatchList(username: string): Observable<WatchListDTO[]> {
     const url = `${this.API_URL}/portf/watchlist/${username}`;
     return this.http.get<WatchListDTO[]>(url).pipe(
-      tap((watchlist) => console.log('Fetched holdings:', watchlist)), 
+      tap((watchlist) => console.log('Fetched whatchlist:', watchlist)), 
       catchError(this.handleError)
     );
   } 

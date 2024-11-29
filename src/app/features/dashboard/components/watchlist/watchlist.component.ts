@@ -62,13 +62,13 @@ export class WatchlistComponent implements OnInit {
           console.error('Error fetching watchlist:', err);
         },
       });
-    
+
       // Check if watchlistItems is getting populated
       const filteredWatchlistItems = this.watchlistItems().map((item) => {
         console.log(item);  // Log each item to check
         return item;
       });
-    
+
       this.stockDataSource.data = filteredWatchlistItems;
     });
   }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit} from '@angular/core';
+import { Component, effect, inject, OnInit, signal} from '@angular/core';
 import { AssetService } from '../../../../services/asset.service';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,7 +10,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ChartComponent } from "../chart/chart.component";
 import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
-import { Asset } from '../../../../models/asset.model';
+import { Asset, WatchlistItem } from '../../../../models/asset.model';
 import { Router } from '@angular/router';
 import { state } from '@angular/animations';
 import { TransactionService } from '../../../../services/transaction.service';
@@ -44,7 +44,6 @@ export class AssetdetailsComponent implements OnInit {
   public selectedSymbol: string | null = null;
   public predictionDuration = 1;
   public isLoadingPrediction = false;
-
   
   result: any;
   error: string | null = null;
@@ -55,8 +54,10 @@ export class AssetdetailsComponent implements OnInit {
   ];
 
   constructor(private router: Router) {}
+  
 
   ngOnInit() {}
+
 
   navigateToBuySell() {
     const asset = this.selectedAsset();
