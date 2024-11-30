@@ -50,4 +50,5 @@ export interface WatchlistItem {
   performance: number;
   category: string;
   trend: 'up' | 'down';
+  currentPrice?: number;
 }

@@ -8,7 +8,9 @@ import {
 import { environment } from '../../environments/environment';
 import { Socket } from 'socket.io-client';
 import { io } from 'socket.io-client';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { catchError, map, Observable, of } from 'rxjs';
+import { StockPredictionResponse } from '../models/StockPredictionResponse.model';
 
 @Injectable({
   providedIn: 'root',
@@ -25,8 +27,9 @@ export class AssetService {
   readonly bestWinners = computed(() => this.bestWinnersSignal());
   readonly userAssets = computed(() => this.userAssetsSignal());
   readonly assets = computed(() => this.assetsSignal());
-
+  private readonly apiFlask = `${environment.flaskUrl}`;
   private readonly apiUrl = `${environment.apiUrl}/asset`;
+  private readonly apiUrl1 = `${environment.apiUrl}/portf`;
   socket: Socket;
 
   constructor(private http: HttpClient) {
@@ -37,6 +40,31 @@ export class AssetService {
       console.log('Real-time update:', data);
       this.updateAssetData(data);
     });
+  }
+  getAssetMetrics(symbol: string): Observable<any> {
+    return this.http.get<any>(`${this.apiFlask}/api/assets/${symbol}/metrics`).pipe(
+      catchError((error) => {
+        console.error('Error fetching asset metrics:', error);
+        return of(null);
+      })
+    );
+  }
+  getAllWatchList(page: number = 0, size: number = 20, username: string): void {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+  
+    this.http
+      .get<PageResponse<WatchlistItem>>(`${this.apiUrl1}/watchlist/${username}`, { params })
+      .subscribe({
+        next: (response) => {
+          console.log('API Response:', response.content);
+          this.watchlistSignal.set(response.content);
+        },
+        error: (error) => {
+          console.error(`Error fetching watchlist for username "${username}":`, error);
+        },
+      });
   }
 
   // Get paginated asset data
@@ -52,6 +80,9 @@ export class AssetService {
       });
   }
 
+  predictStock(symbol: string, train: boolean): Observable<StockPredictionResponse> {
+    return this.http.post<StockPredictionResponse>(`${this.apiUrl}/predict`, { symbol, train });
+  }
   // Update individual asset data
   private updateAssetData(updatedAsset: Asset) {
     this.assetsSignal.update((current) => {
@@ -82,6 +113,21 @@ export class AssetService {
         updated[index] = {
           ...current[index],
           currentPrice: updatedAsset.currentPrice,
+        };
+        return updated;
+      }
+      return current;
+    });
+  }
+  private updateWatchlist(updatedAsset: Asset): void {
+    this.watchlistSignal.update((current) => {
+      const index = current.findIndex((item) => item.symbol === updatedAsset.symbol);
+      if (index !== -1) {
+        const updated = [...current];
+        updated[index] = {
+          ...current[index],
+          currentPrice: updatedAsset.currentPrice,
+          trend: updatedAsset.priceChange > 0 ? 'up' : 'down',
         };
         return updated;
       }
