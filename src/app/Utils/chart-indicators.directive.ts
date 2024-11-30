@@ -30,7 +30,6 @@ export class ChartIndicatorsDirective {
 
       this.mainChart = charts[0];
       this.volumeChart = charts[1];
-      console.log('Main Chart:', this.mainChart);
       this.updateIndicators();
     });
     effect(() => {
@@ -44,30 +43,33 @@ export class ChartIndicatorsDirective {
   private updateIndicators(indicators: string[] = []) {
     // Remove existing additional series
     Object.keys(this.additionalSeries).forEach((key) => {
-      console.log('Removing series', key);
-      if (this.additionalSeries[key]) {
-        this.mainChart?.removeSeries(this.additionalSeries[key]);
-        delete this.additionalSeries[key];
+      const series = this.additionalSeries[key];
+      if (Array.isArray(series)) {
+        // Handle multi-series indicators
+        series.forEach((singleSeries) => {
+          if (singleSeries) {
+            this.mainChart?.removeSeries(singleSeries);
+          }
+        });
+      } else if (series) {
+        // Handle single-series indicators
+        this.mainChart?.removeSeries(series);
       }
+      delete this.additionalSeries[key];
     });
 
-    // Add requested indicators
     indicators.forEach((indicator) => {
       switch (indicator) {
         case 'SMA':
-          console.log('Adding SMA');
           this.addMovingAverage();
           break;
         case 'RSI':
-          console.log('Adding RSI');
           this.addRSI();
           break;
         case 'MACD':
-          console.log('Adding MACD');
           this.addMACD();
           break;
         case 'BB':
-          console.log('Adding BB');
           this.addBollingerBands();
           break;
       }

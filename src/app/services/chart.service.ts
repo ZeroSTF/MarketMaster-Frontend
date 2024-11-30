@@ -33,7 +33,7 @@ interface HistoricalDataResponse {
 export class ChartService implements OnDestroy {
   private historicalDataSignal = signal<ChartDataPoint[]>([]);
   private timeframeSignal = signal<string>('D');
-  private indicatorsSignal = signal<string[]>([]);
+  private indicatorsSignal = signal<string[]>(['VOL']);
   private selectedAssetSignal = signal<Asset | null>(null);
   private chartTypeSignal = signal<ChartType>('Candlestick');
 
