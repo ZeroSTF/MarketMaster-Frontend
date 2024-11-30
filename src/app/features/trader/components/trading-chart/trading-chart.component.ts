@@ -19,7 +19,6 @@ import {
   TVBaselineChartComponent,
   TVAreaChartComponent,
   TVChartDirective,
-  TVChartCustomSeriesComponent,
   TVLineChartDirective,
 } from 'ngx-lightweight-charts';
 
