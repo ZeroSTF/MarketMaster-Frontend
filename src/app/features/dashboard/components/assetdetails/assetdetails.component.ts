@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, signal} from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { AssetService } from '../../../../services/asset.service';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,13 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
-import { ChartComponent } from "../chart/chart.component";
-import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
-import { Asset, WatchlistItem } from '../../../../models/asset.model';
 import { Router } from '@angular/router';
-import { state } from '@angular/animations';
 import { TransactionService } from '../../../../services/transaction.service';
-import { WatchListDTO } from '../../../../models/watchlist.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { StockPredictionResponse } from '../../../../models/StockPredictionResponse.model';
@@ -26,8 +21,8 @@ import { StockPredictionResponse } from '../../../../models/StockPredictionRespo
     MatInputModule,
     MatSelectModule,
     MatIconModule,
-    FormsModule
-],
+    FormsModule,
+  ],
   templateUrl: './assetdetails.component.html',
   styleUrl: './assetdetails.component.css',
 })
@@ -42,7 +37,7 @@ export class AssetdetailsComponent implements OnInit {
   public selectedSymbol: string | null = null;
   public predictionDuration = 1;
   public isLoadingPrediction = false;
-  
+
   result: any;
   error: string | null = null;
   newsItems = [
@@ -52,10 +47,8 @@ export class AssetdetailsComponent implements OnInit {
   ];
 
   constructor(private router: Router) {}
-  
 
   ngOnInit() {}
-
 
   navigateToBuySell() {
     const asset = this.selectedAsset();
@@ -70,7 +63,10 @@ export class AssetdetailsComponent implements OnInit {
     const asset = this.selectedAsset();
     if (asset) {
       this.transactionService.addWatchList('zerostf', asset.symbol).subscribe({
-        next: () => this.snackBar.open('Added to watchlist!', 'Close', { duration: 3000 }),
+        next: () =>
+          this.snackBar.open('Added to watchlist!', 'Close', {
+            duration: 3000,
+          }),
         error: (err) => console.error(err),
       });
     }
@@ -105,7 +101,4 @@ export class AssetdetailsComponent implements OnInit {
       });
     }
   }
-  
-  
-  
-  }  
+}
