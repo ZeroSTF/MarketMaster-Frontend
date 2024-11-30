@@ -1,20 +1,3 @@
-export interface Indicator {
-  name: string;
-  type: string;
-  icon: string;
-  active: boolean;
-  parameters?: {
-    name: string;
-    default: number;
-  }[];
-}
-
-export interface TimeFrame {
-  name: string;
-  value: string;
-  label: string;
-}
-
 export type ChartType =
   | 'Candlestick'
   | 'Line'
@@ -43,6 +26,12 @@ export const chartTypes = [
   },
 ];
 
+export interface TimeFrame {
+  name: string;
+  value: string;
+  label: string;
+}
+
 export const timeframes: TimeFrame[] = [
   { name: '1m', value: '1', label: '1 min' },
   { name: '5m', value: '5', label: '5 min' },
@@ -55,20 +44,48 @@ export const timeframes: TimeFrame[] = [
   { name: '1M', value: 'M', label: 'Month' },
 ];
 
+export interface Indicator {
+  name: string;
+  type: string;
+  icon: string;
+  active: boolean;
+  parameters?: {
+    name: string;
+    default: number;
+    min: number;
+    max: number;
+    step?: number;
+  }[];
+}
+
 export const indicators: Indicator[] = [
   {
-    name: 'Moving Average',
+    name: 'Simple Moving Average',
     type: 'SMA',
     icon: 'show_chart',
     active: false,
-    parameters: [{ name: 'length', default: 20 }],
+    parameters: [{ name: 'length', default: 20, min: 5, max: 200 }],
+  },
+  {
+    name: 'Exponential Moving Average',
+    type: 'EMA',
+    icon: 'trending_up',
+    active: false,
+    parameters: [{ name: 'length', default: 20, min: 5, max: 200 }],
+  },
+  {
+    name: 'Weighted Moving Average',
+    type: 'WMA',
+    icon: 'linear_scale',
+    active: false,
+    parameters: [{ name: 'length', default: 20, min: 5, max: 200 }],
   },
   {
     name: 'RSI',
     type: 'RSI',
     icon: 'analytics',
     active: false,
-    parameters: [{ name: 'length', default: 14 }],
+    parameters: [{ name: 'length', default: 14, min: 5, max: 50 }],
   },
   {
     name: 'MACD',
@@ -76,9 +93,9 @@ export const indicators: Indicator[] = [
     icon: 'trending_up',
     active: false,
     parameters: [
-      { name: 'fastLength', default: 12 },
-      { name: 'slowLength', default: 26 },
-      { name: 'signalLength', default: 9 },
+      { name: 'fastLength', default: 12, min: 5, max: 50 },
+      { name: 'slowLength', default: 26, min: 10, max: 100 },
+      { name: 'signalLength', default: 9, min: 3, max: 30 },
     ],
   },
   {
@@ -87,9 +104,32 @@ export const indicators: Indicator[] = [
     icon: 'design_services',
     active: false,
     parameters: [
-      { name: 'length', default: 20 },
-      { name: 'stdDev', default: 2 },
+      { name: 'length', default: 20, min: 5, max: 50 },
+      { name: 'stdDev', default: 2, min: 1, max: 5, step: 0.5 },
     ],
+  },
+  {
+    name: 'Stochastic Oscillator',
+    type: 'Stochastic',
+    icon: 'multi_line_chart',
+    active: false,
+    parameters: [
+      { name: 'length', default: 14, min: 5, max: 50 },
+      { name: 'signalLength', default: 3, min: 1, max: 10 },
+    ],
+  },
+  {
+    name: 'Commodity Channel Index',
+    type: 'CCI',
+    icon: 'waves',
+    active: false,
+    parameters: [{ name: 'length', default: 20, min: 5, max: 50 }],
+  },
+  {
+    name: 'Average True Range',
+    type: 'ATR',
+    icon: 'trending_up',
+    active: false,
   },
   {
     name: 'Volume',
