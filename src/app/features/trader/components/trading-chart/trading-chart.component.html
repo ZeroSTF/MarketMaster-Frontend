@@ -2,7 +2,8 @@
   <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)" class="chart-group">
     @switch (chartService.chartType()) {
     @case ('Candlestick') {
-    <tv-candlestick-chart id="main-chart" [data]="candlestickData()" [options]="chartOptions()">
+    <tv-candlestick-chart id="main-chart" [data]="candlestickData()" [options]="chartOptions()" chartIndicators
+      [data]="candlestickData()">
     </tv-candlestick-chart>
     }
     @case ('Line') {
@@ -14,7 +15,8 @@
     </tv-area-chart>
     }
     @case ('Bar') {
-    <div tvChart="Bar" id="main-chart" [data]="candlestickData()" [options]="chartOptions()">
+    <div tvChart="Bar" id="main-chart" [data]="candlestickData()" [options]="chartOptions()" chartIndicators
+      [data]="candlestickData()">
     </div>
     }
     @case ('Baseline') {

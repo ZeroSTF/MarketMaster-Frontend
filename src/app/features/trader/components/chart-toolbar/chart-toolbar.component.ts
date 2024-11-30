@@ -84,7 +84,7 @@ export class ChartToolbarComponent {
   indicators: Indicator[] = [
     {
       name: 'Moving Average',
-      type: 'MA',
+      type: 'SMA',
       icon: 'show_chart',
       active: false,
       parameters: [{ name: 'length', default: 20 }],

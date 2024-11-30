@@ -7,6 +7,7 @@ import {
   BollingerBands,
 } from '@debut/indicators';
 import { LineData } from 'lightweight-charts';
+import { ChartService } from '../services/chart.service';
 
 @Directive({
   selector: '[chartIndicators]',
@@ -14,9 +15,9 @@ import { LineData } from 'lightweight-charts';
 })
 export class ChartIndicatorsDirective {
   readonly #collector = inject(TVChartCollectorDirective);
+  readonly #chartService = inject(ChartService);
 
   @Input() data: any[] = [];
-  @Input() indicators: string[] = [];
 
   private chart: TVChart<any> | null = null;
   private additionalSeries: Record<string, any> = {};
@@ -29,11 +30,18 @@ export class ChartIndicatorsDirective {
       this.chart = charts[0];
       this.updateIndicators();
     });
+    effect(() => {
+      const indicators = this.#chartService.indicators();
+      if (this.chart) {
+        this.updateIndicators(indicators);
+      }
+    });
   }
 
-  private updateIndicators() {
+  private updateIndicators(indicators: string[] = []) {
     // Remove existing additional series
     Object.keys(this.additionalSeries).forEach((key) => {
+      console.log('Removing series', key);
       if (this.additionalSeries[key]) {
         this.chart?.removeSeries(this.additionalSeries[key]);
         delete this.additionalSeries[key];
@@ -41,18 +49,22 @@ export class ChartIndicatorsDirective {
     });
 
     // Add requested indicators
-    this.indicators.forEach((indicator) => {
+    indicators.forEach((indicator) => {
       switch (indicator) {
-        case 'MA':
+        case 'SMA':
+          console.log('Adding SMA');
           this.addMovingAverage();
           break;
         case 'RSI':
+          console.log('Adding RSI');
           this.addRSI();
           break;
         case 'MACD':
+          console.log('Adding MACD');
           this.addMACD();
           break;
         case 'BB':
+          console.log('Adding BB');
           this.addBollingerBands();
           break;
       }
@@ -63,23 +75,23 @@ export class ChartIndicatorsDirective {
     if (!this.chart) return;
 
     const smaIndicator = new SMA(20);
-    const maData: LineData[] = [];
+    const smaData: LineData[] = [];
 
     this.data.forEach((point) => {
-      const ma = smaIndicator.nextValue(point.close);
-      if (ma !== undefined) {
-        maData.push({ time: point.time, value: ma });
+      const sma = smaIndicator.nextValue(point.close);
+      if (sma !== undefined) {
+        smaData.push({ time: point.time, value: sma });
       }
     });
 
     const series = this.chart.addAdditionalSeries('Line', {
       color: '#FF6B6B',
       lineWidth: 2,
-      title: 'MA 20',
+      title: 'SMA 20',
     });
 
-    series.series?.setData(maData);
-    this.additionalSeries['MA'] = series.series;
+    series.series?.setData(smaData);
+    this.additionalSeries['SMA'] = series.series;
   }
 
   private addRSI() {

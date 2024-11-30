@@ -28,6 +28,7 @@ import {
   DarkModeService,
   AppTheme,
 } from '../../../../services/dark-mode.service';
+import { ChartIndicatorsDirective } from '../../../../utils/chart-indicators.directive';
 
 @Component({
   selector: 'app-trading-chart',
@@ -45,6 +46,7 @@ import {
     TVAreaChartComponent,
     TVBaselineChartComponent,
     TVLineChartDirective,
+    ChartIndicatorsDirective,
   ],
   templateUrl: './trading-chart.component.html',
   styleUrl: './trading-chart.component.scss',
@@ -106,12 +108,13 @@ export class TradingChartComponent implements OnDestroy {
     };
   });
 
-  // Other chart options, computed based on the main chart options
+  // Volume chart options, computed based on the main chart options
   volumeOptions = computed(() => ({
     ...this.chartOptions(),
     height: 200,
   }));
 
+  // Baseline series options
   baselineSeriesOptions = {
     baseValue: {
       price: 100,
