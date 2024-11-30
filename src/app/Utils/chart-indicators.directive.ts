@@ -19,20 +19,23 @@ export class ChartIndicatorsDirective {
 
   @Input() data: any[] = [];
 
-  private chart: TVChart<any> | null = null;
+  private mainChart: TVChart<any> | null = null;
+  private volumeChart: TVChart<any> | null = null;
   private additionalSeries: Record<string, any> = {};
 
   constructor() {
     effect(() => {
       const charts = this.#collector.charts();
-      if (!charts?.length || !this.data.length) return;
+      if (!charts?.length) return;
 
-      this.chart = charts[0];
+      this.mainChart = charts[0];
+      this.volumeChart = charts[1];
+      console.log('Main Chart:', this.mainChart);
       this.updateIndicators();
     });
     effect(() => {
       const indicators = this.#chartService.indicators();
-      if (this.chart) {
+      if (this.mainChart) {
         this.updateIndicators(indicators);
       }
     });
@@ -43,7 +46,7 @@ export class ChartIndicatorsDirective {
     Object.keys(this.additionalSeries).forEach((key) => {
       console.log('Removing series', key);
       if (this.additionalSeries[key]) {
-        this.chart?.removeSeries(this.additionalSeries[key]);
+        this.mainChart?.removeSeries(this.additionalSeries[key]);
         delete this.additionalSeries[key];
       }
     });
@@ -72,7 +75,7 @@ export class ChartIndicatorsDirective {
   }
 
   private addMovingAverage() {
-    if (!this.chart) return;
+    if (!this.mainChart) return;
 
     const smaIndicator = new SMA(20);
     const smaData: LineData[] = [];
@@ -84,7 +87,7 @@ export class ChartIndicatorsDirective {
       }
     });
 
-    const series = this.chart.addAdditionalSeries('Line', {
+    const series = this.mainChart.addAdditionalSeries('Line', {
       color: '#FF6B6B',
       lineWidth: 2,
       title: 'SMA 20',
@@ -95,7 +98,7 @@ export class ChartIndicatorsDirective {
   }
 
   private addRSI() {
-    if (!this.chart) return;
+    if (!this.mainChart) return;
 
     const rsiIndicator = new RSI(14);
     const rsiData: LineData[] = [];
@@ -107,7 +110,7 @@ export class ChartIndicatorsDirective {
       }
     });
 
-    const series = this.chart.addAdditionalSeries('Histogram', {
+    const series = this.mainChart.addAdditionalSeries('Histogram', {
       color: '#4ECDC4',
       title: 'RSI 14',
     });
@@ -117,7 +120,7 @@ export class ChartIndicatorsDirective {
   }
 
   private addMACD() {
-    if (!this.chart) return;
+    if (!this.mainChart) return;
 
     const macdIndicator = new MACDIndicator(12, 26, 9);
     const macdData: LineData[] = [];
@@ -131,13 +134,13 @@ export class ChartIndicatorsDirective {
       }
     });
 
-    const macdSeries = this.chart.addAdditionalSeries('Line', {
+    const macdSeries = this.mainChart.addAdditionalSeries('Line', {
       color: '#FF6B6B',
       lineWidth: 2,
       title: 'MACD',
     });
 
-    const signalSeries = this.chart.addAdditionalSeries('Line', {
+    const signalSeries = this.mainChart.addAdditionalSeries('Line', {
       color: '#4ECDC4',
       lineWidth: 2,
       title: 'Signal',
@@ -150,7 +153,7 @@ export class ChartIndicatorsDirective {
   }
 
   private addBollingerBands() {
-    if (!this.chart) return;
+    if (!this.mainChart) return;
 
     const bbIndicator = new BollingerBands(20, 2);
     const upperBandData: LineData[] = [];
@@ -166,20 +169,20 @@ export class ChartIndicatorsDirective {
       }
     });
 
-    const upperBandSeries = this.chart.addAdditionalSeries('Line', {
+    const upperBandSeries = this.mainChart.addAdditionalSeries('Line', {
       color: '#FF6B6B',
       lineWidth: 1,
       lineStyle: 2, // dashed
       title: 'Upper BB',
     });
 
-    const middleBandSeries = this.chart.addAdditionalSeries('Line', {
+    const middleBandSeries = this.mainChart.addAdditionalSeries('Line', {
       color: '#4ECDC4',
       lineWidth: 2,
       title: 'Middle BB',
     });
 
-    const lowerBandSeries = this.chart.addAdditionalSeries('Line', {
+    const lowerBandSeries = this.mainChart.addAdditionalSeries('Line', {
       color: '#FF6B6B',
       lineWidth: 1,
       lineStyle: 2, // dashed

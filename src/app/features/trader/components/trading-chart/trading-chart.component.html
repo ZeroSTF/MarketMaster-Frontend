@@ -1,9 +1,9 @@
 <div class="trading-chart-container relative" (mousemove)="onChartMouseMove($event)">
-  <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)" class="chart-group">
+  <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)" class="chart-group"
+    chartIndicators [data]="candlestickData()">
     @switch (chartService.chartType()) {
     @case ('Candlestick') {
-    <tv-candlestick-chart id="main-chart" [data]="candlestickData()" [options]="chartOptions()" chartIndicators
-      [data]="candlestickData()">
+    <tv-candlestick-chart id="main-chart" [data]="candlestickData()" [options]="chartOptions()">
     </tv-candlestick-chart>
     }
     @case ('Line') {
@@ -15,8 +15,7 @@
     </tv-area-chart>
     }
     @case ('Bar') {
-    <div tvChart="Bar" id="main-chart" [data]="candlestickData()" [options]="chartOptions()" chartIndicators
-      [data]="candlestickData()">
+    <div tvChart="Bar" id="main-chart" [data]="candlestickData()" [options]="chartOptions()">
     </div>
     }
     @case ('Baseline') {
