@@ -6,8 +6,8 @@
     </tv-candlestick-chart>
     }
     @case ('Line') {
-    <div tvChart="Line" id="main-chart" [data]="lineChartData()" [options]="chartOptions()">
-    </div>
+    <tv-line-chart id="main-chart" [data]="lineChartData()" [options]="chartOptions()">
+    </tv-line-chart>
     }
     @case ('Area') {
     <tv-area-chart id="main-chart" [data]="areaChartData()" [options]="chartOptions()">
@@ -18,7 +18,8 @@
     </div>
     }
     @case ('Baseline') {
-    <tv-baseline-chart id="main-chart" [data]="baselineChartData()" [options]="chartOptions()">
+    <tv-baseline-chart id="main-chart" [data]="baselineChartData()" [options]="chartOptions()"
+      [seriesOptions]="baselineSeriesOptions">
     </tv-baseline-chart>
     }
     }
@@ -55,7 +56,7 @@
       @if (chartService.chartType() === 'Baseline') {
       <div class="flex justify-between gap-4">
         <span>Baseline</span>
-        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.baseline) }}</span>
+        <span class="font-medium">{{ 100 }}</span>
       </div>
       }
       }

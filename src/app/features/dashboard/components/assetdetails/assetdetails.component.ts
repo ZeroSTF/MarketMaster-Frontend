@@ -1,16 +1,12 @@
-import { Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AssetService } from '../../../../services/asset.service';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { ChartComponent } from "../chart/chart.component";
-import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
-import { Asset } from '../../../../models/asset.model';
+import { ChartComponent } from '../chart/chart.component';
 
 @Component({
   selector: 'app-asset-details',
@@ -22,10 +18,9 @@ import { Asset } from '../../../../models/asset.model';
     MatInputModule,
     MatSelectModule,
     MatIconModule,
-    ChartComponent
-],
+  ],
   templateUrl: './assetdetails.component.html',
-  styleUrl: './assetdetails.component.css'
+  styleUrl: './assetdetails.component.css',
 })
 export class AssetdetailsComponent {
   private assetService = inject(AssetService);
@@ -41,21 +36,20 @@ export class AssetdetailsComponent {
     {
       id: 1,
       headline: 'Breaking News: Major Market Movement',
-      content: 'Detailed content about the market movement...'
+      content: 'Detailed content about the market movement...',
     },
     {
       id: 2,
       headline: 'Quarterly Earnings Report Released',
-      content: 'Details about the quarterly earnings...'
+      content: 'Details about the quarterly earnings...',
     },
     {
       id: 3,
       headline: 'New Product Launch Announced',
-      content: 'Information about the new product launch...'
-    }
+      content: 'Information about the new product launch...',
+    },
   ];
-  
-  
+
   setActiveTab(tab: 'overview' | 'financial' | 'news') {
     this.activeTab = tab;
   }
@@ -63,5 +57,4 @@ export class AssetdetailsComponent {
   toggleFullText(id: number) {
     this.expandedNews[id] = !this.expandedNews[id];
   }
-
 }
