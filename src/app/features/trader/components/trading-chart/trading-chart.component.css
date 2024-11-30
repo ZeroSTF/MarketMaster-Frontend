@@ -1,8 +1,5 @@
 .trading-chart-container {
-  @apply w-full h-[600px] flex flex-col relative;
-
   .chart-group {
-    @apply flex-1 grid;
     grid-template-rows: 70% 30%;
   }
 

@@ -1,13 +1,14 @@
-<div class="trading-chart-container relative" (mousemove)="onChartMouseMove($event)">
-  <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)" class="chart-group">
+<div class="trading-chart-container w-full h-[600px] flex flex-col relative" (mousemove)="onChartMouseMove($event)">
+  <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)"
+    class="flex-1 grid chart-group" chartIndicators [data]="candlestickData()">
     @switch (chartService.chartType()) {
     @case ('Candlestick') {
     <tv-candlestick-chart id="main-chart" [data]="candlestickData()" [options]="chartOptions()">
     </tv-candlestick-chart>
     }
     @case ('Line') {
-    <div tvChart="Line" id="main-chart" [data]="lineChartData()" [options]="chartOptions()">
-    </div>
+    <tv-line-chart id="main-chart" [data]="lineChartData()" [options]="chartOptions()">
+    </tv-line-chart>
     }
     @case ('Area') {
     <tv-area-chart id="main-chart" [data]="areaChartData()" [options]="chartOptions()">
@@ -18,12 +19,15 @@
     </div>
     }
     @case ('Baseline') {
-    <tv-baseline-chart id="main-chart" [data]="baselineChartData()" [options]="chartOptions()">
+    <tv-baseline-chart id="main-chart" [data]="baselineChartData()" [options]="chartOptions()"
+      [seriesOptions]="baselineSeriesOptions">
     </tv-baseline-chart>
     }
     }
+    @if(chartService.indicators().includes('VOL')) {
     <tv-histogram-chart id="volume-chart" [data]="volumeData()" [options]="volumeOptions()">
     </tv-histogram-chart>
+    }
   </div>
 
   @if (currentCrosshairData()) {
@@ -55,7 +59,7 @@
       @if (chartService.chartType() === 'Baseline') {
       <div class="flex justify-between gap-4">
         <span>Baseline</span>
-        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.baseline) }}</span>
+        <span class="font-medium">{{ 100 }}</span>
       </div>
       }
       }

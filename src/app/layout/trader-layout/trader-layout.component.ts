@@ -2,7 +2,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, effect } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ChartToolbarComponent } from '../../features/trader/components/chart-toolbar/chart-toolbar.component';
+import {
+  ChartToolbarComponent,
+  Indicator,
+} from '../../features/trader/components/chart-toolbar/chart-toolbar.component';
 import { TradingChartComponent } from '../../features/trader/components/trading-chart/trading-chart.component';
 import { AssetSelectorComponent } from '../../features/trader/components/asset-selector/asset-selector.component';
 import { ChartService } from '../../services/chart.service';

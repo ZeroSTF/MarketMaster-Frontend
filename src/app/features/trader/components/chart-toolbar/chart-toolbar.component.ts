@@ -7,7 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-interface Indicator {
+export interface Indicator {
   name: string;
   type: string;
   icon: string;
@@ -47,11 +47,6 @@ export type ChartType =
   styleUrls: ['./chart-toolbar.component.scss'],
 })
 export class ChartToolbarComponent {
-  @Output() chartTypeChange = new EventEmitter<string>();
-  @Output() intervalChange = new EventEmitter<string>();
-  @Output() indicatorAdd = new EventEmitter<Indicator>();
-  @Output() indicatorRemove = new EventEmitter<string>();
-
   chartTypes = [
     {
       name: 'Candlestick',
@@ -60,7 +55,11 @@ export class ChartToolbarComponent {
     },
     { name: 'Line', value: 'Line' as ChartType, icon: 'show_chart' },
     { name: 'Area', value: 'Area' as ChartType, icon: 'area_chart' },
-    { name: 'Bar', value: 'Bar' as ChartType, icon: 'bar_chart' },
+    {
+      name: 'Bar',
+      value: 'Bar' as ChartType,
+      icon: 'bar_chart',
+    },
     {
       name: 'Baseline',
       value: 'Baseline' as ChartType,
@@ -85,7 +84,7 @@ export class ChartToolbarComponent {
   indicators: Indicator[] = [
     {
       name: 'Moving Average',
-      type: 'MA',
+      type: 'SMA',
       icon: 'show_chart',
       active: false,
       parameters: [{ name: 'length', default: 20 }],
@@ -132,20 +131,18 @@ export class ChartToolbarComponent {
   onChartTypeChange(type: ChartType) {
     this.chartType = type;
     this.chartService.setChartType(type);
-    this.chartTypeChange.emit(type);
   }
 
   onTimeframeChange(timeframe: TimeFrame) {
     this.chartService.setTimeframe(timeframe.value);
-    this.intervalChange.emit(timeframe.value);
   }
 
   toggleIndicator(indicator: Indicator) {
     indicator.active = !indicator.active;
     if (indicator.active) {
-      this.indicatorAdd.emit(indicator);
+      this.chartService.addIndicator(indicator.type);
     } else {
-      this.indicatorRemove.emit(indicator.type);
+      this.chartService.removeIndicator(indicator.type);
     }
   }
 }

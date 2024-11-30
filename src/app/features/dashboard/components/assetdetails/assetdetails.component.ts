@@ -4,9 +4,7 @@ import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ChartComponent } from "../chart/chart.component";
 import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
@@ -31,7 +29,7 @@ import { StockPredictionResponse } from '../../../../models/StockPredictionRespo
     FormsModule
 ],
   templateUrl: './assetdetails.component.html',
-  styleUrl: './assetdetails.component.css'
+  styleUrl: './assetdetails.component.css',
 })
 export class AssetdetailsComponent implements OnInit {
   private assetService = inject(AssetService);
