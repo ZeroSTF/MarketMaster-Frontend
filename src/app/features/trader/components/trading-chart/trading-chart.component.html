@@ -1,6 +1,6 @@
-<div class="trading-chart-container relative" (mousemove)="onChartMouseMove($event)">
-  <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)" class="chart-group"
-    chartIndicators [data]="candlestickData()">
+<div class="trading-chart-container w-full h-[600px] flex flex-col relative" (mousemove)="onChartMouseMove($event)">
+  <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)"
+    class="flex-1 grid chart-group" chartIndicators [data]="candlestickData()">
     @switch (chartService.chartType()) {
     @case ('Candlestick') {
     <tv-candlestick-chart id="main-chart" [data]="candlestickData()" [options]="chartOptions()">
@@ -24,8 +24,10 @@
     </tv-baseline-chart>
     }
     }
+    @if(chartService.indicators().includes('VOL')) {
     <tv-histogram-chart id="volume-chart" [data]="volumeData()" [options]="volumeOptions()">
     </tv-histogram-chart>
+    }
   </div>
 
   @if (currentCrosshairData()) {
