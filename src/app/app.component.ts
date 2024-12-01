@@ -1,21 +1,15 @@
 
-import { Component, HostBinding, effect, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
-import { DashboardSidebarComponent } from './features/dashboard/components/dashboard-sidebar/dashboard-sidebar.component';
 import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
-import { DarkModeService } from './services/dark-mode.service';
 import { CommonModule } from '@angular/common';
 
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { DashboardSidebarComponent } from './features/dashboard/components/dashboard-sidebar/dashboard-sidebar.component';
-import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [DashboardSidebarComponent, NavBarComponent, RouterModule,CommonModule],
+  imports: [NavBarComponent, RouterModule,CommonModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })

@@ -1,4 +1,3 @@
-// trader-layout.component.ts
 import { CommonModule } from '@angular/common';
 import { Component, inject, effect } from '@angular/core';
 import { RouterModule } from '@angular/router';
