@@ -1,0 +1,47 @@
+<div
+  class="flex min-h-screen w-full items-center justify-center bg-cover bg-center bg-no-repeat"
+  style="background-image: linear-gradient(0deg, rgba(25, 18, 63, 0.61), rgba(25, 18, 63, 0.61)), url('/images/BackgroundSignInUp.png')"
+>
+  <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 sm:p-8 relative mx-4">
+    <!-- Close Button -->
+    <button type="button" class="absolute right-4 top-4">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <img src="images/LogoMM.png" alt="MarketMaster" class="h-6 mx-auto mb-6" />
+      <h1 class="text-xl font-medium mb-2">Preview Order</h1> <!-- Reduced font size from text-2xl to text-xl -->
+    </div>
+
+    <div class="space-y-6">
+      <!-- Transaction Display -->
+      <div *ngIf="transaction" class="space-y-2">
+        <h2 class="font-medium text-sm"> Details</h2> <!-- Changed to text-lg -->
+        <div class="text-sm text-gray-700">
+          <p><strong>Quantity:</strong> {{ transaction.quantity }}</p>
+          <p><strong>Symbol:</strong> {{ transaction.symbol }}</p>
+          <p><strong>Timestamp:</strong> {{ transaction.timeStamp | date: 'short' }}</p>
+          <p><strong>Price:</strong> {{ transaction.price }}</p>
+        </div>
+      </div>
+
+      <!-- Limit Order Display -->
+      <div *ngIf="limitOrder" class="space-y-2">
+        <h2 class="font-medium text-sm">Limit Order Details</h2> <!-- Changed to text-lg -->
+        <div class="text-sm text-gray-700">
+          <p><strong>Type:</strong> {{ limitOrder.type }}</p>
+          <p><strong>Quantity:</strong> {{ limitOrder.quantity }}</p>
+          <p><strong>Symbol:</strong> {{ limitOrder.symbol }}</p>
+          <p><strong>Limit Price:</strong> {{ limitOrder.limitPrice | currency }}</p>
+        </div>
+      </div>
+
+      <!-- Confirm and Back buttons -->
+      <div class="flex gap-4">
+        <button mat-button color="primary" (click)="onConfirm()" class="w-full">Confirm</button>
+        <button mat-button color="warn" (click)="onBack()" class="w-full">Back</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,9 +3,14 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 /* Hide scrollbar */
 .scrollbar-hide::-webkit-scrollbar {
@@ -14,8 +19,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /* Hide scrollbar for IE, Edge, and Firefox */
 .scrollbar-hide {
+
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;      /* Firefox */
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+

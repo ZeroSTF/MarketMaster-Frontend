@@ -7,7 +7,7 @@ module.exports = {
         "roboto-flex": ['"Roboto Flex"', "sans-serif"],
       },
       boxShadowwatchlist: {
-        'custom-inset': 'inset 0px 2px 11.4px 0px rgba(46, 156, 244, 0.25)',
+        "custom-inset": "inset 0px 2px 11.4px 0px rgba(46, 156, 244, 0.25)",
       },
       screens: {
         'sm': '640px',   // Small devices (phones)
@@ -23,10 +23,23 @@ module.exports = {
         'dark-main': 'rgba(13,13,13,0.85)',
         'dark-sidebar': '#1f1f1f',
       },
+
       boxShadow: {
         'futuristic': '0 0 15px 5px rgba(255, 255, 0, 0.5)',
       },
       
+
+      colors: {
+        primary: {
+          light: "#7ea1e9", // light shade of primary color
+          DEFAULT: "#0056b3", // main primary color
+          dark: "#003a75", // dark shade of primary color
+        },
+        "primary-500": "#0056b3",
+        "primary-400": "#7ea1e9",
+        "primary-600": "#003a75",
+      },
+
     },
   },
   plugins: [require("@tailwindcss/forms")],

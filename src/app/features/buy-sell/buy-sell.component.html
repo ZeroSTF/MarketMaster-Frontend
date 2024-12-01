@@ -1,0 +1,79 @@
+<div
+  class="flex min-h-screen w-full items-center justify-center bg-cover bg-center bg-no-repeat"
+  style="background-image: linear-gradient(0deg, rgba(25, 18, 63, 0.61), rgba(25, 18, 63, 0.61)), url('/images/BackgroundSignInUp.png')"
+>
+  <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 sm:p-8 relative mx-4">
+    <!-- Close Button -->
+    <button type="button" class="absolute right-4 top-4">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <img src="images/LogoMM.png" alt="MarketMaster" class="h-6 mx-auto mb-6"/>
+      <h1 class="text-2xl font-medium mb-2">Trade Asset</h1>
+    </div>
+
+    <form [formGroup]="tradeForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <!-- Asset Display -->
+      <div class="space-y-2">
+        <label>Asset</label>
+        <div class="flex gap-4 items-center">
+          <span class="font-medium text-lg">{{ symbol }}</span>
+        </div>
+      </div>
+
+      <!-- Action Selection -->
+      <div class="space-y-2">
+        <label>Action</label>
+        <mat-radio-group formControlName="action" class="flex gap-4">
+          <mat-radio-button value="buy">BUY</mat-radio-button>
+          <mat-radio-button value="sell">SELL</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <!-- Quantity Input -->
+      <div class="space-y-2">
+        <label for="quantity">Quantity</label>
+        <input
+          matInput
+          id="quantity"
+          type="number"
+          placeholder="Enter quantity"
+          formControlName="quantity"
+          class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+        />
+      </div>
+
+      <!-- Schedule Checkbox -->
+      <div class="flex items-center space-x-2">
+        <mat-checkbox formControlName="isScheduled">Schedule this action</mat-checkbox>
+      </div>
+
+      <!-- Conditional Price Input -->
+      <div *ngIf="tradeForm.get('isScheduled')?.value" class="space-y-2">
+        <label for="price">Price Condition</label>
+        <input
+          matInput
+          id="price"
+          type="number"
+          placeholder="Enter target price"
+          formControlName="price"
+          class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button
+  mat-raised-button
+  color="primary"
+  type="submit"
+  [disabled]="!tradeForm.valid || isLoading"
+  class="w-full"
+>
+          <span *ngIf="!isLoading">Preview Order</span>
+          <mat-spinner *ngIf="isLoading" diameter="24"></mat-spinner>
+      </button>
+    </form>
+  </div>
+</div>

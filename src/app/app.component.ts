@@ -1,9 +1,16 @@
+
 import { Component, HostBinding, effect, inject } from '@angular/core';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { DashboardSidebarComponent } from './features/dashboard/components/dashboard-sidebar/dashboard-sidebar.component';
 import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
 import { DarkModeService } from './services/dark-mode.service';
 import { CommonModule } from '@angular/common';
+
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { DashboardSidebarComponent } from './features/dashboard/components/dashboard-sidebar/dashboard-sidebar.component';
+import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
+
 
 @Component({
   selector: 'app-root',
@@ -14,6 +21,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent {
   title = 'MarketMaster-Frontend';
+
   
   @HostBinding('class.dark') darkClass = false;
   isGamerRoute: boolean = false;
@@ -28,4 +36,5 @@ export class AppComponent {
       this.darkClass = this.darkModeService.isDarkMode()();
     });
   }
+
 }

@@ -50,12 +50,6 @@
           {{ btn.label }}
         </span>
       </div>
-      
-      <!-- Optional Badge -->
-      <span *ngIf="btn.badge" 
-            class="text-xs font-semibold px-2 py-1 rounded-full bg-blue-500 text-white group-hover:bg-blue-400">
-        {{ btn.badge }}
-      </span>
     </li>
   </ul>
 </nav>
@@ -67,6 +61,7 @@
 <div *ngIf="isMobile" 
      class="fixed bottom-0 left-0 right-0 bg-white shadow-md p-2 flex justify-around z-50">
   <button *ngFor="let btn of sidebarButtons" 
+          [routerLink]="btn.link"   
           (click)="clickSideButton(btn.name)" 
           class="flex flex-col items-center text-gray-400 hover:text-blue-500">
     <span class="material-icons text-2xl">{{ btn.icon }}</span>

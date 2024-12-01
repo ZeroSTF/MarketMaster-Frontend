@@ -1,0 +1,15 @@
+/* trade-asset.component.css */
+:host {
+    display: block;
+  }
+  
+  .bg-cover {
+    background-size: cover;
+  }
+  
+  .mat-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
