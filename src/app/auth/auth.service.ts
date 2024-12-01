@@ -177,8 +177,12 @@ export class AuthService {
         if (this.isTokenValid(tokenResponse)) {
           this.tokenSignal.set(tokenResponse);
           this.userSignal.set(user);
-          // Verify session with backend
-          this.fetchCurrentUser().subscribe();
+
+          Promise.resolve().then(() => {
+            this.fetchCurrentUser().subscribe({
+              error: () => this.clearAuth(),
+            });
+          });
         } else {
           this.clearAuth();
         }

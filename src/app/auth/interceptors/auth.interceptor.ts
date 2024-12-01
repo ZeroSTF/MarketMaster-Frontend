@@ -37,7 +37,14 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
             return next(req);
           }),
           catchError((refreshError) => {
-            authService.logout();
+            authService.logout().subscribe({
+              next: () => {
+                console.log('Logged out successfully');
+              },
+              error: (err) => {
+                console.error('Logout failed', err);
+              },
+            });
             return throwError(() => refreshError);
           })
         );
