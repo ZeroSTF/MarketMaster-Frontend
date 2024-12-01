@@ -20,7 +20,7 @@ export class QuickMatchComponent {
 
   openCreateMatchDialog(): void {
     const dialogRef = this.dialog.open(CreateMatchDialogComponent, {
-      width: '400px',
+      width: '600px',
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -8,6 +8,8 @@ import { GameOverviewComponent } from './features/games/pages/game-overview/game
 import { SettingsComponent } from './features/dashboard/pages/settings/settings.component';
 import { TraderLayoutComponent } from './layout/trader-layout/trader-layout.component';
 import { GamePortfolioComponent } from './features/games/pages/game-portfolio/game-portfolio.component';
+import { GameMainComponent } from './features/games/pages/game-main/game-main.component';
+import { GameGamesComponent } from './features/games/pages/game-games/game-games.component';
 
 export const routes: Routes = [
   {
@@ -15,12 +17,18 @@ export const routes: Routes = [
     redirectTo: 'dashboard/overview',
     pathMatch: 'full',
   },
+  
 
   // AUTH ROUTES
   {
     path: 'login',
     loadComponent: () =>
       import('./features/login/login.component').then((m) => m.LoginComponent),
+  },
+  {
+    path: 'test',
+    loadComponent: () =>
+      import('./features/games/components/market-data/market-data.component').then((m) => m.MarketDataComponent),
   },
   {
     path: 'signup',
@@ -79,8 +87,16 @@ export const routes: Routes = [
         component: GameOverviewComponent,
       },
       {
-        path: 'portfolio',
+        path: 'portfolio/:userId/:gameId',
         component: GamePortfolioComponent,
+      },
+      {
+        path: 'main',
+        component: GameMainComponent,
+      },
+      {
+        path: 'games',
+        component: GameGamesComponent,
       },
     ],
   },

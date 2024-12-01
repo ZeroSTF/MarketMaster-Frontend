@@ -1,42 +1,110 @@
 /* Sidebar container */
 .flex-col {
-    width: 100%;
-    transition: all 0.3s ease-in-out; /* Smooth transition for sidebar width */
-  }
-  
-  /* Sidebar list items */
-  ul li {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    transition: all 0.3s ease-in-out; /* Smooth transition for icon and text */
-  }
-  
-  ul li i {
-    margin-right: 1rem;
-    font-size: 2rem; /* Larger icon size */
-  }
-  
-  /* Text labels */
-  ul li span {
-    opacity: 0; /* Initially hidden */
-    transition: opacity 0.3s ease-in-out; /* Smooth fade-in effect */
-  }
-  
-  ul li span.opacity-100 {
-    opacity: 1; /* Fully visible when expanded */
-  }
-  
-  ul li span.opacity-0 {
-    opacity: 0; /* Hidden when not expanded */
-  }
-  
-  /* Expanded Sidebar */
+  width: 100%;
+  transition: all 0.3s ease-in-out; /* Smooth transition for sidebar width */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sidebar list items */
+ul li {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: all 0.3s ease-in-out; /* Smooth transition for icon and text */
+  padding: 0.5rem 1rem; /* Add some padding around each item */
+  cursor: pointer; /* Makes the items clickable */
+}
+
+ul li:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Hover effect */
+  border-radius: 0.5rem; /* Rounded corners on hover */
+}
+
+/* Sidebar Icon */
+ul li i {
+  margin-right: 1rem;
+  font-size: 2rem; /* Larger icon size */
+  transition: transform 0.3s ease-in-out; /* Smooth transform effect */
+}
+
+/* Sidebar item hover icon effect */
+ul li:hover i {
+  transform: scale(1.1); /* Slightly enlarge the icon on hover */
+}
+
+/* Text labels */
+ul li span {
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth fade and transform effect */
+  transform: translateX(-10px); /* Slide in text from left */
+}
+
+/* Fully visible text when sidebar is expanded */
+ul li span.opacity-100 {
+  opacity: 1; /* Fully visible when expanded */
+  transform: translateX(0); /* Slide in text */
+}
+
+/* Hidden text when sidebar is collapsed */
+ul li span.opacity-0 {
+  opacity: 0; /* Hidden when not expanded */
+  transform: translateX(-10px); /* Slide out text to left */
+}
+
+/* Expanded Sidebar */
+.w-72 {
+  width: 18rem; /* Expanded width */
+  padding: 1rem; /* Add padding to the sidebar */
+  background-color: #f57c00; /* Orange background color */
+  border-radius: 1rem; /* Rounded corners */
+}
+
+/* Collapsed Sidebar */
+.w-20 {
+  width: 5rem; /* Collapsed width */
+  background-color: #fb6805; /* Lighter shade of orange */
+  border-radius: 1rem; /* Rounded corners */
+  overflow: hidden; /* Hide any overflow content */
+}
+
+/* Added spacing for the sidebar list */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
+  justify-content: flex-start; /* Start from the top */
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
   .w-72 {
-    width: 18rem; /* Expanded width */
+    width: 5rem; /* On small screens, keep the sidebar collapsed */
   }
-  
-  .w-20 {
-    width: 5rem; /* Collapsed width */
+
+  ul li {
+    font-size: 1.5rem; /* Slightly smaller font size for mobile */
   }
-  
+
+  ul li i {
+    font-size: 1.8rem; /* Adjust icon size on mobile */
+  }
+
+  ul li span {
+    display: none; /* Hide text labels on small screens */
+  }
+}
+.sidebar-link {
+  text-decoration: none;  /* Remove underline */
+  color: inherit;         /* Inherit color from parent (icon color) */
+}
+
+/* Ensure icon color stays white */
+.sidebar-link i {
+  color: white;  /* Adjust as needed */
+}

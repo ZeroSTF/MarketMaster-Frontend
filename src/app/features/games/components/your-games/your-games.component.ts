@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameService } from '../../../../services/game.service';
 import { GameDto, GameStatus } from '../../../../models/game.model';
@@ -17,13 +17,14 @@ export class YourGamesComponent implements OnInit {
   completedGames: GameDto[] = [];
   cancelledGames: GameDto[] = [];
 
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     const username = 'koussaykoukii'; // Replace with actual username if available dynamically
     this.gameService.getUserGames(username).subscribe({
       next: (games) => {
         this.organizeGamesByStatus(games);
+        this.cdr.detectChanges(); // Manually trigger change detection
       },
       error: (error) => console.error('Error fetching user games', error),
     });

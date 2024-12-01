@@ -15,9 +15,9 @@ export class GameService {
     return this.http.post<NewGameResponseDto>(`${this.apiUrl}/create`, game);
   }
 
-  joinGame(gameId: number, joinGameDto: JoinGameDto): Observable<JoinGameResponseDto> {
-    return this.http.post<JoinGameResponseDto>(`${this.apiUrl}/${gameId}/join`, joinGameDto);
-  }
+  joinGame(gameId: number, username: string): Observable<JoinGameResponseDto> {
+    return this.http.post<JoinGameResponseDto>(`${this.apiUrl}/${gameId}/join/${username}`, {});
+}
 
   getCurrentGames(): Observable<GameDto[]> {
     return this.http.get<GameDto[]>(`${this.apiUrl}/active`);

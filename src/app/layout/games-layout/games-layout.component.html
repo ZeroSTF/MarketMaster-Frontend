@@ -1,30 +1,32 @@
-<div class="flex h-screen overflow-hidden bg-black relative">
-  <!-- Blurry Silhouettes -->
-  <div class="absolute inset-0 z-0 bg-orange-gaamer opacity-50"></div>
-  <div class="absolute inset-0 z-0 blur-background"></div>
-  
-  <!-- Sidebar Container (for desktop) -->
-  <aside
-    *ngIf="!isMobile"
-    class="flex flex-col items-center justify-between bg-orange-800 w-20 md:w-20 transition-all duration-300 ease-in-out ml-4 mt-3 mb-20 rounded-2xl shadow-lg"
-    [class.hidden]="hidden"
-  >
+<div class="layout-container">
+  <div class="background-overlay"></div>
+  <div class="background-blur"></div>
+
+  <aside *ngIf="!isMobile" class="sidebar" [class.hidden]="hidden">
     <app-gamer-sidebar></app-gamer-sidebar>
   </aside>
 
-  <!-- Main Content -->
-  <main class="flex-grow overflow-auto ml-0 mr-2 transition-all duration-500 ease-in-out">
-    <div class="min-h-full h-full p-1">
-      <router-outlet></router-outlet>
-    </div>
+  <main class="main-content">
+    <router-outlet></router-outlet>
   </main>
 
-  <!-- Mobile Bottom Bar (for mobile) -->
-  <div *ngIf="isMobile" class="fixed bottom-0 left-0 right-0 bg-gray-800 p-2 flex justify-around text-white">
-    <i class="fas fa-home text-2xl"></i>
-    <i class="fas fa-chart-line text-2xl"></i>
-    <i class="fas fa-cogs text-2xl"></i>
-    <i class="fas fa-sign-out-alt text-2xl"></i>
-    <i class="fas fa-sign-out-alt text-2xl"></i>
+  <div *ngIf="isMobile" class="mobile-bottom-bar">
+    <ul class="flex justify-around items-center w-full">
+      <li>
+        <i class="fas fa-home"></i>
+      </li>
+      <li>
+        <i class="fas fa-gamepad"></i>
+      </li>
+      <li>
+        <i class="fas fa-chart-line"></i>
+      </li>
+      <li>
+        <i class="fas fa-trophy"></i>
+      </li>
+      <li>
+        <i class="fas fa-sign-out-alt"></i>
+      </li>
+    </ul>
   </div>
 </div>

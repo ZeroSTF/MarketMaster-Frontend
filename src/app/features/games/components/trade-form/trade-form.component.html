@@ -1,0 +1,71 @@
+<div class="trade-form bg-gray-800 text-white p-4 rounded-lg shadow-md">
+    <h3 class="text-lg font-semibold mb-4">Trade Form</h3>
+    <form [formGroup]="tradeForm" (ngSubmit)="onSubmit()">
+      <!-- Asset Input -->
+      <div class="mb-4">
+        <label for="asset" class="block text-sm font-medium">Asset</label>
+        <input
+          id="asset"
+          type="text"
+          formControlName="asset"
+          placeholder="Enter asset symbol (e.g., AAPL)"
+          class="mt-1 p-2 w-full bg-gray-700 text-white rounded"
+          required
+        />
+        <div *ngIf="tradeForm.get('asset')?.invalid && tradeForm.get('asset')?.touched" class="text-red-500 text-sm">
+          Asset is required.
+        </div>
+      </div>
+  
+      <!-- Quantity Input -->
+      <div class="mb-4">
+        <label for="quantity" class="block text-sm font-medium">Quantity</label>
+        <input
+          id="quantity"
+          type="number"
+          formControlName="quantity"
+          class="mt-1 p-2 w-full bg-gray-700 text-white rounded"
+          min="1"
+          required
+        />
+        <div *ngIf="tradeForm.get('quantity')?.invalid && tradeForm.get('quantity')?.touched" class="text-red-500 text-sm">
+          Quantity must be at least 1.
+        </div>
+      </div>
+  
+      <!-- Action Select -->
+      <div class="mb-4">
+        <label for="action" class="block text-sm font-medium">Action</label>
+        <select
+          id="action"
+          formControlName="action"
+          class="mt-1 p-2 w-full bg-gray-700 text-white rounded"
+        >
+          <option value="buy">Buy</option>
+          <option value="sell">Sell</option>
+        </select>
+      </div>
+  
+      <!-- Price Display -->
+      <div class="mb-4">
+        <label for="price" class="block text-sm font-medium">Price</label>
+        <input
+          id="price"
+          type="text"
+          formControlName="price"
+          class="mt-1 p-2 w-full bg-gray-700 text-white rounded"
+          [attr.disabled]="true"
+        />
+      </div>
+  
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        [attr.disabled]="tradeForm.invalid"
+      >
+        Submit Trade
+      </button>
+    </form>
+  </div>
+  

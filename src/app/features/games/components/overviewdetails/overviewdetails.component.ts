@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { GameService } from '../../../../services/game.service';
 import { PlayerPerformanceDto } from '../../../../models/game.model';
 import { CommonModule } from '@angular/common';
@@ -13,12 +13,15 @@ import { CommonModule } from '@angular/common';
 export class OverviewdetailsComponent implements OnInit {
   playerPerformance: PlayerPerformanceDto | null = null;
 
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     const username = 'koussaykoukii'; // Replace with the actual username if available dynamically
     this.gameService.getPlayerPerformance(username).subscribe({
-      next: (data) => (this.playerPerformance = data),
+      next: (data) => {
+        this.playerPerformance = data;
+        this.cdr.detectChanges(); // Manually trigger change detection
+      },
       error: (error) => console.error('Error fetching performance data', error),
     });
   }

@@ -1,46 +1,106 @@
-/* General sidebar styling */
-.aside {
-    margin-left: 1rem; /* Adjust margin as needed */
+:root {
+  --orange-gamer: #fb6805; /* Orange theme color */
+}
+
+/* General Layout */
+.layout-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background-color: black;
+}
+
+/* Background Layers */
+.background-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--orange-gamer);
+  opacity: 1;
+}
+
+.background-blur {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url('../../../../public/images/background.jpg');
+  background-size: cover;
+  filter: blur(5px);
+  opacity: 0.5;
+}
+
+/* Sidebar (only visible on desktop) */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically center the sidebar items */
+  align-items: center;
+  position: fixed; /* Fix the sidebar in place */
+  top: 50%; /* Position it in the middle vertically */
+  transform: translateY(-50%); /* Adjust for exact centering */
+  width: 5rem; /* Fixed width for desktop */
+  margin: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease-in-out;
+  z-index: 10;
+  padding: 1rem 0; /* Ensure padding doesn't interfere with the background */
+  overflow: hidden; /* Prevent content from extending beyond the container */
+  height: auto; /* Allow the sidebar to adjust based on its content */
+}
+
+/* Sidebar Icon Styling */
+.sidebar i {
+  font-size: 1.5rem;
+  color: white; /* Icon color for better contrast */
+  margin: 1rem 0; /* Space between icons */
+}
+
+/* Main Content */
+.main-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  margin-left: 6rem; /* Make space for the sidebar on the left (desktop only) */
+  z-index: 1;
+}
+
+/* Mobile Bottom Bar */
+.mobile-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #333;
+  color: white;
+  height: 4rem;
+  z-index: 10;
+}
+
+.mobile-bottom-bar i {
+  font-size: 1.5rem;
+}
+
+/* Hide Sidebar on Mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none; /* Hide the sidebar on mobile */
   }
-  
-  .rounded-2xl {
-    border-radius: 1rem;
+
+  .main-content {
+    margin-left: 0; /* No need for space for sidebar on mobile */
   }
-  
-  /* Sidebar icons */
-  ul li i {
-    font-size: 2rem; /* Larger icon size */
+
+  .mobile-bottom-bar {
+    display: flex; /* Show bottom bar on mobile */
   }
-  
-  /* Mobile Bottom Bar */
-  .fixed {
-    width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-  }
-  :root {
-    --orange-gaamer: #FB6805; /* Your background color */
-  }
-  
-  .blur-background {
-    background-image: url('../../../../public/images/background.jpg'); /* Add a silhouette image */
-    background-size: cover;
-    filter: blur(5px); /* Adjust the blur amount */
-    opacity: 0.5; /* Control opacity */
-  }
-  
-  /* Additional styles for your layout */
-  .flex {
-    display: flex;
-  }
-  
-  .h-screen {
-    height: 100vh;
-  }
-  
-  .overflow-hidden {
-    overflow: hidden;
-  }
-  
+}
+
+/* Utility Classes */
+.hidden {
+  display: none !important;
+}
