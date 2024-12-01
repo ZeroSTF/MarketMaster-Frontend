@@ -22,19 +22,14 @@ import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
 export class AppComponent {
   title = 'MarketMaster-Frontend';
 
-  
-  @HostBinding('class.dark') darkClass = false;
   isGamerRoute: boolean = false;
 
-  constructor(private darkModeService: DarkModeService, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
     // Listen for changes in the router's URL to check if the current route is '/gamer'
     this.router.events.subscribe(() => {
       this.isGamerRoute = this.router.url.includes('/gamer');
     });
 
-    effect(() => {
-      this.darkClass = this.darkModeService.isDarkMode()();
-    });
   }
 
 }
