@@ -1,0 +1,63 @@
+.matches-container {
+    background: rgba(255, 255, 255, 0.15); /* Semi-transparent background */
+    backdrop-filter: blur(15px); /* Blurry background effect */
+    border-radius: 1rem; /* Rounded corners */
+    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); /* Elevated shadow for depth */
+    color: #ffffff; /* Text color */
+  }
+  
+  /* Tabs */
+  .tabs {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .tab {
+    background: transparent; /* No background for tabs */
+    color: #ffffff; /* White text */
+    border: none; /* No border */
+    padding: 10px 20px; /* Padding for clickable area */
+    cursor: pointer; /* Pointer cursor */
+    transition: color 0.3s; /* Smooth color transition */
+  }
+  
+  .tab:hover {
+    color: var(--orange-gaamer, #FB6805); /* Change color on hover */
+  }
+  
+  .tab.active {
+    border-bottom: 2px solid var(--orange-gaamer, #FB6805); /* Active tab indicator */
+  }
+  
+  /* Tab Content */
+  .tab-content {
+    margin-top: 20px;
+  }
+  
+  .tab-title {
+    color: #ffffff; /* White title color */
+  }
+  
+  .game-item {
+    background: rgba(255, 255, 255, 0.2); /* Transparent background */
+    backdrop-filter: blur(10px); /* Slight blur for depth */
+    border-radius: 0.5rem; /* Rounded edges */
+    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
+    transition: transform 0.2s, box-shadow 0.2s; /* Smooth hover effect */
+  }
+  
+  .game-item:hover {
+    transform: translateY(-2px); /* Lift card on hover */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+  }
+  
+  .game-title {
+    color: #ffffff; /* Title color */
+  }
+  
+  .game-date {
+    color: rgba(255, 255, 255, 0.7); /* Softer white for date */
+  }
+  

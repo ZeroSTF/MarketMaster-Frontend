@@ -1,1 +1,32 @@
-<p>games-layout works!</p>
+<div class="layout-container">
+  <div class="background-overlay"></div>
+  <div class="background-blur"></div>
+
+  <aside *ngIf="!isMobile" class="sidebar" [class.hidden]="hidden">
+    <app-gamer-sidebar></app-gamer-sidebar>
+  </aside>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <div *ngIf="isMobile" class="mobile-bottom-bar">
+    <ul class="flex justify-around items-center w-full">
+      <li>
+        <i class="fas fa-home"></i>
+      </li>
+      <li>
+        <i class="fas fa-gamepad"></i>
+      </li>
+      <li>
+        <i class="fas fa-chart-line"></i>
+      </li>
+      <li>
+        <i class="fas fa-trophy"></i>
+      </li>
+      <li>
+        <i class="fas fa-sign-out-alt"></i>
+      </li>
+    </ul>
+  </div>
+</div>

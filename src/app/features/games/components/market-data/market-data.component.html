@@ -1,0 +1,9 @@
+<div *ngIf="marketData">
+  <h2>Market Data for {{ marketData.asset.symbol }}</h2>
+  <p>Timestamp: {{ marketData.timestamp }}</p>
+  <p>Open: {{ marketData.open }}</p>
+  <p>High: {{ marketData.high }}</p>
+  <p>Low: {{ marketData.low }}</p>
+  <p>Close: {{ marketData.close }}</p>
+  <p>Volume: {{ marketData.volume }}</p>
+</div>

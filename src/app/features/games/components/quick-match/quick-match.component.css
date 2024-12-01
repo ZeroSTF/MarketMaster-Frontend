@@ -1,0 +1,73 @@
+.quick-match-container {
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    backdrop-filter: blur(15px); /* Blurry background effect */
+    border-radius: 0.75rem; /* Rounded corners */
+    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    color: #ffffff; /* White text color */
+  }
+  
+  /* Header */
+  .quick-match-container h2 {
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); /* Subtle shadow for visibility */
+  }
+  
+  /* Match Options */
+  .option-box {
+    background: rgba(255, 255, 255, 0.2); /* Transparent background */
+    backdrop-filter: blur(12px);
+    border-radius: 0.5rem;
+    border: 1px solid var(--orange-gaamer, #FB6805);
+    text-align: center;
+  }
+  
+  .option-box p {
+    color: rgba(255, 255, 255, 0.7); /* Softer white for labels */
+  }
+  
+  .create-match-btn,
+  .join-match-btn {
+    background-color: var(--orange-gaamer, #FB6805);
+    color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+  }
+  
+  .create-match-btn:hover,
+  .join-match-btn:hover {
+    background-color: #e65d00; /* Darken on hover */
+  }
+  
+  /* Match Details Section */
+  .match-details {
+    background: rgba(255, 255, 255, 0.2); /* Transparent for consistency */
+    backdrop-filter: blur(12px);
+    border-radius: 0.5rem;
+    border: 1px solid var(--orange-gaamer, #FB6805);
+    color: #ffffff;
+  }
+  
+  .match-input {
+    width: 100%;
+    border: 1px solid var(--orange-gaamer, #FB6805);
+    background: rgba(255, 255, 255, 0.1); /* Slight transparency */
+    color: #ffffff;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+  
+  .start-match-btn {
+    background-color: var(--orange-gaamer, #FB6805);
+    color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .start-match-btn:hover {
+    background-color: #e65d00; /* Darken on hover */
+  }
+  

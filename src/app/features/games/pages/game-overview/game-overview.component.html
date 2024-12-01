@@ -1,0 +1,29 @@
+<div class="h-screen w-full flex flex-wrap">
+  <!-- Left column -->
+  <div class="w-full md:w-1/3 flex flex-col h-full">
+    <div class="flex-grow p-2 fade-in delay-1">
+      <app-overviewdetails></app-overviewdetails>
+    </div>
+    <div class="h-2/3 p-2 fade-in delay-2">
+      <app-quick-match></app-quick-match>
+    </div>
+  </div>
+
+  <!-- Second column -->
+  <div class="w-full md:w-1/3 flex flex-col pb-20">
+    <div class="p-2 fade-in delay-2">
+      <app-current-games></app-current-games>
+    </div>
+  </div>
+
+  <!-- Right column -->
+  <div class="w-full md:w-1/3 flex flex-col">
+    <div class="flex-grow p-2 fade-in delay-2">
+      <app-your-games></app-your-games>
+
+    </div>
+    <div class="h-2/3 p-2 fade-in delay-2">
+      <app-live-events></app-live-events>
+    </div>
+  </div>
+</div>

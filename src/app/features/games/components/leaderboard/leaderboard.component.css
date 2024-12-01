@@ -1,0 +1,59 @@
+/* General container styling */
+.leaderboard-container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 1rem;
+  border: 1px solid var(--orange-gaamer, #FB6805);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+}
+
+/* Title styling */
+.leaderboard-title {
+  text-align: center;
+  color: var(--orange-gaamer, #FB6805);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Header row styling */
+.leaderboard-header {
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  text-align: left; /* Aligns header items uniformly */
+  gap: 1.3rem; /* Adds consistent spacing between columns */
+}
+
+/* Player row styling */
+.leaderboard-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: left;
+  gap: 1rem; /* Adds consistent spacing between columns */
+}
+
+/* Rank column */
+.rank {
+  color: var(--orange-gaamer, #FB6805);
+  text-align: center; /* Centers rank value */
+}
+
+/* Player column */
+.player-avatar {
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.player-name {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Profit column */
+.profit {
+  font-size: 1.1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Trades column */
+.trades {
+  color: rgba(255, 255, 255, 0.7);
+}
