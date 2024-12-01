@@ -12,11 +12,11 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const isExcluded = excludedUrls.some((url) => req.url.includes(url));
 
   if (!isExcluded) {
-    const tokenResponse = authService.getTokenResponseSignal();
-    if (tokenResponse) {
+    const accessToken = authService.accessToken();
+    if (accessToken) {
       req = req.clone({
         setHeaders: {
-          Authorization: `Bearer ${tokenResponse.accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
     }
@@ -27,10 +27,11 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
       // Handle 401 Unauthorized errors and refresh the token if necessary
       if (error.status === 401 && !req.url.includes('/refresh-token')) {
         return authService.refreshToken().pipe(
-          switchMap((newTokenResponse) => {
+          switchMap(() => {
+            const newAccessToken = authService.accessToken();
             req = req.clone({
               setHeaders: {
-                Authorization: `Bearer ${newTokenResponse.accessToken}`,
+                Authorization: `Bearer ${newAccessToken}`,
               },
             });
             return next(req);

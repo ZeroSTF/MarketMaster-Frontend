@@ -111,7 +111,7 @@ export const indicators: Indicator[] = [
   {
     name: 'Stochastic Oscillator',
     type: 'Stochastic',
-    icon: 'multi_line_chart',
+    icon: 'timeline',
     active: false,
     parameters: [
       { name: 'length', default: 14, min: 5, max: 50 },
