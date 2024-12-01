@@ -3,10 +3,8 @@ import { DashboardOverviewComponent } from './features/dashboard/pages/dashboard
 import { DashboardExploreComponent } from './features/dashboard/pages/dashboard-explore/dashboard-explore.component';
 import { DashboardLayoutComponent } from './layout/dashboard-layout/dashboard-layout.component';
 
-import { PortfolioComponent } from './features/dashboard/pages/portfolio/portfolio.component';
 import { GamesLayoutComponent } from './layout/games-layout/games-layout.component';
 import { GameOverviewComponent } from './features/games/pages/game-overview/game-overview.component';
-import { SettingsComponent } from './features/dashboard/pages/settings/settings.component';
 import { TraderLayoutComponent } from './layout/trader-layout/trader-layout.component';
 import { GamePortfolioComponent } from './features/games/pages/game-portfolio/game-portfolio.component';
 import { GameMainComponent } from './features/games/pages/game-main/game-main.component';
@@ -14,7 +12,6 @@ import { GameGamesComponent } from './features/games/pages/game-games/game-games
 
 import { DashboardPortfolioComponent } from './features/dashboard/pages/dashboard-portfolio/dashboard-portfolio.component';
 import { DashboardSettingsComponent } from './features/dashboard/pages/dashboard-settings/dashboard-settings.component';
-import { TraderLayoutComponent } from './layout/trader-layout/trader-layout.component';
 import { LearningLayoutComponent } from './layout/learning-layout/learning-layout.component';
 import { LearningOverviewComponent } from './features/learning/pages/learning-overview/learning-overview.component';
 import { LearningCalendarComponent } from './features/learning/pages/learning-calendar/learning-calendar.component';
