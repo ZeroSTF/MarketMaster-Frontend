@@ -1,112 +1,103 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { AssetService } from '../../../../services/asset.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { TransactionService } from '../../../../services/transaction.service';
-import { TransactionDTO, TransactionType } from '../../../../models/transaction.model';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormsModule } from '@angular/forms';
+import { StockPredictionResponse } from '../../../../models/StockPredictionResponse.model';
 @Component({
   selector: 'app-asset-details',
   standalone: true,
   imports: [
     CommonModule,
+    MatTableModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     MatIconModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './assetdetails.component.html',
-  styleUrl: './assetdetails.component.css'
+  styleUrl: './assetdetails.component.css',
 })
-export class AssetdetailsComponent {
-  showBuyForm: boolean = false;
-  buyTransaction: TransactionDTO = {
-    symbol: '',
-    quantity: 0,
-    price: 0,
-    timeStamp: new Date(),
-    type: TransactionType.BUY
-  };
-
+export class AssetdetailsComponent implements OnInit {
   private assetService = inject(AssetService);
+  private snackBar = inject(MatSnackBar);
   private transactionService = inject(TransactionService);
   public selectedAsset = this.assetService.selectedAsset;
+  public showPredictionWidget = false;
+  public predictedPrice: number | null = null;
+  public predictedChange: number | null = null;
+  public selectedSymbol: string | null = null;
+  public predictionDuration = 1;
+  public isLoadingPrediction = false;
 
-  expandedNews: { [key: number]: boolean } = {};
-  activeTab: 'overview' | 'financial' | 'news' = 'overview';
-
+  result: any;
+  error: string | null = null;
   newsItems = [
-    {
-      id: 1,
-      headline: 'Breaking News: Major Market Movement',
-      content: 'Detailed content about the market movement...'
-    },
-    {
-      id: 2,
-      headline: 'Quarterly Earnings Report Released',
-      content: 'Details about the quarterly earnings...'
-    },
-    {
-      id: 3,
-      headline: 'New Product Launch Announced',
-      content: 'Information about the new product launch...'
-    }
+    { id: 1, headline: 'Breaking News: Major Market Movement' },
+    { id: 2, headline: 'Quarterly Earnings Report Released' },
+    { id: 3, headline: 'New Product Launch Announced' },
   ];
 
-  setActiveTab(tab: 'overview' | 'financial' | 'news') {
-    this.activeTab = tab;
-  }
+  constructor(private router: Router) {}
 
-  toggleFullText(id: number) {
-    this.expandedNews[id] = !this.expandedNews[id];
-  }
+  ngOnInit() {}
 
-  openBuyForm() {
+  navigateToBuySell() {
     const asset = this.selectedAsset();
     if (asset) {
-      // Initialize the buyTransaction with current asset data
-      this.buyTransaction = {
-        symbol: asset.symbol,
-        quantity: 0,
-        price: asset.currentPrice,
-        timeStamp: new Date(),
-        type: TransactionType.BUY
-      };
+      this.router.navigate(['/buysell'], {
+        queryParams: { symbol: asset.symbol, price: asset.currentPrice },
+      });
     }
-    this.showBuyForm = !this.showBuyForm;
   }
 
-  submitBuyTransaction() {
-    // Ensure symbol and price are set
+  addWatchList() {
     const asset = this.selectedAsset();
     if (asset) {
-      this.buyTransaction.symbol = asset.symbol;
-      this.buyTransaction.price = asset.currentPrice;
-      this.buyTransaction.timeStamp = new Date();
+      this.transactionService.addWatchList('zerostf', asset.symbol).subscribe({
+        next: () =>
+          this.snackBar.open('Added to watchlist!', 'Close', {
+            duration: 3000,
+          }),
+        error: (err) => console.error(err),
+      });
+    }
+  }
+  openPredictWidget(symbol: string): void {
+    this.selectedSymbol = symbol;
+    this.showPredictionWidget = true;
+  }
 
-      console.log('Submitting transaction:', this.buyTransaction);
-      
-      this.transactionService.addTransaction(this.buyTransaction).subscribe({
-        next: (response) => {
-          console.log('Transaction added successfully:', response);
-          this.showBuyForm = false; // Close the form
-          // Reset the form
-          this.buyTransaction = {
-            symbol: '',
-            quantity: 0,
-            price: 0,
-            timeStamp: new Date(),
-            type: TransactionType.BUY
-          };
+  closePredictWidget(): void {
+    this.showPredictionWidget = false;
+    this.predictedPrice = null;
+    this.predictedChange = null;
+  }
+
+  confirmPrediction(): void {
+    if (this.selectedSymbol) {
+      this.isLoadingPrediction = true; // Show loading spinner
+      this.assetService.predictStock(this.selectedSymbol, true).subscribe({
+        next: (response: StockPredictionResponse) => {
+          this.predictedPrice = response.predicted_price;
+          this.predictedChange = response.predicted_change;
+          this.isLoadingPrediction = false; // Hide loading spinner
         },
-        error: (error) => {
-          console.error('Error adding transaction:', error);
-        }
+        error: (err) => {
+          console.error(err);
+          this.snackBar.open('Failed to predict price', 'Close', {
+            duration: 3000,
+          });
+          this.isLoadingPrediction = false; // Hide loading spinner
+        },
       });
     }
   }

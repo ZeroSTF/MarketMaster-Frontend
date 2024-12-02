@@ -1,9 +1,9 @@
-export interface Transaction {
+export interface LimitOrder {
     symbol: string;
     quantity: number;
-    price: number;
-    timeStamp: Date;
+    limitPrice: number;
     type: TransactionType;
+    status: OrderStatus;
   }
   
   // Enum for TransactionType (based on Java enum)
@@ -11,4 +11,9 @@ export interface Transaction {
     BUY = 'BUY',
     SELL = 'SELL'
   }
-  
+  export enum OrderStatus {
+    PENDING = 'PENDING',
+    EXECUTED = 'EXECUTED',
+    CANCELLED = 'CANCELLED'
+  }
+ 
