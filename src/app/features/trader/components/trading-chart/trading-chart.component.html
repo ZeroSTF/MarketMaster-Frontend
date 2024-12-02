@@ -45,24 +45,24 @@
   }
 
   @if (currentCrosshairData()) {
-  <div class="crosshair-tooltip" [style.left.px]="crosshairPosition()?.x! + 15"
-    [style.top.px]="crosshairPosition()?.y! - 350">
+  <div class="crosshair-tooltip" [style.left.px]="crosshairPosition()?.x! - 95"
+    [style.top.px]="crosshairPosition()?.y! - 180">
     <div class="grid gap-1">
       @if (chartService.chartType() === 'Candlestick' || chartService.chartType() === 'Bar') {
       <div class="flex justify-between gap-4">
-        <span>O</span>
+        <span>Open</span>
         <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.open) }}</span>
       </div>
       <div class="flex justify-between gap-4">
-        <span>H</span>
+        <span>High</span>
         <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.high) }}</span>
       </div>
       <div class="flex justify-between gap-4">
-        <span>L</span>
+        <span>Low</span>
         <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.low) }}</span>
       </div>
       <div class="flex justify-between gap-4">
-        <span>C</span>
+        <span>Close</span>
         <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.close) }}</span>
       </div>
       } @else {
@@ -78,9 +78,21 @@
       }
       }
       <div class="flex justify-between gap-4">
-        <span>Vol</span>
+        <span>Volume</span>
         <span class="font-medium">{{ formatVolume(currentCrosshairData()?.['volume-chart']?.value) }}</span>
       </div>
+
+      @if (chartService.indicators().length > 0) {
+      <div class="mt-2 border-t border-gray-200 dark:border-gray-700 pt-2">
+        <h4 class="text-xs font-semibold mb-1">Indicators</h4>
+        @for (indicator of objectEntries(currentCrosshairData().indicators); track $index) {
+        <div class="flex justify-between gap-4">
+          <span>{{ indicator[0] }}</span>
+          <span class="font-medium">{{ formatPrice(indicator[1]) }}</span>
+        </div>
+        }
+      </div>
+      }
     </div>
   </div>
   }

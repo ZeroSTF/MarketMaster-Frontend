@@ -6,6 +6,7 @@ import {
   signal,
   computed,
   inject,
+  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -52,6 +53,9 @@ import { ChartIndicatorsDirective } from '../../../../utils/chart-indicators.dir
   styleUrl: './trading-chart.component.scss',
 })
 export class TradingChartComponent implements OnDestroy {
+  @ViewChild(ChartIndicatorsDirective)
+  chartIndicatorsDirective!: ChartIndicatorsDirective;
+
   chartService = inject(ChartService);
   private darkModeService = inject(DarkModeService);
 
@@ -183,7 +187,47 @@ export class TradingChartComponent implements OnDestroy {
   }
 
   onCrosshairData(data: any) {
-    this.currentCrosshairData.set(data);
+    if (!data || Object.keys(data).length === 0) {
+      this.currentCrosshairData.set(null);
+      return;
+    }
+
+    const currentTime = data['main-chart']?.time;
+    if (!currentTime) {
+      this.currentCrosshairData.set(null);
+      return;
+    }
+
+    const crosshairDataWithIndicators = { ...data };
+    if (this.chartIndicatorsDirective) {
+      try {
+        const indicatorValues =
+          this.chartIndicatorsDirective.getIndicatorValues();
+        crosshairDataWithIndicators.indicators = {};
+
+        if (Object.keys(indicatorValues).length > 0) {
+          Object.entries(indicatorValues).forEach(([indicatorName, values]) => {
+            const matchingValue = values.find((v) => v.time === currentTime);
+            if (matchingValue) {
+              crosshairDataWithIndicators.indicators[indicatorName] =
+                matchingValue.value;
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Error processing indicator values:', error);
+      }
+    }
+
+    if (Object.keys(crosshairDataWithIndicators).length > 0) {
+      this.currentCrosshairData.set(crosshairDataWithIndicators);
+    } else {
+      this.currentCrosshairData.set(null);
+    }
+  }
+
+  objectEntries(obj: Record<string, any>): [string, any][] {
+    return Object.entries(obj);
   }
 
   onChartMouseMove(event: MouseEvent) {
