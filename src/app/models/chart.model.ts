@@ -55,6 +55,7 @@ export interface Indicator {
     min: number;
     max: number;
     step?: number;
+    value?: number;
   }[];
 }
 
@@ -130,12 +131,5 @@ export const indicators: Indicator[] = [
     type: 'ATR',
     icon: 'trending_up',
     active: false,
-  },
-  {
-    name: 'Volume',
-    type: 'VOL',
-    icon: 'bar_chart',
-    active: true,
-    parameters: [],
   },
 ];

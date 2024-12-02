@@ -24,10 +24,8 @@
     </tv-baseline-chart>
     }
     }
-    @if(chartService.indicators().includes('VOL')) {
     <tv-histogram-chart id="volume-chart" [data]="volumeData()" [options]="volumeOptions()">
     </tv-histogram-chart>
-    }
   </div>
 
   @if (currentCrosshairData()) {

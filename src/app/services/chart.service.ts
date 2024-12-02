@@ -3,7 +3,7 @@ import { Injectable, signal, computed, OnDestroy } from '@angular/core';
 import { Asset } from '../models/asset.model';
 import { catchError, firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { ChartType } from '../models/chart.model';
+import { ChartType, Indicator } from '../models/chart.model';
 
 interface ChartDataPoint {
   time: number;
@@ -33,7 +33,7 @@ interface HistoricalDataResponse {
 export class ChartService implements OnDestroy {
   private historicalDataSignal = signal<ChartDataPoint[]>([]);
   private timeframeSignal = signal<string>('D');
-  private indicatorsSignal = signal<string[]>(['VOL']);
+  private indicatorsSignal = signal<Indicator[]>([]);
   private selectedAssetSignal = signal<Asset | null>(null);
   private chartTypeSignal = signal<ChartType>('Candlestick');
 
@@ -112,13 +112,13 @@ export class ChartService implements OnDestroy {
     }
   }
 
-  addIndicator(indicator: string) {
+  addIndicator(indicator: Indicator) {
     this.indicatorsSignal.update((current) => [...current, indicator]);
   }
 
-  removeIndicator(indicator: string) {
+  removeIndicator(indicator: Indicator) {
     this.indicatorsSignal.update((current) =>
-      current.filter((ind) => ind !== indicator)
+      current.filter((ind) => ind.type !== indicator.type)
     );
   }
 
