@@ -1,4 +1,19 @@
 <div class="trading-chart-container w-full h-[600px] flex flex-col relative" (mousemove)="onChartMouseMove($event)">
+  @if (isLoading()) {
+  <div class="absolute inset-0 bg-white bg-opacity-75 z-50 flex items-center justify-center dark:!bg-gray-900">
+    <div class="text-center">
+      <img src="images/LogoMM.png" alt="Logo" class="w-full h-auto mx-auto mb-4 animate-bounce">
+    </div>
+  </div>
+  }
+
+  @if (loadingError()) {
+  <div class="error-container">
+    <p class="text-red-500">{{ loadingError() }}</p>
+    <button (click)="loadChartData(asset().symbol)">Retry</button>
+  </div>
+  }
+  @if (!isLoading() && !loadingError()) {
   <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)"
     class="flex-1 grid chart-group" chartIndicators [data]="candlestickData()">
     @switch (chartService.chartType()) {
@@ -27,6 +42,7 @@
     <tv-histogram-chart id="volume-chart" [data]="volumeData()" [options]="volumeOptions()">
     </tv-histogram-chart>
   </div>
+  }
 
   @if (currentCrosshairData()) {
   <div class="crosshair-tooltip" [style.left.px]="crosshairPosition()?.x! + 15"

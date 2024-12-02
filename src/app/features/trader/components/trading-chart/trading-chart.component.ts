@@ -61,6 +61,10 @@ export class TradingChartComponent implements OnDestroy {
   crosshairPosition = signal<{ x: number; y: number } | null>(null);
   currentCrosshairData = signal<any>(null);
 
+  // Loading states
+  isLoading = signal<boolean>(false);
+  loadingError = signal<string | null>(null);
+
   // Chart data, computed based on selected timeframe
   candlestickData = signal<any[]>([]);
 
@@ -91,7 +95,7 @@ export class TradingChartComponent implements OnDestroy {
     const isDark = this.darkModeService.currentTheme() === AppTheme.DARK;
     return {
       layout: {
-        background: { color: isDark ? '#1e1e1e' : '#ffffff' },
+        background: { color: isDark ? '#111827' : '#ffffff' },
         textColor: isDark ? '#e0e0e0' : '#333',
         attributionLogo: false,
       },
@@ -124,15 +128,21 @@ export class TradingChartComponent implements OnDestroy {
   };
 
   constructor() {
-    effect(() => {
-      const currentAsset = this.asset();
-      if (currentAsset) {
-        this.loadChartData(currentAsset.symbol);
-      }
-    });
+    effect(
+      () => {
+        const currentAsset = this.asset();
+        if (currentAsset) {
+          this.loadChartData(currentAsset.symbol);
+        }
+      },
+      { allowSignalWrites: true }
+    );
   }
 
   async loadChartData(symbol: string) {
+    this.isLoading.set(true);
+    this.loadingError.set(null);
+
     try {
       await this.chartService.loadHistoricalData(symbol);
       const historicalData = this.chartService.historicalData();
@@ -164,6 +174,11 @@ export class TradingChartComponent implements OnDestroy {
       );
     } catch (error) {
       console.error('Error loading chart data:', error);
+      this.loadingError.set(
+        error instanceof Error ? error.message : 'Failed to load chart data'
+      );
+    } finally {
+      this.isLoading.set(false);
     }
   }
 
