@@ -52,11 +52,13 @@ import { ChartIndicatorsDirective } from '../../../../utils/chart-indicators.dir
   styleUrl: './trading-chart.component.scss',
 })
 export class TradingChartComponent implements OnDestroy {
+  chartService = inject(ChartService);
+  private darkModeService = inject(DarkModeService);
+
   asset = input.required<Asset>();
   volumeData = signal<any[]>([]);
   selectedTimeframe = signal<string>('D');
   crosshairPosition = signal<{ x: number; y: number } | null>(null);
-  chartService = inject(ChartService);
   currentCrosshairData = signal<any>(null);
 
   // Chart data, computed based on selected timeframe
@@ -121,7 +123,7 @@ export class TradingChartComponent implements OnDestroy {
     },
   };
 
-  constructor(private darkModeService: DarkModeService) {
+  constructor() {
     effect(() => {
       const currentAsset = this.asset();
       if (currentAsset) {
