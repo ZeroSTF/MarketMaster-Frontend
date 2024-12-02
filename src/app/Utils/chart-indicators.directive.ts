@@ -66,33 +66,38 @@ export class ChartIndicatorsDirective {
     });
 
     indicators.forEach((indicator) => {
+      // Extract parameters with their values
+      const params = indicator.parameters
+        ? indicator.parameters.map((p) => p.value ?? p.default)
+        : [];
+
       switch (indicator.type) {
         case 'SMA':
-          this.addMovingAverage('SMA', 20);
+          this.addMovingAverage('SMA', params[0] ?? 20);
           break;
         case 'EMA':
-          this.addMovingAverage('EMA', 20);
+          this.addMovingAverage('EMA', params[0] ?? 20);
           break;
         case 'WMA':
-          this.addMovingAverage('WMA', 20);
+          this.addMovingAverage('WMA', params[0] ?? 20);
           break;
         case 'RSI':
-          this.addRSI(14);
+          this.addRSI(params[0] ?? 14);
           break;
         case 'MACD':
-          this.addMACD(12, 26, 9);
+          this.addMACD(params[0] ?? 12, params[1] ?? 26, params[2] ?? 9);
           break;
         case 'BB':
-          this.addBollingerBands(20, 2);
+          this.addBollingerBands(params[0] ?? 20, params[1] ?? 2);
           break;
         case 'Stochastic':
-          this.addStochasticOscillator(14, 3);
+          this.addStochasticOscillator(params[0] ?? 14, params[1] ?? 3);
           break;
         case 'CCI':
-          this.addCCI(20);
+          this.addCCI(params[0] ?? 20);
           break;
         case 'ATR':
-          this.addATR(14);
+          this.addATR(params[0] ?? 14);
           break;
       }
     });

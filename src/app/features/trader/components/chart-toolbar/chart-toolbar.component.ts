@@ -53,7 +53,12 @@ export class ChartToolbarComponent {
   toggleIndicator(indicator: Indicator) {
     indicator.active = !indicator.active;
     if (indicator.active) {
-      this.chartService.addIndicator(indicator);
+      // If indicator has parameters, open dialog first
+      if (indicator.parameters && indicator.parameters.length > 0) {
+        this.openIndicatorParameters(indicator);
+      } else {
+        this.chartService.addIndicator(indicator);
+      }
     } else {
       this.chartService.removeIndicator(indicator);
     }
@@ -70,28 +75,37 @@ export class ChartToolbarComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.updateIndicatorParameters(indicator.type, result);
+        // Update indicator with new parameters
+        const updatedIndicator = {
+          ...indicator,
+          parameters: result.map((param: any) => ({
+            ...param,
+            value: param.value,
+          })),
+        };
+
+        // Remove existing indicator of this type
+        this.chartService.removeIndicator(indicator);
+
+        // Add updated indicator
+        this.chartService.addIndicator(updatedIndicator);
+      } else if (!indicator.active) {
+        // If dialog is cancelled and indicator was not previously active, revert active state
+        indicator.active = false;
       }
     });
   }
 
   private getCurrentIndicatorParameters(type: string) {
-    // This method would retrieve current parameters from your chart service
-    // You might want to implement this based on your specific chart service implementation
-    const defaultParams =
-      this.indicators.find((i) => i.type === type)?.parameters || [];
-    return defaultParams.map((param) => ({
-      name: param.name,
-      value: param.default,
-    }));
-  }
-
-  private updateIndicatorParameters(type: string, parameters: any[]) {
-    // Method to update indicator parameters in your chart service
-    // This is a placeholder and should be implemented based on your specific requirements
-    console.log(`Updating ${type} parameters:`, parameters);
-
-    // You might want to call a method in your chart service to update the indicator
-    //this.chartService.updateIndicatorParameters(type, parameters);
+    const indicatorConfig = this.indicators.find((i) => i.type === type);
+    return (
+      indicatorConfig?.parameters?.map((param) => ({
+        name: param.name,
+        value: param.default,
+        min: param.min,
+        max: param.max,
+        step: param.step,
+      })) || []
+    );
   }
 }

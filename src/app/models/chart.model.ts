@@ -55,6 +55,7 @@ export interface Indicator {
     min: number;
     max: number;
     step?: number;
+    value?: number;
   }[];
 }
 
