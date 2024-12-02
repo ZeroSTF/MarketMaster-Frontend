@@ -15,6 +15,7 @@ import {
   indicators,
   timeframes,
 } from '../../../../models/chart.model';
+import { IndicatorParametersDialogComponent } from '../indicator-parameters-dialog/indicator-parameters-dialog.component';
 
 @Component({
   selector: 'app-chart-toolbar',
@@ -52,27 +53,27 @@ export class ChartToolbarComponent {
   toggleIndicator(indicator: Indicator) {
     indicator.active = !indicator.active;
     if (indicator.active) {
-      this.chartService.addIndicator(indicator.type);
+      this.chartService.addIndicator(indicator);
     } else {
-      this.chartService.removeIndicator(indicator.type);
+      this.chartService.removeIndicator(indicator);
     }
   }
 
-  // openIndicatorParameters(indicator: Indicator) {
-  //   const dialogRef = this.dialog.open(IndicatorParametersDialogComponent, {
-  //     width: '400px',
-  //     data: {
-  //       indicator: { ...indicator },
-  //       currentParameters: this.getCurrentIndicatorParameters(indicator.type)
-  //     }
-  //   });
+  openIndicatorParameters(indicator: Indicator) {
+    const dialogRef = this.dialog.open(IndicatorParametersDialogComponent, {
+      width: '400px',
+      data: {
+        indicator: { ...indicator },
+        currentParameters: this.getCurrentIndicatorParameters(indicator.type),
+      },
+    });
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result) {
-  //       this.updateIndicatorParameters(indicator.type, result);
-  //     }
-  //   });
-  // }
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.updateIndicatorParameters(indicator.type, result);
+      }
+    });
+  }
 
   private getCurrentIndicatorParameters(type: string) {
     // This method would retrieve current parameters from your chart service

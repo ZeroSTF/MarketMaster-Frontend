@@ -131,11 +131,4 @@ export const indicators: Indicator[] = [
     icon: 'trending_up',
     active: false,
   },
-  {
-    name: 'Volume',
-    type: 'VOL',
-    icon: 'bar_chart',
-    active: true,
-    parameters: [],
-  },
 ];

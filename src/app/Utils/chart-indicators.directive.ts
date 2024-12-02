@@ -13,6 +13,7 @@ import {
 } from '@debut/indicators';
 import { LineData } from 'lightweight-charts';
 import { ChartService } from '../services/chart.service';
+import { Indicator } from '../models/chart.model';
 
 @Directive({
   selector: '[chartIndicators]',
@@ -40,12 +41,13 @@ export class ChartIndicatorsDirective {
     effect(() => {
       const indicators = this.#chartService.indicators();
       if (this.mainChart) {
+        //get indicators types
         this.updateIndicators(indicators);
       }
     });
   }
 
-  private updateIndicators(indicators: string[] = []) {
+  private updateIndicators(indicators: Indicator[] = []) {
     // Remove existing additional series
     Object.keys(this.additionalSeries).forEach((key) => {
       const series = this.additionalSeries[key];
@@ -64,7 +66,7 @@ export class ChartIndicatorsDirective {
     });
 
     indicators.forEach((indicator) => {
-      switch (indicator) {
+      switch (indicator.type) {
         case 'SMA':
           this.addMovingAverage('SMA', 20);
           break;
