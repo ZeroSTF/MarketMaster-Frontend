@@ -48,7 +48,7 @@ import { CommonModule } from '@angular/common';
               [min]="param.min"
               [max]="param.max"
               [step]="param.step || 1"
-              class="dark:!bg-gray-700 dark:!text-gray-100"
+              class="dark:!bg-gray-700 dark:!text-gray-100 focus:outline-none focus:ring-0"
             />
             <mat-hint> Range: {{ param.min }} - {{ param.max }} </mat-hint>
             <mat-error *ngIf="parametersForm.get(param.name)?.invalid">
