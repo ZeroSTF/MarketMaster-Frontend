@@ -6,6 +6,7 @@ import {
   signal,
   computed,
   inject,
+  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -52,6 +53,9 @@ import { ChartIndicatorsDirective } from '../../../../utils/chart-indicators.dir
   styleUrl: './trading-chart.component.scss',
 })
 export class TradingChartComponent implements OnDestroy {
+  @ViewChild(ChartIndicatorsDirective)
+  chartIndicatorsDirective!: ChartIndicatorsDirective;
+
   chartService = inject(ChartService);
   private darkModeService = inject(DarkModeService);
 
@@ -60,6 +64,10 @@ export class TradingChartComponent implements OnDestroy {
   selectedTimeframe = signal<string>('D');
   crosshairPosition = signal<{ x: number; y: number } | null>(null);
   currentCrosshairData = signal<any>(null);
+
+  // Loading states
+  isLoading = signal<boolean>(false);
+  loadingError = signal<string | null>(null);
 
   // Chart data, computed based on selected timeframe
   candlestickData = signal<any[]>([]);
@@ -91,7 +99,7 @@ export class TradingChartComponent implements OnDestroy {
     const isDark = this.darkModeService.currentTheme() === AppTheme.DARK;
     return {
       layout: {
-        background: { color: isDark ? '#1e1e1e' : '#ffffff' },
+        background: { color: isDark ? '#111827' : '#ffffff' },
         textColor: isDark ? '#e0e0e0' : '#333',
         attributionLogo: false,
       },
@@ -124,15 +132,21 @@ export class TradingChartComponent implements OnDestroy {
   };
 
   constructor() {
-    effect(() => {
-      const currentAsset = this.asset();
-      if (currentAsset) {
-        this.loadChartData(currentAsset.symbol);
-      }
-    });
+    effect(
+      () => {
+        const currentAsset = this.asset();
+        if (currentAsset) {
+          this.loadChartData(currentAsset.symbol);
+        }
+      },
+      { allowSignalWrites: true }
+    );
   }
 
   async loadChartData(symbol: string) {
+    this.isLoading.set(true);
+    this.loadingError.set(null);
+
     try {
       await this.chartService.loadHistoricalData(symbol);
       const historicalData = this.chartService.historicalData();
@@ -164,11 +178,56 @@ export class TradingChartComponent implements OnDestroy {
       );
     } catch (error) {
       console.error('Error loading chart data:', error);
+      this.loadingError.set(
+        error instanceof Error ? error.message : 'Failed to load chart data'
+      );
+    } finally {
+      this.isLoading.set(false);
     }
   }
 
   onCrosshairData(data: any) {
-    this.currentCrosshairData.set(data);
+    if (!data || Object.keys(data).length === 0) {
+      this.currentCrosshairData.set(null);
+      return;
+    }
+
+    const currentTime = data['main-chart']?.time;
+    if (!currentTime) {
+      this.currentCrosshairData.set(null);
+      return;
+    }
+
+    const crosshairDataWithIndicators = { ...data };
+    if (this.chartIndicatorsDirective) {
+      try {
+        const indicatorValues =
+          this.chartIndicatorsDirective.getIndicatorValues();
+        crosshairDataWithIndicators.indicators = {};
+
+        if (Object.keys(indicatorValues).length > 0) {
+          Object.entries(indicatorValues).forEach(([indicatorName, values]) => {
+            const matchingValue = values.find((v) => v.time === currentTime);
+            if (matchingValue) {
+              crosshairDataWithIndicators.indicators[indicatorName] =
+                matchingValue.value;
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Error processing indicator values:', error);
+      }
+    }
+
+    if (Object.keys(crosshairDataWithIndicators).length > 0) {
+      this.currentCrosshairData.set(crosshairDataWithIndicators);
+    } else {
+      this.currentCrosshairData.set(null);
+    }
+  }
+
+  objectEntries(obj: Record<string, any>): [string, any][] {
+    return Object.entries(obj);
   }
 
   onChartMouseMove(event: MouseEvent) {

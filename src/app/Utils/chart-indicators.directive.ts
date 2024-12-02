@@ -28,6 +28,7 @@ export class ChartIndicatorsDirective {
   private mainChart: TVChart<any> | null = null;
   //private volumeChart: TVChart<any> | null = null;
   private additionalSeries: Record<string, any> = {};
+  private indicatorValues: Record<string, LineData[]> = {};
 
   constructor() {
     effect(() => {
@@ -41,14 +42,16 @@ export class ChartIndicatorsDirective {
     effect(() => {
       const indicators = this.#chartService.indicators();
       if (this.mainChart) {
-        //get indicators types
         this.updateIndicators(indicators);
       }
     });
   }
 
   private updateIndicators(indicators: Indicator[] = []) {
-    // Remove existing additional series
+    // Clear indicator values
+    this.indicatorValues = {};
+
+    // Clear additional series
     Object.keys(this.additionalSeries).forEach((key) => {
       const series = this.additionalSeries[key];
       if (Array.isArray(series)) {
@@ -64,6 +67,10 @@ export class ChartIndicatorsDirective {
       }
       delete this.additionalSeries[key];
     });
+
+    if (indicators.length === 0) {
+      return;
+    }
 
     indicators.forEach((indicator) => {
       // Extract parameters with their values
@@ -140,6 +147,7 @@ export class ChartIndicatorsDirective {
 
     series.series?.setData(maData);
     this.additionalSeries[type] = series.series;
+    this.indicatorValues[`${type} ${length}`] = maData;
   }
 
   private addRSI(length: number = 14) {
@@ -162,6 +170,7 @@ export class ChartIndicatorsDirective {
 
     series.series?.setData(rsiData);
     this.additionalSeries['RSI'] = series.series;
+    this.indicatorValues[`RSI ${length}`] = rsiData;
   }
 
   private addMACD(
@@ -203,6 +212,8 @@ export class ChartIndicatorsDirective {
     signalSeries.series?.setData(signalData);
 
     this.additionalSeries['MACD'] = [macdSeries.series, signalSeries.series];
+    this.indicatorValues['MACD'] = macdData;
+    this.indicatorValues['MACD Signal'] = signalData;
   }
 
   private addBollingerBands(length: number = 20, stdDev: number = 2) {
@@ -251,6 +262,9 @@ export class ChartIndicatorsDirective {
       middleBandSeries.series,
       lowerBandSeries.series,
     ];
+    this.indicatorValues['Upper BB'] = upperBandData;
+    this.indicatorValues['Middle BB'] = middleBandData;
+    this.indicatorValues['Lower BB'] = lowerBandData;
   }
 
   private addStochasticOscillator(
@@ -294,6 +308,9 @@ export class ChartIndicatorsDirective {
       stochSeries.series,
       signalSeries.series,
     ];
+
+    this.indicatorValues['Stochastic K'] = stochData;
+    this.indicatorValues['Stochastic D'] = signalData;
   }
 
   private addCCI(length: number = 20) {
@@ -317,6 +334,7 @@ export class ChartIndicatorsDirective {
 
     series.series?.setData(cciData);
     this.additionalSeries['CCI'] = series.series;
+    this.indicatorValues[`CCI ${length}`] = cciData;
   }
 
   private addATR(length: number = 14) {
@@ -340,5 +358,10 @@ export class ChartIndicatorsDirective {
 
     series.series?.setData(atrData);
     this.additionalSeries['ATR'] = series.series;
+    this.indicatorValues[`ATR ${length}`] = atrData;
+  }
+
+  getIndicatorValues(): Record<string, LineData[]> {
+    return this.indicatorValues;
   }
 }
