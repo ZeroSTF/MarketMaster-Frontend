@@ -1,0 +1,11 @@
+#chart {
+  background-color: #9d9dce;
+  padding: 20px;
+  border-radius: 50px;
+}
+
+@media (max-width: 768px) {
+  #chart {
+    height: 300px;
+  }
+}

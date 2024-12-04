@@ -1,36 +1,72 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';  // <-- Import CommonModule
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TransactionService } from '../../../../services/transaction.service';
+import { Transaction } from '../../../../models/transaction.model';
 
 @Component({
   selector: 'app-tradesoverview',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './tradesoverview.component.html',
-  styleUrl: './tradesoverview.component.css'
+  styleUrls: ['./tradesoverview.component.css']
 })
-export class TradesoverviewComponent {
+export class TradesoverviewComponent implements OnInit {
   selectedTab: string = 'openTrades';
+  transactionData: Transaction[] | null = null;
+  username: string = 'gaddour77';
 
-  // Mocked trades data for demonstration
-  trades = [
-    { id: 1, symbol: 'AAPL', type: 'Buy', amount: 10, price: 145.67, status: 'Open' },
-    { id: 2, symbol: 'GOOGL', type: 'Sell', amount: 5, price: 2734.5, status: 'Closed' },
-    { id: 3, symbol: 'AMZN', type: 'Buy', amount: 8, price: 3325.0, status: 'Closed' },
-    // More trades...
-  ];
+  constructor(private transactionService: TransactionService) {}
+
+  ngOnInit(): void {
+    this.selectedTab = 'openTrades';
+    
+    this.transactionService.getTransaction(this.username).subscribe(
+      (data: Transaction[]) => {
+        this.transactionData = data;
+        console.log('transaction data fetched:', data);
+      },
+      (error) => {
+        console.error('Error fetching transaction data:', error);
+      }
+    );
+    this.getTransactionsForSelectedTab();
+  }
 
   selectTab(tab: string) {
     this.selectedTab = tab;
   }
-
-  getTradesForSelectedTab() {
+  getRowBackground(index: number) {
+    const baseColor = '#1E88E5'; // A fixed blue base color
+    // Generate a unique shade of blue for each row by modifying the lightness using HSL
+    const lightness = 95 - (index % 10) * 5;  // Vary lightness for each row
+    
+    return {
+      'background': `hsl(210, 100%, ${lightness}%)` // Use HSL for dynamic lightness
+    };
+  }
+  
+  
+  
+  getTransactionsForSelectedTab(): Transaction[] {
+    if (this.transactionData === null || this.transactionData.length === 0) {
+      return [];
+    }
+  
+    console.log('Selected Tab:', this.selectedTab);
+    console.log('Filtered Data:', this.transactionData);
+  
     switch (this.selectedTab) {
       case 'openTrades':
-        return this.trades.filter(trade => trade.status === 'Open');
+        const openTrades = this.transactionData.filter(transaction => transaction.type === 'BUY');
+        console.log('Open Trades:', openTrades);
+        return openTrades;
       case 'closedTrades':
-        return this.trades.filter(trade => trade.status === 'Closed');
+        const closedTrades = this.transactionData.filter(transaction => transaction.type === 'SELL');
+        console.log('Closed Trades:', closedTrades);
+        return closedTrades;
       case 'allTrades':
-        return this.trades;
+        console.log('All Trades:', this.transactionData);
+        return this.transactionData;
       default:
         return [];
     }

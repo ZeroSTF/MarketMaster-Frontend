@@ -62,7 +62,7 @@ export class AssetdetailsComponent implements OnInit {
   addWatchList() {
     const asset = this.selectedAsset();
     if (asset) {
-      this.transactionService.addWatchList('zerostf', asset.symbol).subscribe({
+      this.transactionService.addWatchList('gaddour77', asset.symbol).subscribe({
         next: () =>
           this.snackBar.open('Added to watchlist!', 'Close', {
             duration: 3000,

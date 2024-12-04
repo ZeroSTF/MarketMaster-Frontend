@@ -1,15 +1,29 @@
+
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { DashboardSidebarComponent } from './features/dashboard/components/dashboard-sidebar/dashboard-sidebar.component';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
+import { CommonModule } from '@angular/common';
+
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [DashboardSidebarComponent, NavBarComponent, RouterModule],
+  imports: [NavBarComponent, RouterModule,CommonModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'MarketMaster-Frontend';
+
+  isGamerRoute: boolean = false;
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+    // Listen for changes in the router's URL to check if the current route is '/gamer'
+    this.router.events.subscribe(() => {
+      this.isGamerRoute = this.router.url.includes('/gamer');
+    });
+
+  }
+
 }

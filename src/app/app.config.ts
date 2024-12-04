@@ -12,10 +12,11 @@ import { getTVChartDefaultProviders } from 'ngx-lightweight-charts';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideExperimentalZonelessChangeDetection(), //Signals+Angular 18=Zoneless Application
+    provideExperimentalZonelessChangeDetection(), 
     provideRouter(routes),
     provideHttpClient(withInterceptors([jwtInterceptor])),
     provideAnimationsAsync(),
     getTVChartDefaultProviders(),
+
   ],
 };

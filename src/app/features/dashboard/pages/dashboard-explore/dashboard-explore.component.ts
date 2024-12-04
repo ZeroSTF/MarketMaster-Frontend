@@ -70,7 +70,7 @@ export class DashboardExploreComponent implements OnDestroy {
   public trendControl = signal<string>('all');
 
   private assets = signal<Asset[]>([]);
-
+  
   public filteredAssets = computed(() => {
     const searchTerm = this.searchControl().toLowerCase();
     const sector = this.sectorControl();

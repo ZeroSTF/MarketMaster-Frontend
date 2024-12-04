@@ -1,0 +1,33 @@
+.holdings-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 0.75rem;
+    border: 1px solid var(--orange-gaamer, #FB6805);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+  }
+  
+  .holding-item {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    border: 1px solid var(--orange-gaamer, #FB6805);
+  }
+  
+  .holding-symbol {
+    font-weight: bold;
+    font-size: 1rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .holding-value p {
+    color: #ffffff;
+  }
+  
+  .holding-info p {
+    color: #ffffff;
+  }
+  

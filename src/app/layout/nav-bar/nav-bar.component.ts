@@ -45,9 +45,16 @@ export class NavBarComponent {
   }
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-    this.toggleMenu();
-    this.toggleMenu2();
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+        this.toggleMenu();
+        this.toggleMenu2();
+        console.log('Logged out successfully');
+      },
+      error: (err) => {
+        console.error('Logout failed', err);
+      },
+    });
   }
 }

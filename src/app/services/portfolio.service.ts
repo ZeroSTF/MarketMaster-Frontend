@@ -1,21 +1,16 @@
-import { HttpClient } from '@angular/common/http';
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HoldingDto } from '../models/holdingDto.model';
-import { AuthService } from '../auth/auth.service';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 @Injectable({
   providedIn: 'root'
 })
 export class PortfolioService {
- holdings: HoldingDto[]=[];
- private authService = inject(AuthService)
-  private readonly apiUrl = `${environment.apiUrl}/portf`;
+  private readonly API_URL = `${environment.apiUrl}`;
   constructor(private http: HttpClient) { }
-  getHolding():Observable<HoldingDto[]>{
-    const username = this.authService.username();
-    return this.http.get<HoldingDto[]>(`${this.apiUrl}/holding/${username}`);
+
+  getTotalValues(username: string): Observable<{ key: string, value: number }[]> {
+    return this.http.get<{ key: string, value: number }[]>(`${this.API_URL}/portf/totalValues/${username}`);
   }
 
 }

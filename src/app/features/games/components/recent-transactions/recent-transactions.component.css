@@ -1,0 +1,33 @@
+.transactions-container {
+    background: rgba(255, 255, 255, 0.1);  /* Semi-transparent background */
+    backdrop-filter: blur(15px);            /* Blurry background effect */
+    border-radius: 0.75rem;                  /* Rounded corners */
+    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Softer shadow */
+    color: #ffffff;                          /* White text color for visibility */
+  }
+  
+  .transaction-item {
+    background: rgba(255, 255, 255, 0.2); /* Slightly more opaque for contrast */
+    border-radius: 0.5rem;                  /* Rounded corners */
+    border: 1px solid var(--orange-gaamer, #FB6805); /* Thin orange border */
+  }
+  
+  .transaction-icon {
+    font-weight: bold;                      /* Bold text for the symbol */
+    font-size: 1rem;                       /* Size of the text */
+    width: 40px;                           /* Width of the icon container */
+    height: 40px;                          /* Height of the icon container */
+    display: flex;                         /* Flexbox to center the icon */
+    justify-content: center;                /* Center the icon horizontally */
+    align-items: center;                   /* Center the icon vertically */
+  }
+  
+  .transaction-value p {
+    color: #ffffff;                        /* White color for the value text */
+  }
+  
+  .transaction-info p {
+    color: #ffffff;                        /* White color for transaction info */
+  }
+  

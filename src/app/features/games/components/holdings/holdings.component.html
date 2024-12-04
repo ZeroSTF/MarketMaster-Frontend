@@ -1,0 +1,25 @@
+<div class="holdings-container">
+    <h2>Your Holdings</h2>
+    <table class="holdings-table">
+      <thead>
+        <tr>
+          <th>Asset</th>
+          <th>Quantity</th>
+          <th>Current Price</th>
+          <th>Total Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let holding of holdings">
+          <td>{{ holding.name }}</td>
+          <td>{{ holding.quantity }}</td>
+          <td>{{ holding.currentPrice }}</td>
+          <td>{{ getTotalValue(holding)   }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="portfolio-summary">
+      <strong>Total Portfolio Value:</strong> {{ getPortfolioValue()   }}
+    </div>
+  </div>
+  

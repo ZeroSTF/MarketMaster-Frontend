@@ -1,9 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, OnDestroy } from '@angular/core';
 import { Asset } from '../models/asset.model';
 import { catchError, firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { ChartType } from '../features/trader/components/chart-toolbar/chart-toolbar.component';
+import { ChartType } from '../models/chart.model';
 
 interface ChartDataPoint {
   time: number;
@@ -30,12 +30,14 @@ interface HistoricalDataResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class ChartService {
+export class ChartService implements OnDestroy {
   private historicalDataSignal = signal<ChartDataPoint[]>([]);
   private timeframeSignal = signal<string>('D');
-  private indicatorsSignal = signal<string[]>([]);
+  private indicatorsSignal = signal<string[]>(['VOL']);
   private selectedAssetSignal = signal<Asset | null>(null);
   private chartTypeSignal = signal<ChartType>('Candlestick');
+
+  private refreshInterval: any = null;
 
   readonly historicalData = computed(() => this.historicalDataSignal());
   readonly timeframe = computed(() => this.timeframeSignal());
@@ -104,6 +106,10 @@ export class ChartService {
 
   setTimeframe(timeframe: string) {
     this.timeframeSignal.set(timeframe);
+    const currentSymbol = this.selectedAssetSignal()?.symbol;
+    if (currentSymbol) {
+      this.setupDataRefresh(currentSymbol);
+    }
   }
 
   addIndicator(indicator: string) {
@@ -118,9 +124,31 @@ export class ChartService {
 
   setSelectedAsset(asset: Asset): void {
     this.selectedAssetSignal.set(asset);
+    this.setupDataRefresh(asset.symbol);
   }
 
   setChartType(type: ChartType) {
     this.chartTypeSignal.set(type);
+  }
+
+  setupDataRefresh(symbol: string) {
+    this.clearDataRefresh();
+
+    if (this.timeframeSignal() === '1') {
+      this.refreshInterval = setInterval(() => {
+        this.loadHistoricalData(symbol);
+      }, 60000);
+    }
+  }
+
+  clearDataRefresh() {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+      this.refreshInterval = null;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.clearDataRefresh();
   }
 }
