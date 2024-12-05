@@ -11,6 +11,8 @@ import { TransactionService } from '../../../../services/transaction.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { StockPredictionResponse } from '../../../../models/StockPredictionResponse.model';
+import { MatDialog } from '@angular/material/dialog';
+import { OptionformComponent } from '../optionform/optionform.component';
 @Component({
   selector: 'app-asset-details',
   standalone: true,
@@ -30,6 +32,7 @@ export class AssetdetailsComponent implements OnInit {
   private assetService = inject(AssetService);
   private snackBar = inject(MatSnackBar);
   private transactionService = inject(TransactionService);
+  private dialog = inject(MatDialog);
   public selectedAsset = this.assetService.selectedAsset;
   public showPredictionWidget = false;
   public predictedPrice: number | null = null;
@@ -100,5 +103,12 @@ export class AssetdetailsComponent implements OnInit {
         },
       });
     }
+  }
+  openOptionForm(): void {
+    // Open the OptionForm component in a dialog
+    this.dialog.open(OptionformComponent, {
+      width: '400px', // Optional: You can define the width of the dialog
+      data: { asset: this.selectedAsset() }
+    });
   }
 }

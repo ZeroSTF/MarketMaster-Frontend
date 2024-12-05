@@ -55,6 +55,39 @@
       </div>
     </div>
   </div>
+ <!-- Options List -->
+<div class="lg:col-span-3 bg-transparent rounded-lg shadow-[0px_2px_7px_0px_rgba(33,150,243,0.5)] backdrop-blur-[4px] h-auto rounded-tl-[10px]">
+  <div class="px-4 py-2 max-h-[40vh] overflow-y-auto scrollbar-hide">
+    <h2 class="text-2xl font-bold mb-4">Options</h2>
+    <table class="min-w-full table-auto border-collapse">
+      <thead>
+        <tr>
+          <th class="px-4 py-2 border-b text-left">Symbol</th>
+          <th class="px-4 py-2 border-b text-left">Type</th>
+          <th class="px-4 py-2 border-b text-left">Strike Price</th>
+          <th class="px-4 py-2 border-b text-left">Expiration</th>
+          <th class="px-4 py-2 border-b text-left">Premium</th>
+          <th class="px-4 py-2 border-b text-left">Underlying Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let option of optionList"  class="cursor-pointer hover:bg-gray-100">
+          <td class="px-4 py-2 border-b">{{ option.symbol }}</td>
+          <td class="px-4 py-2 border-b">{{ option.type }}</td>
+          <td class="px-4 py-2 border-b">{{ option.strikePrice | currency: 'USD': 'symbol':'1.2-2' }}</td>
+          <td class="px-4 py-2 border-b">{{ option.dateEcheance | date: 'yyyy-MM-dd' }}</td>
+          <td class="px-4 py-2 border-b">{{ option.premium | currency: 'USD': 'symbol':'1.2-2' }}</td>
+          <td class="px-4 py-2 border-b">{{ option.underlyingPrice | currency: 'USD': 'symbol':'1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Message if optionList is empty -->
+    <div *ngIf="optionList?.length === 0" class="text-center text-gray-500 mt-4">
+      No options to display
+    </div>
+  </div>
+</div>
 
   <!-- Holding Details Widget -->
 <div *ngIf="selectedHolding" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -227,10 +260,15 @@
 
           <!-- Asset Chart -->
           <app-chart  class="flex-1 h-full"></app-chart>
+          
         }
         <!--insurance-->
+        
+       
         <div class="insurance-container bg-gray-50 p-4 rounded-lg">
+          
           <app-insurance></app-insurance>
+          
         </div>
       </div>
     </div>

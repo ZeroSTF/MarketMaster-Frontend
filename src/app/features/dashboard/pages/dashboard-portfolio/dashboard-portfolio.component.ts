@@ -14,6 +14,10 @@ import { Chart, registerables, } from 'chart.js';
 import { StockPredictionResponse } from '../../../../models/StockPredictionResponse.model';
 import 'chartjs-adapter-date-fns';
 import { InsuranceComponent } from "../../components/insurance/insurance.component";
+import { OptionformComponent } from "../../components/optionform/optionform.component";
+import { Option } from '../../../../models/option.model';
+import { PortfolioService } from '../../../../services/portfolio.service';
+import { OptionService } from '../../../../services/option.service';
 
 
 @Component({
@@ -29,8 +33,10 @@ export class DashboardPortfolioComponent implements OnInit {
   
   selectedAsset: AssetPortfolio | null = null;
   selectedHoldingMetrics: any | null = null;
+  selectedOption : Option | null = null;
   private assetService = inject(AssetService);
   private transactionService = inject(TransactionService);
+  private optionService = inject(OptionService);
   private cdr = inject(ChangeDetectorRef);
   userAssets = this.assetService.userAssets;
   firstRowAssets = this.assetService.userAssets()?.slice(0, 4);
@@ -40,10 +46,12 @@ export class DashboardPortfolioComponent implements OnInit {
   limitOrders: LimitOrder[] = [];
   selectedOrder: LimitOrder | null = null;
   selectedHolding: HoldingDTO | null = null;
+  optionList : Option[]=[];
   username: string = 'gaddour77';
   tt:number | undefined;
 
   ngOnInit(): void {
+    this.getOption();
     this.fetchLimitOrders();
     this.fetchOverviewData();
     this.fetchHoldingData();
@@ -297,6 +305,18 @@ export class DashboardPortfolioComponent implements OnInit {
         },
       });
     }
+  }
+  getOption(): void {
+    this.optionService.getOptions().subscribe(
+      (data: Option[]) => {
+        this.optionList= data;
+        this.cdr.detectChanges();
+        console.log('option data fetched:', data);
+      },
+      (error) => {
+        console.error('Error fetching option data:', error);
+      }
+    );
   }
 }
 

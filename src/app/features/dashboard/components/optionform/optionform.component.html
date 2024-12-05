@@ -1,1 +1,72 @@
-<p>optionform works!</p>
+<!-- Modal Background -->
+<div *ngIf="isModalVisible" class="fixed inset-0 bg-gray-600 bg-opacity-50 z-50 flex justify-center items-center">
+    <div class="bg-white rounded-lg shadow h-auto w-full max-w-lg p-4 flex flex-col">
+      
+      <!-- Close Button -->
+      <button (click)="closeModal()" class="absolute top-2 right-2 text-gray-700 hover:text-black">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <!-- Title Section -->
+      <div class="text-center mb-6">
+        <img src="images/LogoMM.png" alt="MarketMaster" class="h-6 mx-auto mb-6"/>
+        <h1 class="text-2xl font-medium mb-2">Buy Option</h1>
+      </div>
+  
+      <!-- Form Section -->
+      <form (ngSubmit)="buyOption()">
+        <!-- Symbol Field (Display as Text, Not Editable) -->
+        <div class="mb-4">
+          <label for="symbol" class="block text-sm font-medium text-gray-700">Symbol</label>
+          <div class="flex gap-4 items-center">
+            <span class="font-medium text-lg">{{ option.symbol }}</span>
+          </div>
+        </div>
+
+        <!-- Current Price Field -->
+        <div class="mb-4">
+            <label for="symbol" class="block text-sm font-medium text-gray-700">Current Price</label>
+            <div class="flex gap-4 items-center">
+              <span class="font-medium text-lg">{{ option.underlyingPrice }}</span>
+            </div>
+        </div>
+        
+        <!-- Strike Price Field -->
+        <div class="mb-4">
+          <label for="strikePrice" class="block text-sm font-medium text-gray-700">Strike Price</label>
+          <input type="number" id="strikePrice" [(ngModel)]="option.strikePrice" name="strikePrice" 
+                 class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" 
+                 required />
+        </div>
+  
+        <!-- Option Type Field -->
+        <div class="mb-4">
+          <label for="optionType" class="block text-sm font-medium text-gray-700">Option Type</label>
+          <select id="optionType" [(ngModel)]="option.type" name="optionType" 
+                  class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" 
+                  required>
+            <option [value]="OptionType.CALL">{{ OptionType.CALL }}</option>
+            <option [value]="OptionType.PUT">{{ OptionType.PUT }}</option>
+          </select>
+        </div>
+  
+        <!-- Expiration Date Field -->
+        <div class="mb-4">
+          <label for="dateEcheance" class="block text-sm font-medium text-gray-700">Expiration Date</label>
+          <input type="datetime-local" id="dateEcheance" [(ngModel)]="option.dateEcheance" name="dateEcheance" 
+                 class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" 
+                 required />
+        </div>
+  
+        <!-- Submit Button -->
+        <button type="submit" class="px-4 py-2 text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-[#1E88E5] hover:text-white rounded-lg focus:bg-[#1E88E5]">
+          Create Option
+        </button>
+      </form>
+  
+      <!-- Prime Section -->
+      
+    </div>
+</div>

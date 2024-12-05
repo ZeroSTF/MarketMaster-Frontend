@@ -3,13 +3,14 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [NavBarComponent, RouterModule,CommonModule],
+  imports: [NavBarComponent, RouterModule,CommonModule,FormsModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
