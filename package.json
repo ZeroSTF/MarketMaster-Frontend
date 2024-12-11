@@ -44,6 +44,7 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.5",
     "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-chart-matrix": "^2.0.1",
     "classlist.js": "^1.1.20150312",
     "d3": "^7.9.0",
     "date-fns": "^4.1.0",
