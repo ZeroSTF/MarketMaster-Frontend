@@ -32,6 +32,7 @@ import {
 } from '../../../../services/dark-mode.service';
 import { IndicatorUtils } from '../../../../utils/indicators.utils';
 
+
 @Component({
   selector: 'app-trading-chart',
   standalone: true,
