@@ -1,6 +1,5 @@
-import { Course } from './../models/learning.model';
 import { Injectable, signal, computed, DestroyRef, inject } from '@angular/core';
-
+import { Course } from './../models/learning.model';
 
 export interface InterviewState {
   isActive: boolean;
@@ -10,6 +9,10 @@ export interface InterviewState {
   lastAnswer: string;
   silenceStartTime: number | null;
   transcript: string;
+  microphoneStatus: 'untested' | 'working' | 'error';
+  microphoneError?: string;
+
+  
 }
 
 @Injectable({
@@ -20,7 +23,10 @@ export class LearningService {
   private recognition: any = null;
   private synthesis: SpeechSynthesis | null = null;
   private silenceTimeout: number | null = null;
-  private readonly SILENCE_THRESHOLD = 10000; // 10 seconds
+  private readonly SILENCE_THRESHOLD = 3000; // Reduced to 3 seconds for better responsiveness
+  private readonly MINIMUM_SPEAK_DURATION = 3000;
+  private micTestTimeout: any = null;
+
 
   // State management
   private state = signal<InterviewState>({
@@ -30,10 +36,10 @@ export class LearningService {
     isSpeaking: false,
     lastAnswer: '',
     silenceStartTime: null,
-    transcript: ''
+    transcript: '',
+    microphoneStatus: 'untested'
   });
 
-  // Questions array
   private questions = [
     "Tell me about your background in software development.",
     "What's your experience with Angular and TypeScript?",
@@ -42,7 +48,6 @@ export class LearningService {
     "Where do you see yourself in five years?"
   ];
 
-  // Public computed values
   public readonly currentQuestion = computed(() => 
     this.questions[this.state().currentQuestionIndex]
   );
@@ -52,6 +57,7 @@ export class LearningService {
   constructor() {
     if (typeof window !== 'undefined') {
       this.synthesis = window.speechSynthesis;
+      // Remove automatic mic check from constructor
       this.initializeSpeechRecognition();
     }
   }
@@ -83,27 +89,39 @@ export class LearningService {
         const transcript = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
           finalTranscript += transcript;
+          console.log('Final transcript:', finalTranscript); // Log final transcript
         } else {
           interimTranscript += transcript;
         }
       }
 
-      this.updateState({
-        lastAnswer: finalTranscript || interimTranscript,
-        transcript: interimTranscript,
-        silenceStartTime: Date.now()
-      });
+      // Only update if we have actual content
+      if (finalTranscript || interimTranscript) {
+        this.updateState({
+          lastAnswer: finalTranscript || interimTranscript,
+          transcript: interimTranscript,
+          silenceStartTime: Date.now()
+        });
+      }
     };
 
     this.recognition.onend = () => {
-      if (this.state().isListening) {
+      console.log('Speech recognition ended');
+      // Only restart if we're still supposed to be listening
+      if (this.state().isListening && this.state().isActive) {
+        console.log('Restarting speech recognition');
         this.recognition?.start();
       }
     };
 
     this.recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
-      this.updateState({ isListening: false });
+      if (event.error === 'no-speech') {
+        // If no speech is detected, don't immediately stop - give more time
+        this.updateState({ silenceStartTime: Date.now() });
+      } else {
+        this.updateState({ isListening: false });
+      }
     };
   }
 
@@ -161,18 +179,25 @@ export class LearningService {
       silenceStartTime: Date.now()
     });
 
-    this.recognition.start();
-    this.startSilenceDetection();
+    try {
+      this.recognition.start();
+      this.startSilenceDetection();
+      console.log('Started listening');
+    } catch (error) {
+      console.error('Error starting recognition:', error);
+    }
   }
 
   private startSilenceDetection(): void {
     const checkSilence = () => {
-      const { silenceStartTime, isListening } = this.state();
+      const { silenceStartTime, isListening, lastAnswer } = this.state();
       
       if (silenceStartTime && isListening) {
         const silenceDuration = Date.now() - silenceStartTime;
         
-        if (silenceDuration >= this.SILENCE_THRESHOLD) {
+        // Only move to next question if we have an answer and silence threshold is met
+        if (silenceDuration >= this.SILENCE_THRESHOLD && lastAnswer.trim()) {
+          console.log('Moving to next question. Last answer:', lastAnswer);
           this.moveToNextQuestion();
         } else {
           if (this.silenceTimeout) {
@@ -191,8 +216,14 @@ export class LearningService {
 
   private async moveToNextQuestion(): Promise<void> {
     const currentIndex = this.state().currentQuestionIndex;
+    const lastAnswer = this.state().lastAnswer;
+    
+    console.log(`Completed question ${currentIndex + 1}. Answer:`, lastAnswer);
     
     if (currentIndex < this.questions.length - 1) {
+      // Temporarily stop listening while speaking the next question
+      this.stopListening();
+      
       this.updateState({
         currentQuestionIndex: currentIndex + 1,
         silenceStartTime: null,
@@ -201,6 +232,9 @@ export class LearningService {
       });
       
       await this.speak(this.questions[currentIndex + 1]);
+      
+      // Resume listening after speaking
+      this.startListening();
     } else {
       await this.endInterview();
     }
@@ -214,25 +248,179 @@ export class LearningService {
         window.clearTimeout(this.silenceTimeout);
         this.silenceTimeout = null;
       }
+      console.log('Stopped listening');
+    }
+  }
+  
+
+  private async checkMicrophoneAvailability(): Promise<boolean> {
+    try {
+      // First check if the browser supports getUserMedia
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        this.updateState({ 
+          microphoneStatus: 'error',
+          microphoneError: 'Your browser doesn\'t support microphone access'
+        });
+        return false;
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      
+      // Test the audio stream
+      const audioContext = new AudioContext();
+      const mediaStreamSource = audioContext.createMediaStreamSource(stream);
+      const analyzer = audioContext.createAnalyser();
+      mediaStreamSource.connect(analyzer);
+
+      // Stop all tracks after testing
+      stream.getTracks().forEach(track => track.stop());
+      audioContext.close();
+      
+      this.updateState({ 
+        microphoneStatus: 'working',
+        microphoneError: undefined 
+      });
+      
+      return true;
+    } catch (error: any) {
+      console.error('Microphone access error:', error);
+      this.updateState({ 
+        microphoneStatus: 'error',
+        microphoneError: this.getDetailedErrorMessage(error)
+      });
+      return false;
+    }
+  }
+
+  public async testMicrophone(): Promise<boolean> {
+    // First check basic microphone availability
+    const micAvailable = await this.checkMicrophoneAvailability();
+    if (!micAvailable) {
+      return false;
+    }
+
+    return new Promise((resolve) => {
+      if (!('webkitSpeechRecognition' in window)) {
+        this.updateState({ 
+          microphoneStatus: 'error',
+          microphoneError: 'Speech recognition not supported in this browser'
+        });
+        resolve(false);
+        return;
+      }
+
+      let hasDetectedSound = false;
+      const testRecognition = new (window as any).webkitSpeechRecognition();
+      
+      testRecognition.continuous = false; // Changed to false for testing
+      testRecognition.interimResults = true;
+
+      testRecognition.onstart = () => {
+        console.log('Mic test started - please speak something...');
+        // Increased timeout for more reliable testing
+        this.micTestTimeout = setTimeout(() => {
+          testRecognition.stop();
+          if (!hasDetectedSound) {
+            this.updateState({ 
+              microphoneStatus: 'error',
+              microphoneError: 'No speech detected. Please check your microphone.'
+            });
+            resolve(false);
+          }
+        }, 7000); // Increased to 7 seconds
+      };
+
+      testRecognition.onresult = (event: any) => {
+        hasDetectedSound = true;
+        console.log('Speech detected during test:', event.results[0][0].transcript);
+        this.updateState({ 
+          microphoneStatus: 'working',
+          microphoneError: undefined
+        });
+        clearTimeout(this.micTestTimeout);
+        testRecognition.stop();
+        resolve(true);
+      };
+
+      testRecognition.onerror = (event: any) => {
+        console.error('Mic test error:', event.error);
+        this.updateState({ 
+          microphoneStatus: 'error',
+          microphoneError: this.getDetailedErrorMessage(event.error)
+        });
+        clearTimeout(this.micTestTimeout);
+        resolve(false);
+      };
+
+      try {
+        testRecognition.start();
+      } catch (error) {
+        console.error('Failed to start speech recognition:', error);
+        this.updateState({ 
+          microphoneStatus: 'error',
+          microphoneError: 'Failed to start speech recognition'
+        });
+        resolve(false);
+      }
+    });
+  }
+
+  private getDetailedErrorMessage(error: string): string {
+    switch (error) {
+      case 'no-speech':
+        return 'No speech was detected. Please check if your microphone is working and try speaking again.';
+      case 'audio-capture':
+        return 'No microphone was found. Please ensure a microphone is connected and permitted.';
+      case 'not-allowed':
+        return 'Microphone access was denied. Please allow microphone access in your browser settings.';
+      case 'network':
+        return 'Network error occurred. Please check your internet connection.';
+      default:
+        return `Microphone error: ${error}`;
     }
   }
 
   public async startInterview(): Promise<void> {
+    // Clear any previous state
     this.updateState({
-      isActive: true,
+      isActive: false,
       currentQuestionIndex: 0,
       lastAnswer: '',
-      transcript: ''
+      transcript: '',
+      microphoneError: undefined
     });
 
-    await this.speak("Hello! I'm your AI interviewer. Let's begin with the first question.");
-    await this.speak(this.questions[0]);
-    this.startListening();
+    try {
+      const micWorking = await this.testMicrophone();
+      
+      if (!micWorking) {
+        console.error('Cannot start interview: Microphone not working');
+        return;
+      }
+
+      this.updateState({
+        isActive: true,
+        currentQuestionIndex: 0
+      });
+
+      // Small delay before starting to ensure everything is initialized
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      await this.speak("Hello, first question.");
+      await this.speak(this.questions[0]);
+      this.startListening();
+    } catch (error) {
+      console.error('Error starting interview:', error);
+      this.updateState({ 
+        microphoneStatus: 'error',
+        microphoneError: 'Failed to start interview. Please try again.'
+      });
+    }
   }
 
   private async endInterview(): Promise<void> {
     this.stopListening();
-    await this.speak("Thank you for completing the interview. We'll be in touch soon.");
+    await this.speak("Thank you, goodbye.");
     this.updateState({
       isActive: false,
       currentQuestionIndex: 0,
@@ -247,7 +435,6 @@ export class LearningService {
       ...newState
     }));
   }
-
   // Sample courses data
   private coursesData = signal<Course[]>([
     {
