@@ -12,12 +12,12 @@
      }">
 
   <!-- Header Section -->
-  <div class="flex justify-between items-center mb-4">
+  <!-- <div class="flex justify-between items-center mb-4">
     <h1 class="text-xl font-semibold truncate" *ngIf="!hidden">My Resources</h1>
     <button class="text-gray-400">
       <span class="material-icons">more_horiz</span>
     </button>
-  </div>
+  </div> -->
 
   <!-- Search Section -->
   <div class="relative mb-4" *ngIf="!hidden">
@@ -33,13 +33,13 @@
   </div>
 
   <!-- Filter Section -->
-  <div class="flex items-center mb-4" *ngIf="!hidden">
+  <!-- <div class="flex items-center mb-4" *ngIf="!hidden">
     <button class="flex items-center space-x-1 text-sm">
       <span>{{selectedFilter}}</span>
       <span class="material-icons text-sm">expand_more</span>
     </button>
     <span class="ml-auto text-sm text-gray-500">{{totalCourses}} courses</span>
-  </div>
+  </div> -->
 
   <!-- Course List -->
   <nav class="flex-grow flex flex-col space-y-3 overflow-auto scrollbar-hide" *ngIf="!hidden">

@@ -54,7 +54,7 @@ export class LearningSidebarComponent {
 
   sidebarButtons = [
     { name: 'calendar', label: 'Calender', icon: 'calendar_today', link: '/learning/calendar' },
-    { name: 'board', label: 'Board', icon: 'dashboard', link: '/learning/test' },
+    { name: 'board', label: 'Skill Test', icon: 'dashboard', link: '/learning/test' },
     { name: 'overview', label: 'overview', icon: 'shopping_cart', link: '/learning/overview' },
     { name: 'learning', label: 'learning', icon: 'school', link: '/learning/courses' }
   ];

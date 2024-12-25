@@ -1,163 +1,305 @@
-import { computed, DestroyRef, inject, Injectable, OnInit, signal } from '@angular/core';
-import { Course, Module } from '../models/learning.model';
-interface SpeechConfig {
-  onend?: () => void;
+import { Course } from './../models/learning.model';
+import { Injectable, signal, computed, DestroyRef, inject } from '@angular/core';
+
+
+export interface InterviewState {
+  isActive: boolean;
+  currentQuestionIndex: number;
+  isListening: boolean;
+  isSpeaking: boolean;
+  lastAnswer: string;
+  silenceStartTime: number | null;
+  transcript: string;
 }
-declare const responsiveVoice: any;
-declare const annyang: any;
-// Type for speech callback
-type SpeechCallback = (response: string) => void;
 
 @Injectable({
   providedIn: 'root'
 })
 export class LearningService {
-  private readonly destroyRef = inject(DestroyRef);  // Make the signal public and readonly
-  public readonly courses = signal<readonly Course[]>([]);
+  private readonly destroyRef = inject(DestroyRef);
+  private recognition: any = null;
+  private synthesis: SpeechSynthesis | null = null;
+  private silenceTimeout: number | null = null;
+  private readonly SILENCE_THRESHOLD = 10000; // 10 seconds
+
+  // State management
+  private state = signal<InterviewState>({
+    isActive: false,
+    currentQuestionIndex: 0,
+    isListening: false,
+    isSpeaking: false,
+    lastAnswer: '',
+    silenceStartTime: null,
+    transcript: ''
+  });
+
+  // Questions array
+  private questions = [
+    "Tell me about your background in software development.",
+    "What's your experience with Angular and TypeScript?",
+    "How do you approach problem-solving in complex applications?",
+    "Can you describe a challenging project you worked on?",
+    "Where do you see yourself in five years?"
+  ];
+
+  // Public computed values
+  public readonly currentQuestion = computed(() => 
+    this.questions[this.state().currentQuestionIndex]
+  );
   
-  // Computed signals for common filters
-  public readonly completedCourses = computed(() => 
-    this.courses().filter(course => course.progress === 100)
-  );
-
-  public readonly ongoingCourses = computed(() => 
-    this.courses().filter(course => course.progress > 0 && course.progress < 100)
-  );
-
-  public readonly pendingTasks = computed(() => 
-    this.courses().reduce(
-      (sum, course) => sum + course.modules.filter((module: Module) => !module.isCompleted).length,
-      0
-    )
-  );
-
-  // Private properties with clear typing
-  private readonly onSpeechEndCallback = signal<(() => void) | null>(null);
+  public readonly interviewState = computed(() => this.state());
 
   constructor() {
-    this.initializeCourses();
-  }
-
-  public async speak(text: string): Promise<void> {
-    if (window.hasOwnProperty('responsiveVoice')) {
-      (window as any).responsiveVoice.speak(text, null, {
-        onend: () => {
-          if (this.onSpeechEndCallback) {
-            this.onSpeechEndCallback();
-          }
-        }
-      });
-    } else {
-      console.error('ResponsiveVoice is not available.');
+    if (typeof window !== 'undefined') {
+      this.synthesis = window.speechSynthesis;
+      this.initializeSpeechRecognition();
     }
   }
 
-  public startListening(callback: SpeechCallback): void {
-    try {
-      if (!this.isAnnyangAvailable()) {
-        throw new Error('Annyang is not available');
+  private initializeSpeechRecognition(): void {
+    if ('webkitSpeechRecognition' in window) {
+      this.recognition = new (window as any).webkitSpeechRecognition();
+      this.setupRecognitionConfig();
+      this.setupRecognitionHandlers();
+    }
+  }
+
+  private setupRecognitionConfig(): void {
+    if (!this.recognition) return;
+    
+    this.recognition.continuous = true;
+    this.recognition.interimResults = true;
+    this.recognition.lang = 'en-US';
+  }
+
+  private setupRecognitionHandlers(): void {
+    if (!this.recognition) return;
+
+    this.recognition.onresult = (event: any) => {
+      let finalTranscript = '';
+      let interimTranscript = '';
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interimTranscript += transcript;
+        }
       }
 
-      const commands = {
-        '*answer': (answer: string) => {
-          console.log('Recognized answer:', answer);
-          callback(answer);
-        }
+      this.updateState({
+        lastAnswer: finalTranscript || interimTranscript,
+        transcript: interimTranscript,
+        silenceStartTime: Date.now()
+      });
+    };
+
+    this.recognition.onend = () => {
+      if (this.state().isListening) {
+        this.recognition?.start();
+      }
+    };
+
+    this.recognition.onerror = (event: any) => {
+      console.error('Speech recognition error:', event.error);
+      this.updateState({ isListening: false });
+    };
+  }
+
+  public async speak(text: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (!this.synthesis) {
+        reject('Speech synthesis not supported');
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      this.configureUtterance(utterance);
+
+      utterance.onend = () => {
+        this.updateState({ isSpeaking: false });
+        resolve();
       };
 
-      annyang.addCommands(commands);
-      annyang.start({ autoRestart: true, continuous: false });
-    } catch (error) {
-      console.error('Speech recognition failed:', error);
-      throw error;
+      utterance.onerror = (error) => {
+        console.error('Speech synthesis error:', error);
+        this.updateState({ isSpeaking: false });
+        reject(error);
+      };
+
+      this.updateState({ isSpeaking: true });
+      this.synthesis.speak(utterance);
+    });
+  }
+
+  private configureUtterance(utterance: SpeechSynthesisUtterance): void {
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    if (this.synthesis) {
+      const voices = this.synthesis.getVoices();
+      const preferredVoice = voices.find(voice => 
+        voice.lang === 'en-US' && voice.name.includes('Female')
+      );
+      
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
+    }
+  }
+
+  public startListening(): void {
+    if (!this.recognition) {
+      console.error('Speech recognition not supported');
+      return;
+    }
+
+    this.updateState({ 
+      isListening: true,
+      silenceStartTime: Date.now()
+    });
+
+    this.recognition.start();
+    this.startSilenceDetection();
+  }
+
+  private startSilenceDetection(): void {
+    const checkSilence = () => {
+      const { silenceStartTime, isListening } = this.state();
+      
+      if (silenceStartTime && isListening) {
+        const silenceDuration = Date.now() - silenceStartTime;
+        
+        if (silenceDuration >= this.SILENCE_THRESHOLD) {
+          this.moveToNextQuestion();
+        } else {
+          if (this.silenceTimeout) {
+            window.clearTimeout(this.silenceTimeout);
+          }
+          this.silenceTimeout = window.setTimeout(checkSilence, 1000);
+        }
+      }
+    };
+
+    if (this.silenceTimeout) {
+      window.clearTimeout(this.silenceTimeout);
+    }
+    this.silenceTimeout = window.setTimeout(checkSilence, 1000);
+  }
+
+  private async moveToNextQuestion(): Promise<void> {
+    const currentIndex = this.state().currentQuestionIndex;
+    
+    if (currentIndex < this.questions.length - 1) {
+      this.updateState({
+        currentQuestionIndex: currentIndex + 1,
+        silenceStartTime: null,
+        transcript: '',
+        lastAnswer: ''
+      });
+      
+      await this.speak(this.questions[currentIndex + 1]);
+    } else {
+      await this.endInterview();
     }
   }
 
   public stopListening(): void {
-    if (this.isAnnyangAvailable()) {
-      annyang.abort();
+    if (this.recognition) {
+      this.recognition.stop();
+      this.updateState({ isListening: false });
+      if (this.silenceTimeout) {
+        window.clearTimeout(this.silenceTimeout);
+        this.silenceTimeout = null;
+      }
     }
   }
 
-  // Private helper methods
-  private initializeCourses(): void {
-    const mockCourses: readonly Course[] = [
-      {
-        id: '1',
-        title: 'Technical Analysis 101',
-        description: 'Learn the basics of chart patterns and indicators.',
-        thumbnailUrl: 'assets/technical-analysis.jpg',
-        instructors: [{ id: 'inst1', name: 'John Doe', avatarUrl: 'assets/john.jpg' }],
-        duration: 12,
-        platform: 'Udemy',
-        modules: [
-          {
-            id: 'mod1',
-            title: 'Intro to Charts',
-            description: 'Get introduced to chart patterns.',
-            lessons: [
-              {
-                id: 'lesson1',
-                title: 'Candlestick Basics',
-                duration: 30,
-                videoUrl: 'https://www.youtube.com/watch?v=example',
-                platform: 'YouTube',
-                isCompleted: false,
-              }
-            ],
-            isCompleted: false,
-          }
-        ],
-        category: 'Trading',
-        level: 'Beginner',
-        rating: 4.5,
-        isEnrolled: true,
-        progress: 0,
-        releaseDate: new Date('2023-10-01'),
-      },
-      {
-        id: '1',
-        title: 'Technical Analysis 101',
-        description: 'Learn the basics of chart patterns and indicators.',
-        thumbnailUrl: 'assets/technical-analysis.jpg',
-        instructors: [{ id: 'inst1', name: 'John Doe', avatarUrl: 'assets/john.jpg' }],
-        duration: 12,
-        platform: 'Udemy',
-        modules: [
-          {
-            id: 'mod1',
-            title: 'Intro to Charts',
-            description: 'Get introduced to chart patterns.',
-            lessons: [
-              {
-                id: 'lesson1',
-                title: 'Candlestick Basics',
-                duration: 30,
-                videoUrl: 'https://www.youtube.com/watch?v=example',
-                platform: 'YouTube',
-                isCompleted: false,
-              }
-            ],
-            isCompleted: true,
-          }
-        ],
-        category: 'Trading',
-        level: 'Beginner',
-        rating: 4.5,
-        isEnrolled: true,
-        progress: 0,
-        releaseDate: new Date('2023-10-01'),
-      }
-    ];
+  public async startInterview(): Promise<void> {
+    this.updateState({
+      isActive: true,
+      currentQuestionIndex: 0,
+      lastAnswer: '',
+      transcript: ''
+    });
 
-    this.courses.set(mockCourses);
+    await this.speak("Hello! I'm your AI interviewer. Let's begin with the first question.");
+    await this.speak(this.questions[0]);
+    this.startListening();
   }
 
-  private isResponsiveVoiceAvailable(): boolean {
-    return 'responsiveVoice' in window;
+  private async endInterview(): Promise<void> {
+    this.stopListening();
+    await this.speak("Thank you for completing the interview. We'll be in touch soon.");
+    this.updateState({
+      isActive: false,
+      currentQuestionIndex: 0,
+      transcript: '',
+      lastAnswer: ''
+    });
   }
 
-  private isAnnyangAvailable(): boolean {
-    return typeof annyang !== 'undefined';
+  private updateState(newState: Partial<InterviewState>): void {
+    this.state.update(state => ({
+      ...state,
+      ...newState
+    }));
+  }
+
+  // Sample courses data
+  private coursesData = signal<Course[]>([
+    {
+      id: '1',
+      title: 'Angular Fundamentals',
+      description: 'Learn the basics of Angular framework',
+      progress: 100,
+      duration: 120,
+      category: 'frontend',
+      level: 'beginner'
+    },
+    {
+      id: '2',
+      title: 'Advanced TypeScript',
+      description: 'Master TypeScript features and patterns',
+      progress: 60,
+      duration: 180,
+      category: 'programming',
+      level: 'advanced'
+    },
+    {
+      id: '3',
+      title: 'Web Development Basics',
+      description: 'Introduction to web development',
+      progress: 0,
+      duration: 90,
+      category: 'frontend',
+      level: 'beginner'
+    }
+  ]);
+
+  // Public signals and computed values
+  public readonly courses = computed(() => this.coursesData());
+
+  // Course management methods
+  public updateCourseProgress(courseId: string, progress: number): void {
+    this.coursesData.update(courses => 
+      courses.map(course => 
+        course.id === courseId 
+          ? { ...course, progress } 
+          : course
+      )
+    );
+  }
+
+  public addCourse(course: Course): void {
+    this.coursesData.update(courses => [...courses, course]);
+  }
+
+  public removeCourse(courseId: string): void {
+    this.coursesData.update(courses => 
+      courses.filter(course => course.id !== courseId)
+    );
   }
 }

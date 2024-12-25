@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { LearningService } from '../../../../services/learning.service';
-import { Module } from '../../../../models/learning.model';
+import { Course, Module } from '../../../../models/learning.model';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ChartComponent } from '../../../dashboard/components/chart/chart.component';
@@ -14,7 +14,7 @@ import { LearningTestComponent } from "../../components/learning-test/learning-t
 @Component({
   selector: 'app-learning-overview',
   standalone: true,
-  imports: [ MatIconModule, OverviewdetailsComponent, CoursComponent, NewsComponent, WatchlistComponent, ChartComponent, TradesoverviewComponent, CommonModule],
+  imports: [ MatIconModule, CommonModule],
   templateUrl: './learning-overview.component.html',
   styleUrl: './learning-overview.component.css'
 })
@@ -23,21 +23,41 @@ export class LearningOverviewComponent {
   private courseService = inject(LearningService);
   courses = this.courseService.courses; 
 
-  completedCoursesList = computed(() =>
-    this.courses().filter((course) => course.progress === 100)
+  // completedCoursesList = computed(() =>
+  //   this.courses().filter((course) => course.progress === 100)
+  // );
+
+  // ongoingCoursesList = computed(() =>
+  //   this.courses().filter((course) => course.progress > 0 && course.progress < 100)
+  // );
+
+  // pendingTasks = computed(() =>
+  //   this.courses().reduce(
+  //     (sum, course) =>
+  //       sum + course.modules.filter((module: Module) => !module.isCompleted).length,
+  //     0
+  //   )
+  // );
+  completedCourses = computed(() => 
+    this.courses().filter((course: Course) => course.progress === 100)
   );
 
-  ongoingCoursesList = computed(() =>
-    this.courses().filter((course) => course.progress > 0 && course.progress < 100)
-  );
-
-  pendingTasks = computed(() =>
-    this.courses().reduce(
-      (sum, course) =>
-        sum + course.modules.filter((module: Module) => !module.isCompleted).length,
-      0
+  inProgressCourses = computed(() => 
+    this.courses().filter((course: Course) => 
+      course.progress > 0 && course.progress < 100
     )
   );
+
+  averageProgress = computed(() => {
+    const totalProgress = this.courses().reduce(
+      (sum: number, course: Course) => 
+        sum + course.progress, 
+      0
+    );
+    return this.courses().length > 0 
+      ? totalProgress / this.courses().length 
+      : 0;
+  });
 
  
 }
