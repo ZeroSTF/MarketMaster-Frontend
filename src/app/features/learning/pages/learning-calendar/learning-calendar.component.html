@@ -52,13 +52,13 @@
       </div>
 
       <!-- Filter Section -->
-      <div class="flex items-center mb-4">
+      <!-- <div class="flex items-center mb-4">
         <button class="flex items-center space-x-1 text-sm">
           <span>{{selectedFilter}}</span>
           <span class="material-icons text-sm">expand_more</span>
         </button>
         <span class="ml-auto text-sm text-gray-500">{{totalCourses}} courses</span>
-      </div>
+      </div> -->
 
       <!-- Course List -->
       <nav class="flex-grow overflow-auto scrollbar-hide">
@@ -102,7 +102,7 @@
 
       <!-- Bottom Navigation -->
       <div class="flex flex-wrap mt-4 border-t pt-4">
-        <button *ngFor="let btn of sidebarButtons" 
+        <button *ngFor="let btn of sidebarCoursesButtons" 
           [routerLink]="btn.link"   
           (click)="clickSideButton(btn.name)" 
           class="w-1/2 flex flex-col items-center text-gray-400 hover:text-blue-500 p-2"

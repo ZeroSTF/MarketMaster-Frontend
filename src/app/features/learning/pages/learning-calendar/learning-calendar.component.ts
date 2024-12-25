@@ -22,6 +22,12 @@ export class LearningCalendarComponent implements OnInit {
   totalCourses: number = 7;
   selectedFilter: string = 'All';
   
+  sidebarCoursesButtons = [
+    { name: 'In Progress', label: 'In Progress', icon: 'calendar_today', link: '/learning/calendar' },
+    { name: 'Coming', label: 'Coming', icon: 'dashboard', link: '/learning/board' },
+    { name: 'Recommended', label: 'Recommended', icon: 'shopping_cart', link: '/learning/overview' },
+    { name: 'All', label: 'All', icon: 'school', link: '/learning/courses' }
+  ];
   sidebarButtons = [
     { name: 'calendar', label: 'Calender', icon: 'calendar_today', link: '/learning/calendar' },
     { name: 'board', label: 'Board', icon: 'dashboard', link: '/learning/board' },
