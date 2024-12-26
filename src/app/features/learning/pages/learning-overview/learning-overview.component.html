@@ -34,32 +34,55 @@
           </div>
         </div>
         <div class="flex space-x-4">
-          <!-- Completed Courses Button -->
+          <!-- Certifications Button -->
           <button
+            class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
+            [ngClass]="{ 'text-blue-600': activeTab === 'certifications' }"
+            (click)="activeTab = 'certifications'"
+          >
+            <span>Certifications</span>
+            <span class="bg-purple-600 text-white px-2 py-1 rounded-full text-xs">
+              {{ certifications().length }}
+            </span>
+          </button>
+
+          <!-- Completed Courses Button -->
+          <!-- <button
             class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
             [ngClass]="{ 'text-blue-600': activeTab === 'completed' }"
             (click)="activeTab = 'completed'"
           >
-            <span>Completed Courses</span>
-            <span
-              class="bg-green-600 text-white px-2 py-1 rounded-full text-xs"
-            >
+            <span>Completed</span>
+            <span class="bg-green-600 text-white px-2 py-1 rounded-full text-xs">
               {{ completedCourses().length }}
             </span>
-          </button>
+          </button> -->
 
-          <!-- Ongoing Courses Button -->
+          <!-- In Progress Courses Button -->
           <button
             class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
             [ngClass]="{ 'text-blue-600': activeTab === 'ongoing' }"
             (click)="activeTab = 'ongoing'"
           >
             <span>In Progress</span>
-            <span
-              class="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs"
-            >
+            <span class="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs">
               {{ inProgressCourses().length }}
             </span>
+          </button>
+
+          <!-- Coming Courses Button -->
+          <button
+            class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
+            [ngClass]="{ 'text-blue-600': activeTab === 'coming' }"
+            (click)="activeTab = 'coming'"
+          >
+            <span>Coming</span>
+            <span class="bg-gray-500 text-white px-2 py-1 rounded-full text-xs">
+              {{ comingCourses().length }}
+            </span>
+          </button>
+          <button mat-raised-button color="blue-500" >
+            <mat-icon>description</mat-icon>
           </button>
         </div>
       </div>
@@ -68,24 +91,32 @@
 
   <!-- Course List Section -->
   <div class="h-full w-full mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-xl font-bold text-gray-800 mb-4">Your Courses</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">
+      {{ activeTab === 'certifications' ? 'Your Certifications' :
+         activeTab === 'completed' ? 'Completed Courses' :
+         activeTab === 'ongoing' ? 'Courses In Progress' :
+         'Upcoming Courses' }}
+    </h2>
+    <!-- Scrollable Course List -->
+    <div class="h-[60vh] overflow-y-auto scrollbar-hide grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div
-        *ngFor="let course of activeTab === 'completed' 
-                  ? completedCourses() 
-                  : activeTab === 'ongoing' 
-                  ? inProgressCourses() 
-                  : []"
-        class="flex w-auto h-auto flex-col justify-between items-start bg-white shadow-md p-3 rounded-lg space-y-2"
+        *ngFor="let course of getActiveCourses()"
+        class="flex w-auto h-fit flex-col justify-between items-start bg-white shadow-md p-3 rounded-lg space-y-2"
       >
         <img
-          [src]=""
+          [src]="course.imageUrl || 'path/to/default-image.jpg'"
           [alt]="course.title"
           class="rounded-lg w-full h-40 object-cover mb-3"
         />
         <div class="flex items-center justify-between w-full">
           <div
-            class="flex justify-center items-center bg-black text-white text-xs rounded-md px-2 py-1"
+            class="flex justify-center items-center text-white text-xs rounded-md px-2 py-1"
+            [ngClass]="{
+              'bg-purple-600': course.hasCertification,
+              'bg-green-600': course.progress === 100 || course.hasCertification,
+              'bg-yellow-500': course.progress > 0 && course.progress < 100,
+              'bg-gray-500': course.progress === 0
+            }"
           >
             {{ course.progress }}% Completed
           </div>
@@ -107,7 +138,7 @@
         <div class="flex justify-between w-full text-xs text-gray-500">
           <div class="flex items-center space-x-1">
             <span class="material-icons text-blue-500 text-base">calendar_today</span>
-            <!-- <span>{{ course.releaseDate | date: 'shortDate' }}</span> -->
+            <span>{{ course.startDate | date: 'shortDate' }}</span>
           </div>
           <div class="flex items-center space-x-1">
             <span class="material-icons text-orange-500 text-base">access_time</span>
@@ -117,4 +148,5 @@
       </div>
     </div>
   </div>
+  
 </div>

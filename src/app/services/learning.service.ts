@@ -436,35 +436,35 @@ export class LearningService {
     }));
   }
   // Sample courses data
-  private coursesData = signal<Course[]>([
-    {
-      id: '1',
-      title: 'Angular Fundamentals',
-      description: 'Learn the basics of Angular framework',
-      progress: 100,
-      duration: 120,
-      category: 'frontend',
-      level: 'beginner'
-    },
-    {
-      id: '2',
-      title: 'Advanced TypeScript',
-      description: 'Master TypeScript features and patterns',
-      progress: 60,
-      duration: 180,
-      category: 'programming',
-      level: 'advanced'
-    },
-    {
-      id: '3',
-      title: 'Web Development Basics',
-      description: 'Introduction to web development',
-      progress: 0,
-      duration: 90,
-      category: 'frontend',
-      level: 'beginner'
-    }
-  ]);
+  // private coursesData = signal<Course[]>([
+  //   {
+  //     id: '1',
+  //     title: 'Angular Fundamentals',
+  //     description: 'Learn the basics of Angular framework',
+  //     progress: 100,
+  //     duration: 120,
+  //     category: 'frontend',
+  //     level: 'beginner'
+  //   },
+  //   {
+  //     id: '2',
+  //     title: 'Advanced TypeScript',
+  //     description: 'Master TypeScript features and patterns',
+  //     progress: 60,
+  //     duration: 180,
+  //     category: 'programming',
+  //     level: 'advanced'
+  //   },
+  //   {
+  //     id: '3',
+  //     title: 'Web Development Basics',
+  //     description: 'Introduction to web development',
+  //     progress: 0,
+  //     duration: 90,
+  //     category: 'frontend',
+  //     level: 'beginner'
+  //   }
+  // ]);
 
   // Public signals and computed values
   public readonly courses = computed(() => this.coursesData());
@@ -489,4 +489,91 @@ export class LearningService {
       courses.filter(course => course.id !== courseId)
     );
   }
+
+  private coursesData = signal<Course[]>([
+    {
+      id: '1',
+      title: 'Angular Fundamentals',
+      description: 'Learn the basics of Angular framework',
+      progress: 100,
+      duration: 120,
+      category: 'frontend',
+      level: 'beginner',
+      hasCertification: true,
+      imageUrl: 'path/to/angular-image.jpg',
+      startDate: new Date('2024-01-01')
+    },
+    {
+      id: '1',
+      title: 'Angular Fundamentals',
+      description: 'Learn the basics of Angular framework',
+      progress: 100,
+      duration: 120,
+      category: 'frontend',
+      level: 'beginner',
+      hasCertification: true,
+      imageUrl: 'path/to/angular-image.jpg',
+      startDate: new Date('2024-01-01')
+    },
+    {
+      id: '1',
+      title: 'Angular Fundamentals',
+      description: 'Learn the basics of Angular framework',
+      progress: 100,
+      duration: 120,
+      category: 'frontend',
+      level: 'beginner',
+      hasCertification: true,
+      imageUrl: 'path/to/angular-image.jpg',
+      startDate: new Date('2024-01-01')
+    },
+    {
+      id: '1',
+      title: 'Angular Fundamentals',
+      description: 'Learn the basics of Angular framework',
+      progress: 100,
+      duration: 120,
+      category: 'frontend',
+      level: 'beginner',
+      hasCertification: true,
+      imageUrl: 'path/to/angular-image.jpg',
+      startDate: new Date('2024-01-01')
+    },
+    {
+      id: '1',
+      title: 'Angular Fundamentals',
+      description: 'Learn the basics of Angular framework',
+      progress: 100,
+      duration: 120,
+      category: 'frontend',
+      level: 'beginner',
+      hasCertification: true,
+      imageUrl: 'path/to/angular-image.jpg',
+      startDate: new Date('2024-01-01')
+    },
+    {
+      id: '2',
+      title: 'Advanced TypeScript',
+      description: 'Master TypeScript features and patterns',
+      progress: 60,
+      duration: 180,
+      category: 'programming',
+      level: 'advanced',
+      hasCertification: false,
+      imageUrl: 'path/to/typescript-image.jpg',
+      startDate: new Date('2024-02-01')
+    },
+    {
+      id: '3',
+      title: 'Web Development Basics',
+      description: 'Introduction to web development',
+      progress: 0,
+      duration: 90,
+      category: 'frontend',
+      level: 'beginner',
+      hasCertification: false,
+      imageUrl: 'path/to/webdev-image.jpg',
+      startDate: new Date('2024-03-01')
+    }
+  ]);
 }

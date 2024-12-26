@@ -23,22 +23,7 @@ export interface Instructor {
     isCompleted: boolean;
   }
   
-  // export interface Course {
-  //   id: string;
-  //   title: string;
-  //   description: string;
-  //   thumbnailUrl: string;
-  //   instructors: Instructor[];
-  //   duration: number; // Duration in hours
-  //   platform: 'Udemy' | 'YouTube';
-  //   modules: Module[];
-  //   category: string;
-  //   level: 'Beginner' | 'Intermediate' | 'Advanced';
-  //   rating: number; // 0 - 5 rating
-  //   isEnrolled: boolean;
-  //   progress: number; // 0 - 100 percentage
-  //   releaseDate: Date;
-  // }
+
   
   export interface Course {
     id: string;
@@ -47,6 +32,8 @@ export interface Instructor {
     progress: number;
     duration: number;
     category: string;
-    level: 'beginner' | 'intermediate' | 'advanced';
-    thumbnail?: string;
+    level: string;
+    hasCertification?: boolean;
+    startDate?: Date;
+    imageUrl?: string;
   }

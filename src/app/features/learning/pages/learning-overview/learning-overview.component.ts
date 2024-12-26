@@ -3,43 +3,30 @@ import { LearningService } from '../../../../services/learning.service';
 import { Course, Module } from '../../../../models/learning.model';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { ChartComponent } from '../../../dashboard/components/chart/chart.component';
-import { CoursComponent } from '../../../dashboard/components/cours/cours.component';
-import { NewsComponent } from '../../../dashboard/components/news/news.component';
-import { OverviewdetailsComponent } from '../../../dashboard/components/overviewdetails/overviewdetails.component';
-import { TradesoverviewComponent } from '../../../dashboard/components/tradesoverview/tradesoverview.component';
-import { WatchlistComponent } from '../../../dashboard/components/watchlist/watchlist.component';
-import { LearningTestComponent } from "../../components/learning-test/learning-test.component";
 
 @Component({
   selector: 'app-learning-overview',
   standalone: true,
-  imports: [ MatIconModule, CommonModule],
+  imports: [MatIconModule, CommonModule],
   templateUrl: './learning-overview.component.html',
   styleUrl: './learning-overview.component.css'
 })
 export class LearningOverviewComponent {
-  activeTab: string = 'completed';
+  activeTab: string = 'certifications'; // Changed default tab
   private courseService = inject(LearningService);
-  courses = this.courseService.courses; 
+  courses = this.courseService.courses;
 
-  // completedCoursesList = computed(() =>
-  //   this.courses().filter((course) => course.progress === 100)
-  // );
+  // Computed properties for each category
+  certifications = computed(() => 
+    this.courses().filter((course: Course) => 
+      course.progress === 100 && course.hasCertification === true
+    )
+  );
 
-  // ongoingCoursesList = computed(() =>
-  //   this.courses().filter((course) => course.progress > 0 && course.progress < 100)
-  // );
-
-  // pendingTasks = computed(() =>
-  //   this.courses().reduce(
-  //     (sum, course) =>
-  //       sum + course.modules.filter((module: Module) => !module.isCompleted).length,
-  //     0
-  //   )
-  // );
   completedCourses = computed(() => 
-    this.courses().filter((course: Course) => course.progress === 100)
+    this.courses().filter((course: Course) => 
+      course.progress === 100 && !course.hasCertification
+    )
   );
 
   inProgressCourses = computed(() => 
@@ -48,16 +35,37 @@ export class LearningOverviewComponent {
     )
   );
 
+  comingCourses = computed(() => 
+    this.courses().filter((course: Course) => 
+      course.progress === 0
+    )
+  );
+
+
+  // Helper computed properties
   averageProgress = computed(() => {
     const totalProgress = this.courses().reduce(
-      (sum: number, course: Course) => 
-        sum + course.progress, 
+      (sum: number, course: Course) => sum + course.progress, 
       0
     );
     return this.courses().length > 0 
-      ? totalProgress / this.courses().length 
+      ? Math.round(totalProgress / this.courses().length) 
       : 0;
   });
 
- 
+  // Method to get courses based on active tab
+  getActiveCourses() {
+    switch (this.activeTab) {
+      case 'certifications':
+        return this.certifications();
+      case 'completed':
+        return this.completedCourses();
+      case 'ongoing':
+        return this.inProgressCourses();
+      case 'coming':
+        return this.comingCourses();
+      default:
+        return [];
+    }
+  }
 }
