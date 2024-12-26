@@ -5,6 +5,8 @@ import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export interface Course {
+hasCertification: any;
+startDate: string|number|Date;
   id: string;
   title: string;
   description: string;

@@ -435,36 +435,7 @@ export class LearningService {
       ...newState
     }));
   }
-  // Sample courses data
-  // private coursesData = signal<Course[]>([
-  //   {
-  //     id: '1',
-  //     title: 'Angular Fundamentals',
-  //     description: 'Learn the basics of Angular framework',
-  //     progress: 100,
-  //     duration: 120,
-  //     category: 'frontend',
-  //     level: 'beginner'
-  //   },
-  //   {
-  //     id: '2',
-  //     title: 'Advanced TypeScript',
-  //     description: 'Master TypeScript features and patterns',
-  //     progress: 60,
-  //     duration: 180,
-  //     category: 'programming',
-  //     level: 'advanced'
-  //   },
-  //   {
-  //     id: '3',
-  //     title: 'Web Development Basics',
-  //     description: 'Introduction to web development',
-  //     progress: 0,
-  //     duration: 90,
-  //     category: 'frontend',
-  //     level: 'beginner'
-  //   }
-  // ]);
+  
 
   // Public signals and computed values
   public readonly courses = computed(() => this.coursesData());
@@ -540,10 +511,10 @@ export class LearningService {
       startDate: new Date('2024-01-01')
     },
     {
-      id: '1',
+      id: '4',
       title: 'Angular Fundamentals',
       description: 'Learn the basics of Angular framework',
-      progress: 100,
+      progress: 10,
       duration: 120,
       category: 'frontend',
       level: 'beginner',
@@ -552,7 +523,7 @@ export class LearningService {
       startDate: new Date('2024-01-01')
     },
     {
-      id: '2',
+      id: '5',
       title: 'Advanced TypeScript',
       description: 'Master TypeScript features and patterns',
       progress: 60,

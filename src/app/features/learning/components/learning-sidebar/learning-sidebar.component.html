@@ -11,16 +11,10 @@
        'maxWidth': hidden ? '4rem' : '20rem'
      }">
 
-  <!-- Header Section -->
-  <!-- <div class="flex justify-between items-center mb-4">
-    <h1 class="text-xl font-semibold truncate" *ngIf="!hidden">My Resources</h1>
-    <button class="text-gray-400">
-      <span class="material-icons">more_horiz</span>
-    </button>
-  </div> -->
+  
 
   <!-- Search Section -->
-  <div class="relative mb-4" *ngIf="!hidden">
+  <div class="relative mb-4" *ngIf="showSearch">
     <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
       <span class="material-icons text-lg">search</span>
     </span>
@@ -32,14 +26,7 @@
     >
   </div>
 
-  <!-- Filter Section -->
-  <!-- <div class="flex items-center mb-4" *ngIf="!hidden">
-    <button class="flex items-center space-x-1 text-sm">
-      <span>{{selectedFilter}}</span>
-      <span class="material-icons text-sm">expand_more</span>
-    </button>
-    <span class="ml-auto text-sm text-gray-500">{{totalCourses}} courses</span>
-  </div> -->
+  
 
   <!-- Course List -->
   <nav class="flex-grow flex flex-col space-y-3 overflow-auto scrollbar-hide" *ngIf="!hidden">
@@ -91,13 +78,18 @@
     </div>
   </nav>
 
+  
+
   <!-- Sidebar Buttons -->
-  <div class="flex flex-wrap">
+  <div class="flex flex-wrap mt-4 border-t pt-4">
     <button *ngFor="let btn of sidebarButtons" 
-            [routerLink]="btn.link"   
-            (click)="clickSideButton(btn.name)" 
-            class="w-1/2 flex flex-col items-center text-gray-400 hover:text-blue-500 p-2"
-            [ngClass]="{'text-blue-500': selectedButton === btn.name}">
+    [routerLink]="btn.link"   
+    (click)="clickSideButton(btn.name)" 
+    class="w-1/2 flex flex-col items-center text-gray-400 hover:text-blue-500 p-2"
+    [ngClass]="{
+      'text-blue-500': selectedButton === btn.name,
+      'text-gray-400': selectedButton !== btn.name
+    }">
       <span class="material-icons text-2xl">{{btn.icon}}</span>
       <span class="text-xs mt-1">{{btn.label}}</span>
     </button>
