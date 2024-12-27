@@ -99,8 +99,8 @@ export class LearningService {
       if (finalTranscript || interimTranscript) {
         this.updateState({
           lastAnswer: finalTranscript || interimTranscript,
-          transcript: interimTranscript,
-          silenceStartTime: Date.now()
+          transcript: finalTranscript || interimTranscript,
+          silenceStartTime: null // Prevent auto-progression when editing
         });
       }
     };
@@ -189,56 +189,55 @@ export class LearningService {
   }
 
   private startSilenceDetection(): void {
-    const checkSilence = () => {
-      const { silenceStartTime, isListening, lastAnswer } = this.state();
+  const checkSilence = () => {
+    const { silenceStartTime, isListening, lastAnswer } = this.state();
+    
+    if (silenceStartTime && isListening) {
+      const silenceDuration = Date.now() - silenceStartTime;
       
-      if (silenceStartTime && isListening) {
-        const silenceDuration = Date.now() - silenceStartTime;
-        
-        // Only move to next question if we have an answer and silence threshold is met
-        if (silenceDuration >= this.SILENCE_THRESHOLD && lastAnswer.trim()) {
-          console.log('Moving to next question. Last answer:', lastAnswer);
-          this.moveToNextQuestion();
-        } else {
-          if (this.silenceTimeout) {
-            window.clearTimeout(this.silenceTimeout);
-          }
-          this.silenceTimeout = window.setTimeout(checkSilence, 1000);
+      // Give more time to edit before auto-progression
+      if (silenceDuration >= this.SILENCE_THRESHOLD + 5000 && lastAnswer.trim()) {
+        this.moveToNextQuestion();
+      } else {
+        if (this.silenceTimeout) {
+          window.clearTimeout(this.silenceTimeout);
         }
+        this.silenceTimeout = window.setTimeout(checkSilence, 2000); // Increased check interval
       }
-    };
-
-    if (this.silenceTimeout) {
-      window.clearTimeout(this.silenceTimeout);
     }
-    this.silenceTimeout = window.setTimeout(checkSilence, 1000);
-  }
+  };
 
-  private async moveToNextQuestion(): Promise<void> {
-    const currentIndex = this.state().currentQuestionIndex;
-    const lastAnswer = this.state().lastAnswer;
-    
-    console.log(`Completed question ${currentIndex + 1}. Answer:`, lastAnswer);
-    
-    if (currentIndex < this.questions.length - 1) {
-      // Temporarily stop listening while speaking the next question
-      this.stopListening();
-      
-      this.updateState({
-        currentQuestionIndex: currentIndex + 1,
-        silenceStartTime: null,
-        transcript: '',
-        lastAnswer: ''
-      });
-      
-      await this.speak(this.questions[currentIndex + 1]);
-      
-      // Resume listening after speaking
-      this.startListening();
-    } else {
-      await this.endInterview();
-    }
+  if (this.silenceTimeout) {
+    window.clearTimeout(this.silenceTimeout);
   }
+  this.silenceTimeout = window.setTimeout(checkSilence, 2000);
+}
+
+  // private async moveToNextQuestion(): Promise<void> {
+  //   const currentIndex = this.state().currentQuestionIndex;
+  //   const lastAnswer = this.state().lastAnswer;
+    
+  //   console.log(`Completed question ${currentIndex + 1}. Answer:`, lastAnswer);
+    
+  //   if (currentIndex < this.questions.length - 1) {
+  //     // Temporarily stop listening while speaking the next question
+  //     this.stopListening();
+      
+  //     this.updateState({
+  //       currentQuestionIndex: currentIndex + 1,
+  //       silenceStartTime: null,
+  //       transcript: '',
+  //       lastAnswer: ''
+  //     });
+      
+  //     await this.speak(this.questions[currentIndex + 1]);
+      
+  //     // Resume listening after speaking
+  //     this.startListening();
+  //   } else {
+  //     await this.endInterview();
+  //   }
+  // }
 
   public stopListening(): void {
     if (this.recognition) {
@@ -589,5 +588,78 @@ export class LearningService {
     public getCourse(courseId: string): Course | undefined {
       return this._courses().find(course => course.id === courseId);
     }
+    // In LearningService
+submitEditedAnswer(answer: string) {
+  this.updateState({
+    lastAnswer: answer,
+    transcript: '',
+    isListening: false
+  });
+  this.moveToNextQuestion();
+}
+
+// Update moveToNextQuestion to be public
+public async moveToNextQuestion(): Promise<void> {
+  const currentIndex = this.state().currentQuestionIndex;
+  
+  if (currentIndex < this.questions.length - 1) {
+    this.stopListening();
+    
+    this.updateState({
+      currentQuestionIndex: currentIndex + 1,
+      silenceStartTime: null,
+      transcript: '',
+    });
+    
+    await this.speak(this.questions[currentIndex + 1]);
+    this.startListening();
+  } else {
+    await this.endInterview();
+  }
+}
+
+//video
+
+  private readonly D_ID_API_KEY = 'your_api_key';
+  private readonly D_ID_API_URL = 'https://api.d-id.com';
+  
+  private async createTalkingVideo(text: string): Promise<string> {
+    const response = await fetch(`${this.D_ID_API_URL}/talks`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${this.D_ID_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        script: {
+          type: 'text',
+          input: text
+        },
+        source_url: 'YOUR_PRESENTER_IMAGE_URL',
+        driver_url: 'bank://presenter/driver',
+        config: {
+          stitch: true,
+        }
+      })
+    });
+
+    const { id } = await response.json();
+    return this.waitForVideo(id);
+  }
+
+  private async waitForVideo(talkId: string): Promise<string> {
+    while (true) {
+      const response = await fetch(`${this.D_ID_API_URL}/talks/${talkId}`, {
+        headers: { 'Authorization': `Basic ${this.D_ID_API_KEY}` }
+      });
+      
+      const result = await response.json();
+      if (result.status === 'done') {
+        return result.result_url;
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  }
   
 }

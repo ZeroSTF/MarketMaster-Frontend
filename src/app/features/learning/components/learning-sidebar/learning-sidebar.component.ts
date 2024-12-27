@@ -15,7 +15,7 @@ export class LearningSidebarComponent {
   @Input() hidden = false;
   @Output() toggle = new EventEmitter<void>();
   
-  selectedButton: string = 'calendar';
+  selectedButton: string = 'overview';
   isMobile = false;
   searchQuery: string = '';
   totalCourses: number = 7;

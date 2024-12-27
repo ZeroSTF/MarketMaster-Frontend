@@ -7,9 +7,9 @@ import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, NgModel } from '@angular/forms';
-import { ClickOutsideDirective } from '../../utils/click-outside.directive';
 import { AuthService } from '../../auth/auth.service';
 import { DarkModeService } from '../../services/dark-mode.service';
+import { ClickOutsideDirective } from '../../Utils/click-outside.directive';
 
 @Component({
   selector: 'app-nav-bar',
@@ -22,7 +22,6 @@ import { DarkModeService } from '../../services/dark-mode.service';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatMenuTrigger,
     ClickOutsideDirective,
   ],
   templateUrl: './nav-bar.component.html',

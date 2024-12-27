@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LearningService } from '../../../../services/learning.service';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { FormsModule } from '@angular/forms';
 
 export interface Course {
 hasCertification: any;
@@ -20,7 +21,7 @@ startDate: string|number|Date;
 @Component({
   selector: 'app-interview',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './learning-test.component.html'
 })
 export class LearningTestComponent implements OnInit, OnDestroy {
@@ -162,4 +163,11 @@ export class LearningTestComponent implements OnInit, OnDestroy {
       });
     }
   }
+  // In component
+submitEditedAnswer() {
+  if (this.interviewState().transcript) {
+    this.interviewService.submitEditedAnswer(this.interviewState().transcript);
+  }
+}
+  
 }

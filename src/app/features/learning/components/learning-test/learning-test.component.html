@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gradient-to-br from-white to-gray-500 p-6 rounded-3xl ">
+<div class="min-h-screen bg-gradient-to-br from-white via-white to-blue-50 p-6 rounded-3xl shadow-md border border-blue-100/10 backdrop-filter backdrop-blur-sm ">
   <div class="max-w-6xl mx-auto">
     <!-- Header -->
     <header class="mb-8 text-center">
@@ -59,53 +59,61 @@
 
       <!-- Current Question & Answer Display -->
       <div *ngIf="interviewState().isActive" 
-           class="bg-white/10 backdrop-blur-sm rounded-lg p-6 space-y-4">
-        <!-- Progress Indicator -->
-        <div class="flex items-center justify-between text-sm text-gray-400 mb-4">
-          <span>Question {{ interviewState().currentQuestionIndex + 1 }} of {{ 5 }}</span>
-          <span *ngIf="interviewState().silenceStartTime" class="text-yellow-400">
-            Listening for response...
-          </span>
-        </div>
+     class="bg-white/10 backdrop-blur-sm rounded-lg p-6 space-y-4 border border-blue-100/10">
+  <!-- Progress -->
+  <div class="flex items-center justify-between text-sm text-blue-100 mb-4">
+    <span>Question {{ interviewState().currentQuestionIndex + 1 }} of {{ 5 }}</span>
+    <span *ngIf="interviewState().silenceStartTime" class="text-yellow-400">
+      Listening...
+    </span>
+  </div>
 
-        <!-- Current Question -->
-        <div class="space-y-2">
-          <h3 class="text-gray-400 text-sm font-medium">Current Question:</h3>
-          <p class="text-white text-lg font-medium">{{ currentQuestion() }}</p>
-        </div>
+  <!-- Question -->
+  <!-- In template -->
+<div class="space-y-2">
+  <h3 class="text-gray-800 text-sm font-medium">Current Question:</h3>
+  <p class="text-gray-900 text-lg font-medium">{{ currentQuestion() }}</p>
+</div>
 
-        <!-- Live Transcript -->
-        <div *ngIf="interviewState().transcript" 
-             class="bg-black/20 rounded-lg p-4 mt-4">
-          <p class="text-gray-300 italic">{{ interviewState().transcript }}</p>
-        </div>
+<!-- Editable Transcript -->
+<div *ngIf="interviewState().transcript" class="space-y-2">
+  <textarea 
+    [(ngModel)]="interviewState().transcript"
+    class="w-full bg-white rounded-lg p-4 text-gray-800 border border-gray-200 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 min-h-[100px] shadow-sm"
+  ></textarea>
+  <button 
+    (click)="submitEditedAnswer()"
+    class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium shadow-sm">
+    Submit Answer & Continue
+  </button>
+</div>
 
-        <!-- Previous Answer -->
-        <div *ngIf="interviewState().lastAnswer" 
-             class="border-t border-gray-700 pt-4 mt-4">
-          <h3 class="text-gray-400 text-sm font-medium mb-2">Your Last Answer:</h3>
-          <p class="text-gray-300">{{ interviewState().lastAnswer }}</p>
-        </div>
-      </div>
+<!-- Previous Answer -->
+<!-- <div *ngIf="interviewState().lastAnswer" class="border-t border-gray-200 pt-4 mt-4">
+  <h3 class="text-gray-800 text-sm font-medium mb-2">Previous Answer:</h3>
+  <p class="text-gray-700">{{ interviewState().lastAnswer }}</p>
+</div>
+</div> -->
 
-      <!-- Interview Status -->
-      <div *ngIf="interviewState().isActive" 
-           class="fixed bottom-6 right-6 bg-black/50 backdrop-blur-sm rounded-lg p-4 shadow-lg">
-        <div class="flex items-center gap-4">
-          <div class="flex items-center gap-2">
-            <div class="w-2 h-2 rounded-full"
-                 [ngClass]="{'bg-green-500': interviewState().isListening, 'bg-gray-500': !interviewState().isListening}">
-            </div>
-            <span class="text-sm text-gray-300">Microphone</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <div class="w-2 h-2 rounded-full"
-                 [ngClass]="{'bg-blue-500': interviewState().isSpeaking, 'bg-gray-500': !interviewState().isSpeaking}">
-            </div>
-            <span class="text-sm text-gray-300">Speaker</span>
-          </div>
-        </div>
-      </div>
+      
     </div>
+    <!-- Interview Status -->
+    <div *ngIf="interviewState().isActive" 
+    class="fixed bottom-6 right-6 bg-black/50 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+ <div class="flex items-center gap-4">
+   <div class="flex items-center gap-2">
+     <div class="w-2 h-2 rounded-full"
+          [ngClass]="{'bg-green-500': interviewState().isListening, 'bg-gray-500': !interviewState().isListening}">
+     </div>
+     <span class="text-sm text-gray-300">Microphone</span>
+   </div>
+   <div class="flex items-center gap-2">
+     <div class="w-2 h-2 rounded-full"
+          [ngClass]="{'bg-blue-500': interviewState().isSpeaking, 'bg-gray-500': !interviewState().isSpeaking}">
+     </div>
+     <span class="text-sm text-gray-300">Speaker</span>
+   </div>
+ </div>
+</div>
   </div>
 </div>
