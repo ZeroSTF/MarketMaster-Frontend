@@ -30,10 +30,13 @@ export interface Instructor {
     title: string;
     description: string;
     progress: number;
-    duration: number;
+    duration: number;  // in minutes
     category: string;
     level: string;
     hasCertification?: boolean;
-    startDate?: Date;
+    startDate: Date;  // make this required
+    endDate?: Date;   // add this for calendar events
     imageUrl?: string;
+    color?: string;   // add this for calendar event styling
+    status: 'not-started' | 'in-progress' | 'completed';  // add this for better status tracking
   }

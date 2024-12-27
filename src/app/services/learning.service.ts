@@ -437,114 +437,157 @@ export class LearningService {
   }
   
 
-  // Public signals and computed values
-  public readonly courses = computed(() => this.coursesData());
+ 
 
-  // Course management methods
-  public updateCourseProgress(courseId: string, progress: number): void {
-    this.coursesData.update(courses => 
-      courses.map(course => 
-        course.id === courseId 
-          ? { ...course, progress } 
-          : course
-      )
-    );
-  }
-
-  public addCourse(course: Course): void {
-    this.coursesData.update(courses => [...courses, course]);
-  }
-
-  public removeCourse(courseId: string): void {
-    this.coursesData.update(courses => 
-      courses.filter(course => course.id !== courseId)
-    );
-  }
-
-  private coursesData = signal<Course[]>([
+  private readonly _courses = signal<Course[]>([
     {
       id: '1',
       title: 'Angular Fundamentals',
-      description: 'Learn the basics of Angular framework',
-      progress: 100,
+      description: 'Master the core concepts of Angular framework',
+      progress: 75,
       duration: 120,
       category: 'frontend',
       level: 'beginner',
       hasCertification: true,
-      imageUrl: 'path/to/angular-image.jpg',
-      startDate: new Date('2024-01-01')
+      imageUrl: '/assets/images/courses/angular.jpg',
+      startDate: new Date('2024-01-15T10:00:00'),
+      status: 'in-progress'
     },
     {
-      id: '1',
-      title: 'Angular Fundamentals',
-      description: 'Learn the basics of Angular framework',
-      progress: 100,
-      duration: 120,
-      category: 'frontend',
-      level: 'beginner',
-      hasCertification: true,
-      imageUrl: 'path/to/angular-image.jpg',
-      startDate: new Date('2024-01-01')
-    },
-    {
-      id: '1',
-      title: 'Angular Fundamentals',
-      description: 'Learn the basics of Angular framework',
-      progress: 100,
-      duration: 120,
-      category: 'frontend',
-      level: 'beginner',
-      hasCertification: true,
-      imageUrl: 'path/to/angular-image.jpg',
-      startDate: new Date('2024-01-01')
-    },
-    {
-      id: '1',
-      title: 'Angular Fundamentals',
-      description: 'Learn the basics of Angular framework',
-      progress: 100,
-      duration: 120,
-      category: 'frontend',
-      level: 'beginner',
-      hasCertification: true,
-      imageUrl: 'path/to/angular-image.jpg',
-      startDate: new Date('2024-01-01')
-    },
-    {
-      id: '4',
-      title: 'Angular Fundamentals',
-      description: 'Learn the basics of Angular framework',
-      progress: 10,
-      duration: 120,
-      category: 'frontend',
-      level: 'beginner',
-      hasCertification: true,
-      imageUrl: 'path/to/angular-image.jpg',
-      startDate: new Date('2024-01-01')
-    },
-    {
-      id: '5',
+      id: '2',
       title: 'Advanced TypeScript',
-      description: 'Master TypeScript features and patterns',
-      progress: 60,
+      description: 'Deep dive into TypeScript features and patterns',
+      progress: 100,
       duration: 180,
       category: 'programming',
       level: 'advanced',
-      hasCertification: false,
-      imageUrl: 'path/to/typescript-image.jpg',
-      startDate: new Date('2024-02-01')
+      hasCertification: true,
+      imageUrl: '/assets/images/courses/typescript.jpg',
+      startDate: new Date('2024-01-20T14:00:00'),
+      status: 'completed'
     },
     {
       id: '3',
-      title: 'Web Development Basics',
-      description: 'Introduction to web development',
+      title: 'React Native Development',
+      description: 'Build mobile apps with React Native',
+      progress: 0,
+      duration: 240,
+      category: 'mobile',
+      level: 'intermediate',
+      hasCertification: true,
+      imageUrl: '/assets/images/courses/react-native.jpg',
+      startDate: new Date('2024-02-01T09:00:00'),
+      status: 'not-started'
+    },
+    {
+      id: '4',
+      title: 'Node.js Microservices',
+      description: 'Design and implement microservices architecture',
+      progress: 30,
+      duration: 150,
+      category: 'backend',
+      level: 'advanced',
+      hasCertification: true,
+      imageUrl: '/assets/images/courses/nodejs.jpg',
+      startDate: new Date('2024-01-25T13:00:00'),
+      status: 'in-progress'
+    },
+    {
+      id: '5',
+      title: 'UI/UX Design Principles',
+      description: 'Learn fundamental design principles and tools',
       progress: 0,
       duration: 90,
-      category: 'frontend',
+      category: 'design',
       level: 'beginner',
       hasCertification: false,
-      imageUrl: 'path/to/webdev-image.jpg',
-      startDate: new Date('2024-03-01')
+      imageUrl: '/assets/images/courses/uiux.jpg',
+      startDate: new Date('2024-02-05T11:00:00'),
+      status: 'not-started'
+    },
+    {
+      id: '6',
+      title: 'GraphQL APIs',
+      description: 'Build efficient APIs with GraphQL',
+      progress: 45,
+      duration: 160,
+      category: 'backend',
+      level: 'intermediate',
+      hasCertification: true,
+      imageUrl: '/assets/images/courses/graphql.jpg',
+      startDate: new Date('2024-01-18T15:00:00'),
+      status: 'in-progress'
     }
   ]);
+    // Public computed for accessing courses
+    public readonly courses = computed(() => this._courses());
+
+    // Calendar events computed signal
+    public readonly calendarEvents = computed(() => 
+      this._courses().map(course => this.courseToEvent(course))
+    );
+  
+    private courseToEvent(course: Course) {
+      const endDate = new Date(course.startDate);
+      endDate.setMinutes(endDate.getMinutes() + course.duration);
+  
+      return {
+        id: course.id,
+        title: course.title,
+        start: course.startDate,
+        end: endDate,
+        backgroundColor: this.getEventColor(course.progress),
+        borderColor: this.getEventColor(course.progress),
+        textColor: 'white',
+        extendedProps: {
+          description: course.description,
+          progress: course.progress,
+          level: course.level,
+          duration: course.duration,
+          category: course.category,
+          courseId: course.id // Add this to easily reference back to course
+        }
+      };
+    }
+  
+    private getEventColor(progress: number): string {
+      if (progress === 100) return '#059669';
+      if (progress > 0) return '#3B82F6';
+      return '#6B7280';
+    }
+  
+    public updateCourseStartDate(courseId: string, newDate: Date): void {
+      this._courses.update(courses =>
+        courses.map(course =>
+          course.id === courseId
+            ? { ...course, startDate: newDate }
+            : course
+        )
+      );
+    }
+  
+    public updateCourseProgress(courseId: string, progress: number): void {
+      this._courses.update(courses =>
+        courses.map(course =>
+          course.id === courseId
+            ? {
+                ...course,
+                progress,
+                status: this.getStatusFromProgress(progress)
+              }
+            : course
+        )
+      );
+    }
+  
+    private getStatusFromProgress(progress: number): Course['status'] {
+      if (progress === 100) return 'completed';
+      if (progress > 0) return 'in-progress';
+      return 'not-started';
+    }
+  
+    public getCourse(courseId: string): Course | undefined {
+      return this._courses().find(course => course.id === courseId);
+    }
+  
 }

@@ -1,106 +1,155 @@
-<div class="flex h-full bg-transparent">
+<!-- Main Container -->
+<div class="flex h-full bg-gray-50/50">
   <!-- Calendar Section -->
-  <div class="flex-grow pr-2">
-    <div class="bg-white shadow-lg rounded-lg p-4 h-full flex flex-col overflow-hidden">
-      <h2 class="text-2xl font-bold mb-4">Learning Calendar</h2>
-      
-      <div class="flex-grow bg-white rounded-lg shadow-md overflow-auto">
+  <div class="flex-grow p-6">
+    <div class="bg-white rounded-2xl shadow-md h-full flex flex-col overflow-hidden border border-gray-100">
+      <!-- Calendar Header -->
+      <div class="p-6 border-b border-gray-100">
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-2xl font-semibold text-gray-800">Learning Schedule</h1>
+            <p class="text-sm text-gray-500 mt-1">Manage your learning journey</p>
+          </div>
+          <div class="flex gap-3">
+            <button class="inline-flex items-center px-4 py-2 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium">
+              <span class="material-icons text-lg mr-2">file_download</span>
+              Export
+            </button>
+            <button class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium">
+              <span class="material-icons text-lg mr-2">add</span>
+              Add Course
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar Container -->
+      <div class="flex-grow p-6 bg-white">
         <full-calendar 
           [options]="calendarOptions"
-          class="w-full h-full"
+          class="w-full h-full !font-sans"
         ></full-calendar>
       </div>
-      
     </div>
   </div>
-  
 
-  <!-- Courses Section -->
+  <!-- Sidebar -->
   <div class="w-80 flex-shrink-0">
-    <div class="bg-white shadow-lg rounded-lg p-4 h-full flex flex-col">
-      <!-- Header Section -->
-      <div class="flex justify-between items-center mb-4">
-        <h1 class="text-xl font-semibold">Courses</h1>
-        <button class="text-gray-400 hover:text-gray-600">
-          <span class="material-icons">more_horiz</span>
+    <div class="bg-white shadow-lg rounded-3xl p-4 h-full flex flex-col">
+      <!-- Sidebar Header -->
+      <div class="p-6 border-b border-gray-100">
+        <h2 class="text-xl font-semibold text-gray-800">Available Courses</h2>
+        <p class="text-sm text-gray-500 mt-1">Drag courses to schedule them</p>
+      </div>
+
+      <!-- Search Box -->
+      <div class="px-6 pt-4">
+        <div class="relative">
+          <span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
+            <span class="material-icons text-xl">search</span>
+          </span>
+          <input 
+            type="text" 
+            placeholder="Search courses..."
+            (input)="updateSearch($event)"
+            class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+          >
+        </div>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="flex gap-2 px-6 pt-4 pb-2 overflow-x-auto scrollbar-hide">
+        <button 
+          *ngFor="let filter of filters"
+          (click)="setActiveFilter(filter.name)"
+          [class.bg-blue-500]="activeFilter() === filter.name"
+          [class.text-white]="activeFilter() === filter.name"
+          [class.bg-gray-50]="activeFilter() !== filter.name"
+          [class.text-gray-700]="activeFilter() !== filter.name"
+          class="px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200">
+          <span class="material-icons text-base mr-1.5 align-text-bottom">{{filter.icon}}</span>
+          {{filter.label}}
+          <!-- <span class="ml-1.5 px-2 py-0.5 rounded-full text-xs inline-flex items-center justify-center"
+                [class.bg-white/20]="activeFilter() === filter.name"
+                [class.bg-gray-200]="activeFilter() !== filter.name">
+            {{getFilterCount(filter.name)}}
+          </span> -->
         </button>
       </div>
 
-      <!-- Search Section -->
-      <div class="relative mb-4">
-        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-          <span class="material-icons text-lg">search</span>
-        </span>
-        <input 
-  type="text" 
-  placeholder="Search course & class"
-  (input)="updateSearch($event)"
-  class="w-full bg-gray-50 rounded-lg py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-/>
-
-
+      <!-- Course List -->
+      <div class="flex-1 overflow-auto px-6 py-4 scrollbar-hide">
+        <div class="space-y-3">
+          <div 
+            *ngFor="let course of filteredCourses()"
+            class="group relative bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-300 cursor-move overflow-hidden"
+            [attr.data-course-id]="course.id"
+            draggable="true"
+            (dragstart)="onDragStart($event, course)">
+            
+            <!-- Progress Bar Background -->
+            <div class="absolute top-0 left-0 h-1 w-full bg-gray-100">
+              <div class="h-full transition-all duration-300"
+                   [style.width]="course.progress + '%'"
+                   [ngClass]="{
+                     'bg-green-500': course.progress === 100,
+                     'bg-blue-500': course.progress > 0 && course.progress < 100,
+                     'bg-gray-400': course.progress === 0
+                   }">
+              </div>
+            </div>
+      
+            <!-- Main Content -->
+            <div class="p-4">
+              <!-- Header Section -->
+              <div class="flex items-start justify-between gap-4 mb-3">
+                <!-- Title and Description -->
+                <div class="flex-1 min-w-0"> <!-- min-w-0 helps with text truncation -->
+                  <h3 class="font-medium text-gray-900 truncate group-hover:text-blue-500 transition-colors">
+                    {{course.title}}
+                  </h3>
+                  <p class="text-sm text-gray-500 mt-1 line-clamp-1 group-hover:line-clamp-2 transition-all">
+                    {{course.description}}
+                  </p>
+                </div>
+                
+                <!-- Progress Badge -->
+                <div class="flex-shrink-0">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium"
+                        [ngClass]="{
+                          'bg-green-100 text-green-700': course.progress === 100,
+                          'bg-blue-100 text-blue-700': course.progress > 0 && course.progress < 100,
+                          'bg-gray-100 text-gray-700': course.progress === 0
+                        }">
+                    {{course.progress}}%
+                  </span>
+                </div>
+              </div>
+      
+              <!-- Course Meta -->
+              <div class="flex items-center gap-3 text-xs text-gray-500">
+                <!-- Duration -->
+                <div class="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
+                  <span class="material-icons text-base mr-1">schedule</span>
+                  <span>{{course.duration}} min</span>
+                </div>
+                
+                <!-- Level -->
+                <div class="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
+                  <span class="material-icons text-base mr-1">school</span>
+                  <span class="capitalize">{{course.level}}</span>
+                </div>
+                
+                <!-- Category -->
+                <div class="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
+                  <span class="material-icons text-base mr-1">category</span>
+                  <span class="capitalize">{{course.category}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-<!-- Course List -->
-<nav class="flex-grow overflow-auto scrollbar-hide">
-  <div class="space-y-3">
-    <div *ngFor="let course of filteredCourses()" 
-      class="flex flex-col justify-between items-start bg-white shadow-md p-3 rounded-lg space-y-2">
-      <!-- Header Section with Progress and Actions -->
-      <div class="flex items-center justify-between w-full">
-        <!-- Progress Badge -->
-        <div class="flex justify-center items-center text-white text-xs rounded-md px-2 py-1"
-          [ngClass]="{
-            'bg-green-600': course.progress === 100,
-            'bg-yellow-500': course.progress > 0 && course.progress < 100,
-            'bg-gray-500': course.progress === 0
-          }">
-          {{course.progress}}% Complete
-        </div>
-        <!-- Edit and More Options Buttons -->
-        <div class="flex space-x-1">
-          <button class="text-gray-400 hover:text-gray-600">
-            <span class="material-icons text-base">edit</span>
-          </button>
-          <button class="text-gray-400 hover:text-gray-600">
-            <span class="material-icons text-base">more_vert</span>
-          </button>
-        </div>
-      </div>
-      <!-- Course Title -->
-      <h3 class="font-semibold text-sm text-gray-800 truncate w-full">{{course.title}}</h3>
-      <!-- Course Description -->
-      <p class="text-xs text-gray-500 leading-tight truncate w-full">{{course.description}}</p>
-      <!-- Footer with Date and Duration -->
-      <div class="flex justify-between w-full text-xs text-gray-500">
-        <div class="flex items-center space-x-1">
-          <span class="material-icons text-blue-500 text-base">calendar_today</span>
-          <span>{{course.startDate | date:'shortDate'}}</span>
-        </div>
-        <div class="flex items-center space-x-1">
-          <span class="material-icons text-orange-500 text-base">access_time</span>
-          <span>{{course.duration}} hours</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</nav>
-
-<!-- Bottom Navigation with Filters -->
-<div class="flex flex-wrap mt-4 border-t pt-4">
-  <button *ngFor="let filter of filters" 
-  (click)="setActiveFilter(filter.name)" 
-  class="w-1/2 flex flex-col items-center p-2"
-  [ngClass]="{
-    'text-blue-500': activeFilter() === filter.name,
-    'text-gray-400': activeFilter() !== filter.name
-  }">
-  <span class="material-icons text-2xl">{{filter.icon}}</span>
-  <span class="text-xs mt-1">{{filter.label}}</span>
-  <span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-xs mt-1">
-    {{getFilterCount(filter.name)}}
-  </span>
-</button>
-</div>
     </div>
   </div>
 </div>
