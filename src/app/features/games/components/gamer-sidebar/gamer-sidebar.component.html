@@ -1,0 +1,44 @@
+<!-- Desktop Sidebar -->
+<div class="flex flex-col items-center bg-orange-800 h-full w-20 rounded-2xl">
+  <div class="flex flex-col items-center justify-between w-20 hover:w-72 transition-all duration-300 ease-in-out">
+    <!-- Sidebar Icons -->
+    <ul class="flex flex-col items-center pl-0 space-y-8 py-4 text-white">
+      <!-- Home Button -->
+      <li class="text-2xl mt-18">
+        <a routerLink="/gamer/overview" class="sidebar-link">
+          <i class="fas fa-home"></i>
+          <span *ngIf="isExpanded" class="ml-4">Home</span>
+        </a>
+      </li>
+      
+      <!-- Games Button -->
+      <li class="text-2xl mt-17">
+        <a routerLink="/gamer/games" class="sidebar-link">
+          <i class="fas fa-gamepad"></i>
+          <span *ngIf="isExpanded" class="ml-4">Games</span>
+        </a>
+      </li>
+      
+      <!-- Stats Button -->
+      <li class="text-2xl mt-17">
+        <i class="fas fa-chart-line"></i>
+        <span *ngIf="isExpanded" class="ml-4">Stats</span>
+      </li>
+      
+      <!-- Achievements Button -->
+      <li class="text-2xl mt-17">
+        <i class="fas fa-trophy"></i>
+        <span *ngIf="isExpanded" class="ml-4">Achievements</span>
+      </li>
+      
+      <!-- Exit Button -->
+      <li class="text-2xl mt-17">
+        <a routerLink="/dashboard/overview" class="sidebar-link">
+        <i class="fas fa-sign-out-alt"></i>
+        <span *ngIf="isExpanded" class="ml-4">Exit</span>
+      </a>
+
+      </li>
+    </ul>
+  </div>
+</div>

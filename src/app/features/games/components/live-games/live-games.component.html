@@ -1,0 +1,29 @@
+<div class="live-games-container p-4">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold">Live Games</h2>
+      <i class="fas fa-gamepad text-2xl"></i>
+    </div>
+  
+    <!-- Current User Games -->
+    <div class="mb-4">
+      <h3 class="text-md font-semibold mb-2">Your Active Games</h3>
+      <div *ngFor="let game of userGames" class="game-box p-4 mb-2">
+        <p class="text-sm mb-2">Game: {{ game.title }}</p>
+        <div class="buttons flex justify-between">
+          <button class="game-btn open-btn" (click)="openGame(game)">Open</button>
+          <button class="game-btn portfolio-btn" (click)="viewPortfolio(game)">Portfolio</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Open Games -->
+    <div>
+      <h3 class="text-md font-semibold mb-2">Available Games</h3>
+      <div *ngFor="let game of openGames" class="game-box p-4 mb-2">
+        <p class="text-sm mb-2">Game: {{ game.title }}</p>
+        <button class="game-btn join-btn" (click)="joinGame(game)">Join</button>
+      </div>
+    </div>
+  </div>
+  

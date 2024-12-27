@@ -1,13 +1,29 @@
-<div class="trading-chart-container relative" (mousemove)="onChartMouseMove($event)">
-  <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)" class="chart-group">
+<div class="trading-chart-container w-full h-[600px] flex flex-col relative" (mousemove)="onChartMouseMove($event)">
+  @if (isLoading()) {
+  <div class="absolute inset-0 bg-white bg-opacity-75 z-50 flex items-center justify-center dark:!bg-gray-900">
+    <div class="text-center">
+      <img src="images/LogoMM.png" alt="Logo" class="w-full h-auto mx-auto mb-4 animate-bounce">
+    </div>
+  </div>
+  }
+
+  @if (loadingError()) {
+  <div class="error-container">
+    <p class="text-red-500">{{ loadingError() }}</p>
+    <button (click)="loadChartData(asset().symbol)">Retry</button>
+  </div>
+  }
+  @if (!isLoading() && !loadingError()) {
+  <div tvChartCollector tvChartGroup tvChartSync (tvChartCrosshairData)="onCrosshairData($event)"
+    class="flex-1 grid chart-group" chartIndicators [data]="candlestickData()">
     @switch (chartService.chartType()) {
     @case ('Candlestick') {
     <tv-candlestick-chart id="main-chart" [data]="candlestickData()" [options]="chartOptions()">
     </tv-candlestick-chart>
     }
     @case ('Line') {
-    <div tvChart="Line" id="main-chart" [data]="lineChartData()" [options]="chartOptions()">
-    </div>
+    <tv-line-chart id="main-chart" [data]="lineChartData()" [options]="chartOptions()">
+    </tv-line-chart>
     }
     @case ('Area') {
     <tv-area-chart id="main-chart" [data]="areaChartData()" [options]="chartOptions()">
@@ -18,33 +34,35 @@
     </div>
     }
     @case ('Baseline') {
-    <tv-baseline-chart id="main-chart" [data]="baselineChartData()" [options]="chartOptions()">
+    <tv-baseline-chart id="main-chart" [data]="baselineChartData()" [options]="chartOptions()"
+      [seriesOptions]="baselineSeriesOptions">
     </tv-baseline-chart>
     }
     }
     <tv-histogram-chart id="volume-chart" [data]="volumeData()" [options]="volumeOptions()">
     </tv-histogram-chart>
   </div>
+  }
 
   @if (currentCrosshairData()) {
-  <div class="crosshair-tooltip" [style.left.px]="crosshairPosition()?.x! + 15"
-    [style.top.px]="crosshairPosition()?.y! - 350">
+  <div class="crosshair-tooltip" [style.left.px]="crosshairPosition()?.x! - 95"
+    [style.top.px]="crosshairPosition()?.y! - 180">
     <div class="grid gap-1">
       @if (chartService.chartType() === 'Candlestick' || chartService.chartType() === 'Bar') {
       <div class="flex justify-between gap-4">
-        <span>O</span>
+        <span>Open</span>
         <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.open) }}</span>
       </div>
       <div class="flex justify-between gap-4">
-        <span>H</span>
+        <span>High</span>
         <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.high) }}</span>
       </div>
       <div class="flex justify-between gap-4">
-        <span>L</span>
+        <span>Low</span>
         <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.low) }}</span>
       </div>
       <div class="flex justify-between gap-4">
-        <span>C</span>
+        <span>Close</span>
         <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.close) }}</span>
       </div>
       } @else {
@@ -55,14 +73,26 @@
       @if (chartService.chartType() === 'Baseline') {
       <div class="flex justify-between gap-4">
         <span>Baseline</span>
-        <span class="font-medium">{{ formatPrice(currentCrosshairData()?.['main-chart']?.baseline) }}</span>
+        <span class="font-medium">{{ 100 }}</span>
       </div>
       }
       }
       <div class="flex justify-between gap-4">
-        <span>Vol</span>
+        <span>Volume</span>
         <span class="font-medium">{{ formatVolume(currentCrosshairData()?.['volume-chart']?.value) }}</span>
       </div>
+
+      @if (chartService.indicators().length > 0) {
+      <div class="mt-2 border-t border-gray-200 dark:border-gray-700 pt-2">
+        <h4 class="text-xs font-semibold mb-1">Indicators</h4>
+        @for (indicator of objectEntries(currentCrosshairData().indicators); track $index) {
+        <div class="flex justify-between gap-4">
+          <span>{{ indicator[0] }}</span>
+          <span class="font-medium">{{ formatPrice(indicator[1]) }}</span>
+        </div>
+        }
+      </div>
+      }
     </div>
   </div>
   }

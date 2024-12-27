@@ -1,20 +1,13 @@
-import { Component, effect, inject, OnInit, signal} from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { AssetService } from '../../../../services/asset.service';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { ChartComponent } from "../chart/chart.component";
-import { AssetStatisticsDto, YfinanceService } from '../../../../services/yfinance.service';
-import { Asset, WatchlistItem } from '../../../../models/asset.model';
 import { Router } from '@angular/router';
-import { state } from '@angular/animations';
 import { TransactionService } from '../../../../services/transaction.service';
-import { WatchListDTO } from '../../../../models/watchlist.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { StockPredictionResponse } from '../../../../models/StockPredictionResponse.model';
@@ -33,10 +26,10 @@ Chart.register(...registerables);
     MatInputModule,
     MatSelectModule,
     MatIconModule,
-    FormsModule
-],
+    FormsModule,
+  ],
   templateUrl: './assetdetails.component.html',
-  styleUrl: './assetdetails.component.css'
+  styleUrl: './assetdetails.component.css',
 })
 export class AssetdetailsComponent implements OnInit {
   private assetService = inject(AssetService);
@@ -71,7 +64,6 @@ export class AssetdetailsComponent implements OnInit {
     if(currentUser){
     this.username=currentUser.username;}
   }
-
 
   navigateToBuySell() {
     const asset = this.selectedAsset();

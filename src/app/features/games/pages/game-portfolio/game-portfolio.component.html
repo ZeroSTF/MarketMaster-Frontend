@@ -1,0 +1,38 @@
+<div class="h-screen w-full flex flex-wrap">
+    <!-- Left column: Contains the top-left and bottom-left stacked -->
+    <div class="w-full md:w-1/3 flex flex-col h-full">
+        <!-- Top left section: 1/4 width, flexible height -->
+        <div class="flex-grow p-2">
+          <app-portfolio-summary></app-portfolio-summary>
+        </div>
+      
+        <!-- Bottom left section: 1/4 width, fixed height -->
+        <div class="h-2/3 p-2">
+          <app-portfolio-performance></app-portfolio-performance>
+        </div>
+      </div>
+      
+  
+    <!-- Second column -->
+    <div class="w-full md:w-1/3 flex flex-col pb-20">
+      <!-- Top second section next to top-left: 1/4 width, 1/3 height -->
+      <div class=" p-2">
+<app-current-holdings></app-current-holdings>      
+</div>
+  
+      <!-- Bottom second section -->
+      
+    </div>
+  
+    <!-- Right column -->
+    <div class="w-full md:w-1/3 flex flex-col">
+      <!-- Top right section: 2/3 height -->
+      <div class="flex-grow p-2">
+        <app-recent-transactions></app-recent-transactions>
+      </div>
+  
+      <!-- Bottom right section: 1/3 height -->
+      
+    </div>
+  </div>
+  

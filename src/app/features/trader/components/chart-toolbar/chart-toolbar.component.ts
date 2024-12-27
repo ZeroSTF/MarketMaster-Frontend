@@ -1,36 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { ChartService } from '../../../../services/chart.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
-interface Indicator {
-  name: string;
-  type: string;
-  icon: string;
-  active: boolean;
-  parameters?: {
-    name: string;
-    default: number;
-  }[];
-}
-
-interface TimeFrame {
-  name: string;
-  value: string;
-  label: string;
-}
-
-export type ChartType =
-  | 'Candlestick'
-  | 'Line'
-  | 'Area'
-  | 'Bar'
-  | 'Baseline'
-  | 'Area';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  ChartType,
+  Indicator,
+  TimeFrame,
+  chartTypes,
+  indicators,
+  timeframes,
+} from '../../../../models/chart.model';
+import { IndicatorParametersDialogComponent } from '../indicator-parameters-dialog/indicator-parameters-dialog.component';
 
 @Component({
   selector: 'app-chart-toolbar',
@@ -47,105 +32,80 @@ export type ChartType =
   styleUrls: ['./chart-toolbar.component.scss'],
 })
 export class ChartToolbarComponent {
-  @Output() chartTypeChange = new EventEmitter<string>();
-  @Output() intervalChange = new EventEmitter<string>();
-  @Output() indicatorAdd = new EventEmitter<Indicator>();
-  @Output() indicatorRemove = new EventEmitter<string>();
-
-  chartTypes = [
-    {
-      name: 'Candlestick',
-      value: 'Candlestick' as ChartType,
-      icon: 'candlestick_chart',
-    },
-    { name: 'Line', value: 'Line' as ChartType, icon: 'show_chart' },
-    { name: 'Area', value: 'Area' as ChartType, icon: 'area_chart' },
-    { name: 'Bar', value: 'Bar' as ChartType, icon: 'bar_chart' },
-    {
-      name: 'Baseline',
-      value: 'Baseline' as ChartType,
-      icon: 'stacked_line_chart',
-    },
-  ];
-
   chartType: ChartType = 'Candlestick';
+  chartTypes = chartTypes;
+  timeframes = timeframes;
+  indicators = indicators;
 
-  timeframes: TimeFrame[] = [
-    { name: '1m', value: '1', label: '1 min' },
-    { name: '5m', value: '5', label: '5 min' },
-    { name: '15m', value: '15', label: '15 min' },
-    { name: '30m', value: '30', label: '30 min' },
-    { name: '1h', value: '60', label: '1 hour' },
-    { name: '4h', value: '240', label: '4 hour' },
-    { name: '1D', value: 'D', label: 'Day' },
-    { name: '1W', value: 'W', label: 'Week' },
-    { name: '1M', value: 'M', label: 'Month' },
-  ];
+  chartService = inject(ChartService);
 
-  indicators: Indicator[] = [
-    {
-      name: 'Moving Average',
-      type: 'MA',
-      icon: 'show_chart',
-      active: false,
-      parameters: [{ name: 'length', default: 20 }],
-    },
-    {
-      name: 'RSI',
-      type: 'RSI',
-      icon: 'analytics',
-      active: false,
-      parameters: [{ name: 'length', default: 14 }],
-    },
-    {
-      name: 'MACD',
-      type: 'MACD',
-      icon: 'trending_up',
-      active: false,
-      parameters: [
-        { name: 'fastLength', default: 12 },
-        { name: 'slowLength', default: 26 },
-        { name: 'signalLength', default: 9 },
-      ],
-    },
-    {
-      name: 'Bollinger Bands',
-      type: 'BB',
-      icon: 'design_services',
-      active: false,
-      parameters: [
-        { name: 'length', default: 20 },
-        { name: 'stdDev', default: 2 },
-      ],
-    },
-    {
-      name: 'Volume',
-      type: 'VOL',
-      icon: 'bar_chart',
-      active: true,
-      parameters: [],
-    },
-  ];
-
-  constructor(public chartService: ChartService) {}
+  constructor(private dialog: MatDialog) {}
 
   onChartTypeChange(type: ChartType) {
     this.chartType = type;
     this.chartService.setChartType(type);
-    this.chartTypeChange.emit(type);
   }
 
   onTimeframeChange(timeframe: TimeFrame) {
     this.chartService.setTimeframe(timeframe.value);
-    this.intervalChange.emit(timeframe.value);
   }
 
   toggleIndicator(indicator: Indicator) {
     indicator.active = !indicator.active;
     if (indicator.active) {
-      this.indicatorAdd.emit(indicator);
+      // If indicator has parameters, open dialog first
+      if (indicator.parameters && indicator.parameters.length > 0) {
+        this.openIndicatorParameters(indicator);
+      } else {
+        this.chartService.addIndicator(indicator);
+      }
     } else {
-      this.indicatorRemove.emit(indicator.type);
+      this.chartService.removeIndicator(indicator);
     }
+  }
+
+  openIndicatorParameters(indicator: Indicator) {
+    const dialogRef = this.dialog.open(IndicatorParametersDialogComponent, {
+      width: '400px',
+      data: {
+        indicator: { ...indicator },
+        currentParameters: this.getCurrentIndicatorParameters(indicator.type),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // Update indicator with new parameters
+        const updatedIndicator = {
+          ...indicator,
+          parameters: result.map((param: any) => ({
+            ...param,
+            value: param.value,
+          })),
+        };
+
+        // Remove existing indicator of this type
+        this.chartService.removeIndicator(indicator);
+
+        // Add updated indicator
+        this.chartService.addIndicator(updatedIndicator);
+      } else if (!indicator.active) {
+        // If dialog is cancelled and indicator was not previously active, revert active state
+        indicator.active = false;
+      }
+    });
+  }
+
+  private getCurrentIndicatorParameters(type: string) {
+    const indicatorConfig = this.indicators.find((i) => i.type === type);
+    return (
+      indicatorConfig?.parameters?.map((param) => ({
+        name: param.name,
+        value: param.default,
+        min: param.min,
+        max: param.max,
+        step: param.step,
+      })) || []
+    );
   }
 }

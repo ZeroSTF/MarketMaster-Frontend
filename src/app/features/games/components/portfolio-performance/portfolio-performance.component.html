@@ -1,0 +1,19 @@
+<div class="portfolio-performance-container p-4">
+    <div class="performance-header mb-4 flex justify-between items-center">
+      <h2 class="text-lg font-semibold text-white">Portfolio Performance</h2>
+      <span class="timeframe text-sm text-gray-300">Last {{ selectedPeriod }}</span>
+    </div>
+  
+    <!-- Line Chart -->
+    <canvas id="performanceChart"></canvas>
+  
+    <!-- Filter options -->
+    <div class="filter-options mt-4 flex justify-center space-x-4">
+      <button class="btn bg-white" (click)="filterData('5d')">5D</button>
+      <button class="btn bg-white" (click)="filterData('10d')">10D</button>
+      <button class="btn bg-white" (click)="filterData('1m')">1M</button>
+      <button class="btn bg-white" (click)="filterData('6m')">6M</button>
+      <button class="btn bg-white" (click)="filterData('1y')">1Y</button>
+    </div>
+  </div>
+  

@@ -1,0 +1,12 @@
+.trade-form {
+    background-color: #1f2937; /* Or any desired solid color */
+    opacity: 1 !important;      /* Force full opacity */
+    pointer-events: auto !important; /* Ensure interactivity */
+  }
+  
+  .trade-form * {
+    opacity: 1 !important;
+    pointer-events: auto !important; /* Apply to all child elements */
+    color: #ffffff; /* Ensure text is readable on a dark background */
+  }
+  
