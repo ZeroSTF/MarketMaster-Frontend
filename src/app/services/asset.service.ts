@@ -80,8 +80,14 @@ export class AssetService {
       });
   }
 
-  predictStock(symbol: string, train: boolean): Observable<StockPredictionResponse> {
-    return this.http.post<StockPredictionResponse>(`${this.apiUrl}/predict`, { symbol, train });
+  predictStock(symbol: string,train: boolean,futureDays: number = 14): Observable<StockPredictionResponse> {
+    return this.http.post<StockPredictionResponse>(`${this.apiFlask}/api/predict/${symbol}`, {
+      train,
+      future_days: futureDays
+    });
+  }
+  historicPrice(symbol: string): Observable<any> {
+    return this.http.get<any>(`${this.apiFlask}/api/assets/${symbol}/close_dates`);
   }
   // Update individual asset data
   private updateAssetData(updatedAsset: Asset) {
@@ -144,4 +150,11 @@ export class AssetService {
   setSelectedAsset(asset: Asset): void {
     this.selectedAssetSignal.set(asset);
   }
+
+  getAssetRecommendations(symbol: string): Observable<{ recommendation: { action: string; reason: string }; symbol: string }> {
+    return this.http.get<{ recommendation: { action: string; reason: string }; symbol: string }>(
+      `${this.apiFlask}/api/assets/${symbol}/recommendations`
+    );
+  }
+  
 }
