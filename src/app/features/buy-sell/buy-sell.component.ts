@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
@@ -10,6 +10,7 @@ import { Transaction } from '../../models/Transaction.model';
 import { LimitOrder, OrderStatus } from '../../models/limitOrder.model';
 import { TransactionService } from '../../services/transaction.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-buy-sell',
@@ -35,6 +36,7 @@ export class BuySellComponent implements OnInit {
   transaction:Transaction|null=null;
   actionMessage: string = '';
   prix:number=0;
+  private authService=inject(AuthService)
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -50,6 +52,11 @@ export class BuySellComponent implements OnInit {
   }
 
   ngOnInit() {
+    const currentUser=this.authService.currentUser();
+   if(currentUser){
+   this.username=currentUser.username;
+   
+   }
     // Fetch query parameters
     this.route.queryParams.subscribe(params => {
       this.symbol = params['symbol'] || '';

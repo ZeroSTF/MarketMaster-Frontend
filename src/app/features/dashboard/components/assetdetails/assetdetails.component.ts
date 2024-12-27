@@ -20,6 +20,7 @@ import { FormsModule } from '@angular/forms';
 import { StockPredictionResponse } from '../../../../models/StockPredictionResponse.model';
 import { Chart, registerables } from 'chart.js';
 import { ChangeDetectorRef } from '@angular/core';
+import { AuthService } from '../../../../auth/auth.service';
 
 Chart.register(...registerables);
 @Component({
@@ -51,7 +52,8 @@ export class AssetdetailsComponent implements OnInit {
   public chart: any; // Chart.js instance
   public chartLabels: string[] = []; // Dates for the chart
   public chartData: number[] = []; // Prices for the chart
-  
+  private authService=inject(AuthService)
+  private username:string='';
 
   result: any;
   error: string | null = null;
@@ -64,7 +66,11 @@ export class AssetdetailsComponent implements OnInit {
   constructor(private router: Router,private cdr: ChangeDetectorRef) {}
   
 
-  ngOnInit() {}
+  ngOnInit() {
+    const currentUser=this.authService.currentUser();
+    if(currentUser){
+    this.username=currentUser.username;}
+  }
 
 
   navigateToBuySell() {
@@ -79,7 +85,7 @@ export class AssetdetailsComponent implements OnInit {
   addWatchList() {
     const asset = this.selectedAsset();
     if (asset) {
-      this.transactionService.addWatchList('zerostf', asset.symbol).subscribe({
+      this.transactionService.addWatchList(this.username, asset.symbol).subscribe({
         next: () => this.snackBar.open('Added to watchlist!', 'Close', { duration: 3000 }),
         error: (err) => console.error(err),
       });

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AssetPortfolio } from '../../../../models/asset.model';
 import { ChartComponent } from '../../components/chart/chart.component';
@@ -15,12 +15,13 @@ import { StockPredictionResponse } from '../../../../models/StockPredictionRespo
 import 'chartjs-adapter-date-fns';
 import { PortfolioService } from '../../../../services/portfolio.service';
 import 'chartjs-chart-matrix';
+import { AuthService } from '../../../../auth/auth.service';
 
 
 @Component({
   selector: 'app-dashboard-portfolio',
   standalone: true,
-  imports: [CommonModule, ChartComponent, DragDropModule, WatchlistComponent],
+  imports: [CommonModule, DragDropModule],
   templateUrl: './dashboard-portfolio.component.html',
   styleUrl: './dashboard-portfolio.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,7 +43,7 @@ export class DashboardPortfolioComponent implements OnInit {
   limitOrders: LimitOrder[] = [];
   selectedOrder: LimitOrder | null = null;
   selectedHolding: HoldingDTO | null = null;
-  username: string = 'zerostf';
+  username: string = 'Zerostf';
   tt:number | undefined;
   portfolioPerformances: any[] = [];
   heatmapChart: any;
@@ -54,9 +55,17 @@ export class DashboardPortfolioComponent implements OnInit {
   fibonacciLevels: any = {};
   activeFibonacciChart: number = 1;
   fibonacciChartInstance: Chart | null = null;
-
   
+  private authService=inject(AuthService);
+  constructor(){
+    
+  }
   ngOnInit(): void {
+    const currentUser=this.authService.currentUser();
+   if(currentUser){
+   this.username=currentUser.username;
+   console.log("hhhhh",currentUser);
+   }
     this.fetchLimitOrders();
     this.fetchOverviewData();
     this.fetchHoldingData();
