@@ -129,5 +129,17 @@ export class TransactionService {
   getLimitOrders(username: string): Observable<LimitOrder[]> {
     return this.http.get<LimitOrder[]>(`${this.API_URL}/portf/LimitOrder/${username}`);
   }
+
+  findMaxQuantity(username: string, symbol: string): Observable<Transaction> {
+    const url = `${this.API_URL}/tran/max/${username}/${symbol}`;
+    return this.http.get<Transaction>(url);
+  }
+  deleteLimitOrder(username: string, limitOrder: LimitOrder): Observable<void> {
+    const url = `${this.API_URL}/order/delete/${username}`;
+    return this.http.delete<void>(url, { body: limitOrder }).pipe(
+      catchError(this.handleError)
+    );
+  }
+  
 }
 

@@ -59,4 +59,38 @@ img {
     transform: rotate(360deg);
   }
 }
+canvas {
+  max-width: 100%;
+  margin: 0 auto;
+}
+.fixed {
+  position: fixed;
+  z-index: 50; /* Ensure it is above other elements */
+}
+
+.bg-gray-800.bg-opacity-50 {
+  background-color: rgba(31, 41, 55, 0.5); /* Adjust transparency */
+}
+
+.bg-white {
+  z-index: 60; /* Ensure the content of the widget is above the backdrop */
+}
+
+.shadow-lg {
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.loader {
+  border: 4px solid rgba(0, 0, 0, 0.1); /* Light gray border */
+  border-top-color: #2563eb; /* Blue border */
+}
+
+.bg-opacity-60 {
+  background-color: rgba(31, 41, 55, 0.6); /* Semi-transparent gray */
+}
+
+.shadow-2xl {
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.2),
+    0px 4px 6px -2px rgba(0, 0, 0, 0.1);
+}
+
 

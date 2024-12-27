@@ -4,7 +4,7 @@
 >
   <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 sm:p-8 relative mx-4">
     <!-- Close Button -->
-    <button type="button" class="absolute right-4 top-4">
+    <button type="button" class="absolute right-4 top-4" (click)="gotoexplore()">
       <mat-icon>close</mat-icon>
     </button>
 
@@ -43,6 +43,7 @@
           formControlName="quantity"
           class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
         />
+        <p *ngIf="actionMessage" class="text-sm text-gray-600">{{ actionMessage }}</p>
       </div>
 
       <!-- Schedule Checkbox -->
