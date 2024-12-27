@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Chart } from 'chart.js/auto';  // Import Chart.js
 import { PortfolioService } from '../../../../services/portfolio.service';
+import { AuthService } from '../../../../auth/auth.service';
 
 @Component({
   selector: 'app-chart',
@@ -13,12 +14,16 @@ export class ChartComponent implements OnInit {
   performanceChart: any;  // Reference for the chart
   selectedPeriod: string = '1m';  // Default period is 1 month
   username: string = 'zerostf'; 
+  private authService=inject(AuthService);
   totalValues: { key: string, value: number }[] = []; 
 
   constructor(private portfolioService: PortfolioService) {}
 
   ngOnInit(): void {
     this.fetchTotalValues();  // Initialize the chart on component load
+    const currentUser=this.authService.currentUser();
+    if(currentUser){
+    this.username=currentUser.username;}
   }
 
   fetchTotalValues() {
