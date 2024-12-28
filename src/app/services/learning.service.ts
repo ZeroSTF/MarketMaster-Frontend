@@ -1,5 +1,7 @@
+import { environment } from './../../environments/environment';
 import { Injectable, signal, computed, DestroyRef, inject } from '@angular/core';
 import { Course, InterviewState } from './../models/learning.model';
+import { HttpClient } from '@angular/common/http';
 
 
 
@@ -14,6 +16,7 @@ export class LearningService {
   private readonly SILENCE_THRESHOLD = 3000;
   private readonly MINIMUM_SPEAK_DURATION = 3000;
   private micTestTimeout: any = null;
+  private readonly apiUrl = environment.apiUrl;
 
   // State management
   private state = signal<InterviewState>({
@@ -41,11 +44,12 @@ export class LearningService {
 
   public readonly interviewState = computed(() => this.state());
 
-  constructor() {
+  constructor(private http: HttpClient) {
     if (typeof window !== 'undefined') {
       this.synthesis = window.speechSynthesis;
       this.initializeSpeechRecognition();
     }
+    this.fetchCourses();
   }
   
 
@@ -274,86 +278,21 @@ export class LearningService {
 
   
 
-  private readonly _courses = signal<Course[]>([
-    {
-      id: '1',
-      title: 'Angular Fundamentals',
-      description: 'Master the core concepts of Angular framework',
-      progress: 75,
-      duration: 120,
-      category: 'frontend',
-      level: 'beginner',
-      hasCertification: true,
-      imageUrl: '/assets/images/courses/angular.jpg',
-      startDate: new Date('2024-01-15T10:00:00'),
-      status: 'in-progress',
-    },
-    {
-      id: '2',
-      title: 'Advanced TypeScript',
-      description: 'Deep dive into TypeScript features and patterns',
-      progress: 100,
-      duration: 180,
-      category: 'programming',
-      level: 'advanced',
-      hasCertification: true,
-      imageUrl: '/assets/images/courses/typescript.jpg',
-      startDate: new Date('2024-01-20T14:00:00'),
-      status: 'completed',
-    },
-    {
-      id: '3',
-      title: 'React Native Development',
-      description: 'Build mobile apps with React Native',
-      progress: 0,
-      duration: 240,
-      category: 'mobile',
-      level: 'intermediate',
-      hasCertification: true,
-      imageUrl: '/assets/images/courses/react-native.jpg',
-      startDate: new Date('2024-02-01T09:00:00'),
-      status: 'not-started',
-    },
-    {
-      id: '4',
-      title: 'Node.js Microservices',
-      description: 'Design and implement microservices architecture',
-      progress: 30,
-      duration: 150,
-      category: 'backend',
-      level: 'advanced',
-      hasCertification: true,
-      imageUrl: '/assets/images/courses/nodejs.jpg',
-      startDate: new Date('2024-01-25T13:00:00'),
-      status: 'in-progress',
-    },
-    {
-      id: '5',
-      title: 'UI/UX Design Principles',
-      description: 'Learn fundamental design principles and tools',
-      progress: 0,
-      duration: 90,
-      category: 'design',
-      level: 'beginner',
-      hasCertification: false,
-      imageUrl: '/assets/images/courses/uiux.jpg',
-      startDate: new Date('2024-02-05T11:00:00'),
-      status: 'not-started',
-    },
-    {
-      id: '6',
-      title: 'GraphQL APIs',
-      description: 'Build efficient APIs with GraphQL',
-      progress: 45,
-      duration: 160,
-      category: 'backend',
-      level: 'intermediate',
-      hasCertification: true,
-      imageUrl: '/assets/images/courses/graphql.jpg',
-      startDate: new Date('2024-01-18T15:00:00'),
-      status: 'in-progress',
-    },
-  ]);
+  private readonly _courses = signal<Course[]>([]);
+
+  private fetchCourses(): void {
+    this.http
+      .get<Course[]>(`${this.apiUrl}/courses`) 
+      .subscribe(
+        (courses) => {
+          // Update signal with fetched courses
+          this._courses.set(courses);
+        },
+        (error) => {
+          console.error('Error fetching courses:', error);
+        }
+      );
+  }
   // Public computed for accessing courses
   public readonly courses = computed(() => this._courses());
 
