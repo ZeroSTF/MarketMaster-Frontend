@@ -1,19 +1,7 @@
 import { Injectable, signal, computed, DestroyRef, inject } from '@angular/core';
-import { Course } from './../models/learning.model';
+import { Course, InterviewState } from './../models/learning.model';
 
-export interface InterviewState {
-  isActive: boolean;
-  currentQuestionIndex: number;
-  isListening: boolean;
-  isSpeaking: boolean;
-  lastAnswer: string;
-  silenceStartTime: number | null;
-  transcript: string;
-  microphoneStatus: 'untested' | 'working' | 'error';
-  microphoneError?: string;
 
-  
-}
 
 @Injectable({
   providedIn: 'root',
@@ -56,10 +44,10 @@ export class LearningService {
   constructor() {
     if (typeof window !== 'undefined') {
       this.synthesis = window.speechSynthesis;
-      // Remove automatic mic check from constructor
-      // this.initializeSpeechRecognition();
+      this.initializeSpeechRecognition();
     }
   }
+  
 
   private initializeSpeechRecognition(): void {
     if ('webkitSpeechRecognition' in window) {

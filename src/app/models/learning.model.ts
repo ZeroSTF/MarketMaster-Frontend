@@ -1,28 +1,4 @@
-// models/course.model.ts
 
-export interface Instructor {
-    id: string;
-    name: string;
-    avatarUrl: string;
-  }
-  
-  export interface Lesson {
-    id: string;
-    title: string;
-    duration: number; // Duration in minutes
-    videoUrl: string;
-    platform: 'Udemy' | 'YouTube';
-    isCompleted: boolean;
-  }
-  
-  export interface Module {
-    id: string;
-    title: string;
-    description: string;
-    lessons: Lesson[];
-    isCompleted: boolean;
-  }
-  
 
   
   export interface Course {
@@ -30,13 +6,39 @@ export interface Instructor {
     title: string;
     description: string;
     progress: number;
-    duration: number;  // in minutes
+    duration: number;
     category: string;
     level: string;
     hasCertification?: boolean;
-    startDate: Date;  // make this required
-    endDate?: Date;   // add this for calendar events
+    startDate: Date;
+    endDate?: Date;
     imageUrl?: string;
-    color?: string;   // add this for calendar event styling
-    status: 'not-started' | 'in-progress' | 'completed';  // add this for better status tracking
+    color?: string;
+    status: 'not-started' | 'in-progress' | 'completed';
+  }
+
+  export interface InterviewState {
+    isActive: boolean;
+    currentQuestionIndex: number;
+    isListening: boolean;
+    isSpeaking: boolean;
+    lastAnswer: string;
+    silenceStartTime: number | null;
+    transcript: string;
+    microphoneStatus: 'untested' | 'working' | 'error';
+    microphoneError?: string;
+    currentVideoUrl?: string; // Add this
+  
+  
+    
+  }
+
+  //calendar
+  export interface CourseEventProps {
+    description: string;
+    progress: number;
+    level: string;
+    duration: number;
+    category: string;
+    courseId: string;
   }

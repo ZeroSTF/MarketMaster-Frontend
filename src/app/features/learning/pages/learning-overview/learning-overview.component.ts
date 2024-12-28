@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { LearningService } from '../../../../services/learning.service';
-import { Course, Module } from '../../../../models/learning.model';
+import { Course } from '../../../../models/learning.model';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
