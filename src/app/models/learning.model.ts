@@ -23,20 +23,20 @@ export interface Instructor {
     isCompleted: boolean;
   }
   
+
+  
   export interface Course {
     id: string;
     title: string;
     description: string;
-    thumbnailUrl: string;
-    instructors: Instructor[];
-    duration: number; // Duration in hours
-    platform: 'Udemy' | 'YouTube';
-    modules: Module[];
+    progress: number;
+    duration: number;  // in minutes
     category: string;
-    level: 'Beginner' | 'Intermediate' | 'Advanced';
-    rating: number; // 0 - 5 rating
-    isEnrolled: boolean;
-    progress: number; // 0 - 100 percentage
-    releaseDate: Date;
+    level: string;
+    hasCertification?: boolean;
+    startDate: Date;  // make this required
+    endDate?: Date;   // add this for calendar events
+    imageUrl?: string;
+    color?: string;   // add this for calendar event styling
+    status: 'not-started' | 'in-progress' | 'completed';  // add this for better status tracking
   }
-  

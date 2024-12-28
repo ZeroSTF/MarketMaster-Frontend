@@ -1,7 +1,10 @@
+export interface PredictedPrice {
+  date: string;
+  price: number;
+}
+
 export interface StockPredictionResponse {
-    current_price: number; 
-    model_path: string;    
-    predicted_change: number; 
-    predicted_price: number;  
-  }
-  
+  current_price: number;
+  predicted_prices: PredictedPrice[];
+  predicted_change: number;
+}

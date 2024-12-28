@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -15,53 +15,35 @@ export class LearningSidebarComponent {
   @Input() hidden = false;
   @Output() toggle = new EventEmitter<void>();
   
-  selectedButton: string = 'calendar';
+  selectedButton: string = 'overview';
   isMobile = false;
   searchQuery: string = '';
   totalCourses: number = 7;
   selectedFilter: string = 'All';
+  showSearch = true;
 
-  courses = [
-    {
-      timeLeft: '58 Min Left',
-      title: 'Re-branding Discussion',
-      description: 'Discussion on re-branding of demo Brand',
-      date: '23 Mar 2024',
-      time: '1:30 pm'
-    },
-    {
-      timeLeft: '58 Min Left',
-      title: 'Re-branding Discussion',
-      description: 'Discussion on re-branding of demo Brand',
-      date: '23 Mar 2024',
-      time: '1:30 pm'
-    },
-    {
-      timeLeft: '58 Min Left',
-      title: 'Re-branding Discussion',
-      description: 'Discussion on re-branding of demo Brand',
-      date: '23 Mar 2024',
-      time: '1:30 pm'
-    },
-    {
-      timeLeft: '58 Min Left',
-      title: 'Re-branding Discussion',
-      description: 'Discussion on re-branding of demo Brand',
-      date: '23 Mar 2024',
-      time: '1:30 pm'
-    }
-  ];
+  
 
   sidebarButtons = [
     { name: 'calendar', label: 'Calender', icon: 'calendar_today', link: '/learning/calendar' },
-    { name: 'board', label: 'Board', icon: 'dashboard', link: '/learning/test' },
+    { name: 'board', label: 'Skill Test', icon: 'dashboard', link: '/learning/test' },
     { name: 'overview', label: 'overview', icon: 'shopping_cart', link: '/learning/overview' },
     { name: 'learning', label: 'learning', icon: 'school', link: '/learning/courses' }
   ];
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+  constructor(private breakpointObserver: BreakpointObserver , private router: Router) {
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
       this.isMobile = result.matches;
+    });
+    
+
+  }
+  ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Check the current route
+        this.showSearch = !event.url.includes('/calendar');
+      }
     });
   }
 
@@ -71,5 +53,8 @@ export class LearningSidebarComponent {
 
   clickSideButton(button: string): void {
     this.selectedButton = button;
+  }
+  isCalendarPath(): boolean {
+    return this.router.url === '/calendar';
   }
 }
