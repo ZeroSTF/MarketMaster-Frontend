@@ -1,7 +1,8 @@
 import { environment } from './../../environments/environment';
 import { Injectable, signal, computed, DestroyRef, inject } from '@angular/core';
-import { Course, InterviewState } from './../models/learning.model';
+import { Course, InterviewState, UserProgress } from './../models/learning.model';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 
 
@@ -282,7 +283,7 @@ export class LearningService {
 
   private fetchCourses(): void {
     this.http
-      .get<Course[]>(`${this.apiUrl}/courses`) 
+      .get<Course[]>(`${this.apiUrl}/courses/1/progress`) 
       .subscribe(
         (courses) => {
           // Update signal with fetched courses
@@ -293,10 +294,8 @@ export class LearningService {
         }
       );
   }
-  // Public computed for accessing courses
   public readonly courses = computed(() => this._courses());
 
-  // Calendar events computed signal
   public readonly calendarEvents = computed(() =>
     this._courses().map((course) => this.courseToEvent(course))
   );
@@ -319,7 +318,7 @@ export class LearningService {
         level: course.level,
         duration: course.duration,
         category: course.category,
-        courseId: course.id, // Add this to easily reference back to course
+        courseId: course.id,
       },
     };
   }
@@ -330,29 +329,23 @@ export class LearningService {
     return '#6B7280';
   }
 
-  public updateCourseStartDate(courseId: string, newDate: Date): void {
-    this._courses.update((courses) =>
-      courses.map((course) =>
-        course.id === courseId ? { ...course, startDate: newDate } : course
-      )
-    );
+  // Update course start date
+  public updateCourseStartDate(courseId: string, newDate: Date): Observable<Course> {
+    return this.http.put<Course>(`${this.apiUrl}/${courseId}`, { startDate: newDate });
   }
 
-  public updateCourseProgress(courseId: string, progress: number): void {
-    this._courses.update((courses) =>
-      courses.map((course) =>
-        course.id === courseId
-          ? {
-              ...course,
-              progress,
-              status: this.getStatusFromProgress(progress),
-            }
-          : course
-      )
-    );
+  // Update course progress
+  public updateCourseProgress(courseId: string, userId: string, progress: number): Observable<UserProgress> {
+    const progressDTO = { progress };  // Assume `progressDTO` only contains the progress value
+    return this.http.put<UserProgress>(`${this.apiUrl}/${courseId}/progress/${userId}`, progressDTO);
   }
 
-  private getStatusFromProgress(progress: number): Course['status'] {
+  // Get all user progress for a specific user
+  public getAllUserProgress(userId: string): Observable<UserProgress[]> {
+    return this.http.get<UserProgress[]>(`${this.apiUrl}/${userId}/progress`);
+  }
+
+  private getStatusFromProgress(progress: number): string {
     if (progress === 100) return 'completed';
     if (progress > 0) return 'in-progress';
     return 'not-started';

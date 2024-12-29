@@ -16,6 +16,17 @@
     color?: string;
     status: 'not-started' | 'in-progress' | 'completed';
   }
+  export interface UserProgress {
+    progressId: number;
+    courseId: number;
+    completed: boolean;
+    score: number | null;
+    progress: string;
+    lastAccessed: string;
+    startDate: string;
+    endDate: string | null;
+  }
+  
 
   export interface InterviewState {
     isActive: boolean;

@@ -42,6 +42,7 @@ export class LearningCalendarComponent implements OnInit {
 
   calendarOptions!: CalendarOptions;
   courses = this.learningService.courses;
+  
   public readonly calendarEvents = computed(() => 
     this.courses().map(course => this.courseToEvent(course))
   );
