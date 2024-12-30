@@ -28,7 +28,7 @@ export class LearningSidebarComponent {
     { name: 'calendar', label: 'Calender', icon: 'calendar_today', link: '/learning/calendar' },
     { name: 'board', label: 'Skill Test', icon: 'dashboard', link: '/learning/test' },
     { name: 'overview', label: 'overview', icon: 'shopping_cart', link: '/learning/overview' },
-    { name: 'learning', label: 'learning', icon: 'school', link: '/learning/courses' }
+    { name: 'learning', label: 'learning', icon: 'school', link: '/learning/course' }
   ];
 
   constructor(private breakpointObserver: BreakpointObserver , private router: Router) {
