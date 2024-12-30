@@ -1,8 +1,9 @@
 import { environment } from './../../environments/environment';
 import { Injectable, signal, computed, DestroyRef, inject } from '@angular/core';
 import { Course, InterviewState, UserProgress } from './../models/learning.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 
 
 
@@ -19,8 +20,95 @@ export class LearningService {
   private micTestTimeout: any = null;
   private readonly apiUrl = environment.apiUrl;
 
-  // State management
-  private state = signal<InterviewState>({
+
+  constructor(private http: HttpClient , private authService: AuthService) {
+    if (typeof window !== 'undefined') {
+      this.synthesis = window.speechSynthesis;
+      this.initializeSpeechRecognition();
+    }
+    this.fetchCourses();    
+  }
+
+//courses
+  private readonly _courses = signal<UserProgress[]>([]);
+  public readonly courses = computed(() => this._courses());
+
+
+  private fetchCourses(): void {
+    const user = this.authService.currentUser();
+    if (!user) {
+      console.error('Username is required to fetch courses.');
+      return;
+    }
+  
+    this.http.get<Course[]>(`${this.apiUrl}/courses`).subscribe({
+      next: (allCourses) => {
+        this.http.get<UserProgress[]>(`${this.apiUrl}/courses/${user.username}/progress`).subscribe({
+          next: (userProgress) => {
+            const enrichedCourses: UserProgress[] = allCourses.map(course => {
+              const existingProgress = userProgress.find(p => p.course.title === course.title);
+              return existingProgress || {
+                course: course,
+                User: user,
+                completed: false,
+                progress: 0,
+                score: null,
+                lastAccessed: "",
+                startDate: "",
+                endDate: null
+              };
+            });
+            this._courses.set(enrichedCourses);
+          },
+          error: (error) => {
+            console.error('Error fetching user progress:', error);
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error fetching courses:', error);
+      }
+    });
+  }
+  public startCourse(courseTitle: string): Observable<UserProgress> {
+    const user = this.authService.currentUser();
+    if (!user) {
+      throw new Error('User must be logged in to start a course');
+    }
+    const params = new HttpParams().set('username', user.username);
+    console.log('Starting course');
+    return this.http.post<UserProgress>(
+      `${this.apiUrl}/courses/${courseTitle}/progress`,
+      null, 
+      { params }
+    );
+  }
+  
+
+
+
+  
+  public updateCourseStartDate(courseId: string, newDate: Date): Observable<UserProgress> {
+    return this.http.put<UserProgress>(`${this.apiUrl}/${courseId}`, { startDate: newDate });
+  }
+
+  public updateCourseProgress(courseId: string, userId: string, progress: String): Observable<UserProgress> {
+    const progressDTO = { progress };
+    return this.http.put<UserProgress>(`${this.apiUrl}/${courseId}/progress/${userId}`, progressDTO);
+  }
+
+  public getAllUserProgress(userId: string): Observable<UserProgress[]> {
+    return this.http.get<UserProgress[]>(`${this.apiUrl}/${userId}/progress`);
+  }
+
+  public getCourse(courseTitle: string): UserProgress | undefined {
+    return this._courses().find((course) => course.course.title === courseTitle);
+  }
+
+   
+
+  //test logic
+   private state = signal<InterviewState>({
     isActive: false,
     currentQuestionIndex: 0,
     isListening: false,
@@ -45,317 +133,231 @@ export class LearningService {
 
   public readonly interviewState = computed(() => this.state());
 
-  constructor(private http: HttpClient) {
-    if (typeof window !== 'undefined') {
-      this.synthesis = window.speechSynthesis;
-      this.initializeSpeechRecognition();
-    }
-    this.fetchCourses();
+
+private initializeSpeechRecognition(): void {
+  if ('webkitSpeechRecognition' in window) {
+    this.recognition = new (window as any).webkitSpeechRecognition();
+    this.setupRecognitionConfig();
+    this.setupRecognitionHandlers();
   }
-  
+}
 
-  private initializeSpeechRecognition(): void {
-    if ('webkitSpeechRecognition' in window) {
-      this.recognition = new (window as any).webkitSpeechRecognition();
-      this.setupRecognitionConfig();
-      this.setupRecognitionHandlers();
-    }
-  }
+private setupRecognitionConfig(): void {
+  if (!this.recognition) return;
 
-  private setupRecognitionConfig(): void {
-    if (!this.recognition) return;
+  this.recognition.continuous = true;
+  this.recognition.interimResults = true;
+  this.recognition.lang = 'en-US';
+}
 
-    this.recognition.continuous = true;
-    this.recognition.interimResults = true;
-    this.recognition.lang = 'en-US';
-  }
+private setupRecognitionHandlers(): void {
+  if (!this.recognition) return;
 
-  private setupRecognitionHandlers(): void {
-    if (!this.recognition) return;
+  this.recognition.onresult = (event: any) => {
+    let finalTranscript = '';
+    let interimTranscript = '';
 
-    this.recognition.onresult = (event: any) => {
-      let finalTranscript = '';
-      let interimTranscript = '';
-
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          finalTranscript += transcript;
-          console.log('Final transcript:', finalTranscript); // Log final transcript
-        } else {
-          interimTranscript += transcript;
-        }
-      }
-
-      // Only update if we have actual content
-      if (finalTranscript || interimTranscript) {
-        this.updateState({
-          lastAnswer: finalTranscript || interimTranscript,
-          transcript: finalTranscript || interimTranscript,
-          silenceStartTime: null, // Prevent auto-progression when editing
-        });
-      }
-    };
-
-    this.recognition.onend = () => {
-      console.log('Speech recognition ended');
-      // Only restart if we're still supposed to be listening
-      if (this.state().isListening && this.state().isActive) {
-        console.log('Restarting speech recognition');
-        this.recognition?.start();
-      }
-    };
-
-    this.recognition.onerror = (event: any) => {
-      console.error('Speech recognition error:', event.error);
-      if (event.error === 'no-speech') {
-        // If no speech is detected, don't immediately stop - give more time
-        this.updateState({ silenceStartTime: Date.now() });
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        finalTranscript += transcript;
+        console.log('Final transcript:', finalTranscript); // Log final transcript
       } else {
-        this.updateState({ isListening: false });
-      }
-    };
-  }
-
-  public async speak(text: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (!this.synthesis) {
-        reject('Speech synthesis not supported');
-        return;
-      }
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      this.configureUtterance(utterance);
-
-      utterance.onend = () => {
-        this.updateState({ isSpeaking: false });
-        resolve();
-      };
-
-      utterance.onerror = (error) => {
-        console.error('Speech synthesis error:', error);
-        this.updateState({ isSpeaking: false });
-        reject(error);
-      };
-
-      this.updateState({ isSpeaking: true });
-      this.synthesis.speak(utterance);
-    });
-  }
-
-  private configureUtterance(utterance: SpeechSynthesisUtterance): void {
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-
-    if (this.synthesis) {
-      const voices = this.synthesis.getVoices();
-      const preferredVoice = voices.find(
-        (voice) => voice.lang === 'en-US' && voice.name.includes('Female')
-      );
-
-      if (preferredVoice) {
-        utterance.voice = preferredVoice;
+        interimTranscript += transcript;
       }
     }
-  }
 
-  public startListening(): void {
-    if (!this.recognition) {
-      console.error('Speech recognition not supported');
+    // Only update if we have actual content
+    if (finalTranscript || interimTranscript) {
+      this.updateState({
+        lastAnswer: finalTranscript || interimTranscript,
+        transcript: finalTranscript || interimTranscript,
+        silenceStartTime: null, // Prevent auto-progression when editing
+      });
+    }
+  };
+
+  this.recognition.onend = () => {
+    console.log('Speech recognition ended');
+    // Only restart if we're still supposed to be listening
+    if (this.state().isListening && this.state().isActive) {
+      console.log('Restarting speech recognition');
+      this.recognition?.start();
+    }
+  };
+
+  this.recognition.onerror = (event: any) => {
+    console.error('Speech recognition error:', event.error);
+    if (event.error === 'no-speech') {
+      // If no speech is detected, don't immediately stop - give more time
+      this.updateState({ silenceStartTime: Date.now() });
+    } else {
+      this.updateState({ isListening: false });
+    }
+  };
+}
+
+public async speak(text: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (!this.synthesis) {
+      reject('Speech synthesis not supported');
       return;
     }
 
-    this.updateState({
-      isListening: true,
-      silenceStartTime: Date.now(),
-    });
+    const utterance = new SpeechSynthesisUtterance(text);
+    this.configureUtterance(utterance);
 
-    try {
-      this.recognition.start();
-      this.startSilenceDetection();
-      console.log('Started listening');
-    } catch (error) {
-      console.error('Error starting recognition:', error);
-    }
-  }
-
-  private startSilenceDetection(): void {
-    const checkSilence = () => {
-      const { silenceStartTime, isListening, lastAnswer } = this.state();
-
-      if (silenceStartTime && isListening) {
-        const silenceDuration = Date.now() - silenceStartTime;
-
-        // Give more time to edit before auto-progression
-        if (
-          silenceDuration >= this.SILENCE_THRESHOLD + 5000 &&
-          lastAnswer.trim()
-        ) {
-          this.moveToNextQuestion();
-        } else {
-          if (this.silenceTimeout) {
-            window.clearTimeout(this.silenceTimeout);
-          }
-          this.silenceTimeout = window.setTimeout(checkSilence, 2000); // Increased check interval
-        }
-      }
+    utterance.onend = () => {
+      this.updateState({ isSpeaking: false });
+      resolve();
     };
 
-    if (this.silenceTimeout) {
-      window.clearTimeout(this.silenceTimeout);
+    utterance.onerror = (error) => {
+      console.error('Speech synthesis error:', error);
+      this.updateState({ isSpeaking: false });
+      reject(error);
+    };
+
+    this.updateState({ isSpeaking: true });
+    this.synthesis.speak(utterance);
+  });
+}
+
+private configureUtterance(utterance: SpeechSynthesisUtterance): void {
+  utterance.rate = 0.9;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+
+  if (this.synthesis) {
+    const voices = this.synthesis.getVoices();
+    const preferredVoice = voices.find(
+      (voice) => voice.lang === 'en-US' && voice.name.includes('Female')
+    );
+
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
     }
-    this.silenceTimeout = window.setTimeout(checkSilence, 2000);
+  }
+}
+
+public startListening(): void {
+  if (!this.recognition) {
+    console.error('Speech recognition not supported');
+    return;
   }
 
-  
+  this.updateState({
+    isListening: true,
+    silenceStartTime: Date.now(),
+  });
 
-  private async checkMicrophoneAvailability(): Promise<boolean> {
-    try {
-      // First check if the browser supports getUserMedia
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        this.updateState({
-          microphoneStatus: 'error',
-          microphoneError: "Your browser doesn't support microphone access",
-        });
-        return false;
+  try {
+    this.recognition.start();
+    this.startSilenceDetection();
+    console.log('Started listening');
+  } catch (error) {
+    console.error('Error starting recognition:', error);
+  }
+}
+
+private startSilenceDetection(): void {
+  const checkSilence = () => {
+    const { silenceStartTime, isListening, lastAnswer } = this.state();
+
+    if (silenceStartTime && isListening) {
+      const silenceDuration = Date.now() - silenceStartTime;
+
+      // Give more time to edit before auto-progression
+      if (
+        silenceDuration >= this.SILENCE_THRESHOLD + 5000 &&
+        lastAnswer.trim()
+      ) {
+        this.moveToNextQuestion();
+      } else {
+        if (this.silenceTimeout) {
+          window.clearTimeout(this.silenceTimeout);
+        }
+        this.silenceTimeout = window.setTimeout(checkSilence, 2000); // Increased check interval
       }
+    }
+  };
 
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  if (this.silenceTimeout) {
+    window.clearTimeout(this.silenceTimeout);
+  }
+  this.silenceTimeout = window.setTimeout(checkSilence, 2000);
+}
 
-      // Test the audio stream
-      const audioContext = new AudioContext();
-      const mediaStreamSource = audioContext.createMediaStreamSource(stream);
-      const analyzer = audioContext.createAnalyser();
-      mediaStreamSource.connect(analyzer);
 
-      // Stop all tracks after testing
-      stream.getTracks().forEach((track) => track.stop());
-      audioContext.close();
 
-      this.updateState({
-        microphoneStatus: 'working',
-        microphoneError: undefined,
-      });
-
-      return true;
-    } catch (error: any) {
-      console.error('Microphone access error:', error);
+private async checkMicrophoneAvailability(): Promise<boolean> {
+  try {
+    // First check if the browser supports getUserMedia
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       this.updateState({
         microphoneStatus: 'error',
-        microphoneError: this.getDetailedErrorMessage(error),
+        microphoneError: "Your browser doesn't support microphone access",
       });
       return false;
     }
-  }
 
-  
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-  private getDetailedErrorMessage(error: string): string {
-    switch (error) {
-      case 'no-speech':
-        return 'No speech was detected. Please check if your microphone is working and try speaking again.';
-      case 'audio-capture':
-        return 'No microphone was found. Please ensure a microphone is connected and permitted.';
-      case 'not-allowed':
-        return 'Microphone access was denied. Please allow microphone access in your browser settings.';
-      case 'network':
-        return 'Network error occurred. Please check your internet connection.';
-      default:
-        return `Microphone error: ${error}`;
-    }
-  }
+    // Test the audio stream
+    const audioContext = new AudioContext();
+    const mediaStreamSource = audioContext.createMediaStreamSource(stream);
+    const analyzer = audioContext.createAnalyser();
+    mediaStreamSource.connect(analyzer);
 
-  private async endInterview(): Promise<void> {
-    this.stopListening();
-    await this.speak('Thank you, goodbye.');
+    // Stop all tracks after testing
+    stream.getTracks().forEach((track) => track.stop());
+    audioContext.close();
+
     this.updateState({
-      isActive: false,
-      currentQuestionIndex: 0,
-      transcript: '',
-      lastAnswer: '',
+      microphoneStatus: 'working',
+      microphoneError: undefined,
     });
+
+    return true;
+  } catch (error: any) {
+    console.error('Microphone access error:', error);
+    this.updateState({
+      microphoneStatus: 'error',
+      microphoneError: this.getDetailedErrorMessage(error),
+    });
+    return false;
   }
+}
 
-  
 
-  private readonly _courses = signal<Course[]>([]);
 
-  private fetchCourses(): void {
-    this.http
-      .get<Course[]>(`${this.apiUrl}/courses/1/progress`) 
-      .subscribe(
-        (courses) => {
-          // Update signal with fetched courses
-          this._courses.set(courses);
-        },
-        (error) => {
-          console.error('Error fetching courses:', error);
-        }
-      );
+private getDetailedErrorMessage(error: string): string {
+  switch (error) {
+    case 'no-speech':
+      return 'No speech was detected. Please check if your microphone is working and try speaking again.';
+    case 'audio-capture':
+      return 'No microphone was found. Please ensure a microphone is connected and permitted.';
+    case 'not-allowed':
+      return 'Microphone access was denied. Please allow microphone access in your browser settings.';
+    case 'network':
+      return 'Network error occurred. Please check your internet connection.';
+    default:
+      return `Microphone error: ${error}`;
   }
-  public readonly courses = computed(() => this._courses());
+}
 
-  public readonly calendarEvents = computed(() =>
-    this._courses().map((course) => this.courseToEvent(course))
-  );
+private async endInterview(): Promise<void> {
+  this.stopListening();
+  await this.speak('Thank you, goodbye.');
+  this.updateState({
+    isActive: false,
+    currentQuestionIndex: 0,
+    transcript: '',
+    lastAnswer: '',
+  });
+}
 
-  private courseToEvent(course: Course) {
-    const endDate = new Date(course.startDate);
-    endDate.setMinutes(endDate.getMinutes() + course.duration);
 
-    return {
-      id: course.id,
-      title: course.title,
-      start: course.startDate,
-      end: endDate,
-      backgroundColor: this.getEventColor(course.progress),
-      borderColor: this.getEventColor(course.progress),
-      textColor: 'white',
-      extendedProps: {
-        description: course.description,
-        progress: course.progress,
-        level: course.level,
-        duration: course.duration,
-        category: course.category,
-        courseId: course.id,
-      },
-    };
-  }
-
-  private getEventColor(progress: number): string {
-    if (progress === 100) return '#059669';
-    if (progress > 0) return '#3B82F6';
-    return '#6B7280';
-  }
-
-  // Update course start date
-  public updateCourseStartDate(courseId: string, newDate: Date): Observable<Course> {
-    return this.http.put<Course>(`${this.apiUrl}/${courseId}`, { startDate: newDate });
-  }
-
-  // Update course progress
-  public updateCourseProgress(courseId: string, userId: string, progress: number): Observable<UserProgress> {
-    const progressDTO = { progress };  // Assume `progressDTO` only contains the progress value
-    return this.http.put<UserProgress>(`${this.apiUrl}/${courseId}/progress/${userId}`, progressDTO);
-  }
-
-  // Get all user progress for a specific user
-  public getAllUserProgress(userId: string): Observable<UserProgress[]> {
-    return this.http.get<UserProgress[]>(`${this.apiUrl}/${userId}/progress`);
-  }
-
-  private getStatusFromProgress(progress: number): string {
-    if (progress === 100) return 'completed';
-    if (progress > 0) return 'in-progress';
-    return 'not-started';
-  }
-
-  public getCourse(courseId: string): Course | undefined {
-    return this._courses().find((course) => course.id === courseId);
-  }
-
-  //test logic
   public async startInterview(): Promise<void> {
     // Clear any previous state
     this.updateState({

@@ -1,12 +1,10 @@
+import { User } from './user.model';
 
 
   
   export interface Course {
-    id: string;
     title: string;
     description: string;
-    progress: number;
-    duration: number;
     category: string;
     level: string;
     hasCertification?: boolean;
@@ -17,11 +15,11 @@
     status: 'not-started' | 'in-progress' | 'completed';
   }
   export interface UserProgress {
-    progressId: number;
-    courseId: number;
+    course: Course;
+    User: User;
     completed: boolean;
     score: number | null;
-    progress: string;
+    progress: number;
     lastAccessed: string;
     startDate: string;
     endDate: string | null;

@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { LearningService } from '../../../../services/learning.service';
-import { Course } from '../../../../models/learning.model';
+import { Course, UserProgress } from '../../../../models/learning.model';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -12,47 +12,36 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './learning-overview.component.css'
 })
 export class LearningOverviewComponent {
-  activeTab: string = 'certifications'; // Changed default tab
+  activeTab: string = 'certifications';
   private courseService = inject(LearningService);
   courses = this.courseService.courses;
 
-  // Computed properties for each category
   certifications = computed(() => 
-    this.courses().filter((course: Course) => 
-      course.progress === 100 && course.hasCertification === true
+    this.courses().filter((course: UserProgress) => 
+      course.progress === 100 || course.completed === true
     )
   );
 
   completedCourses = computed(() => 
-    this.courses().filter((course: Course) => 
-      course.progress === 100 && !course.hasCertification
+    this.courses().filter((course: UserProgress) => 
+      course.progress === 100 && !course.completed
     )
   );
 
-  inProgressCourses = computed(() => 
-    this.courses().filter((course: Course) => 
-      course.progress > 0 && course.progress < 100
+  inProgressCourses = computed(() =>
+    this.courses().filter((course: UserProgress) => 
+       course.progress > 0 && course.progress < 100
     )
   );
 
   comingCourses = computed(() => 
-    this.courses().filter((course: Course) => 
-      course.progress === 0
+    this.courses().filter((course: UserProgress) => 
+      course.progress === 0 && course.startDate !== ""
     )
   );
 
 
-  // Helper computed properties
-  averageProgress = computed(() => {
-    const totalProgress = this.courses().reduce(
-      (sum: number, course: Course) => sum + course.progress, 
-      0
-    );
-    return this.courses().length > 0 
-      ? Math.round(totalProgress / this.courses().length) 
-      : 0;
-  });
-
+ 
   // Method to get courses based on active tab
   getActiveCourses() {
     switch (this.activeTab) {
