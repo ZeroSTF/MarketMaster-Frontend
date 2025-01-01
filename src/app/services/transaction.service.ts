@@ -2,7 +2,7 @@ import { Injectable, Signal, computed, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Transaction } from '../models/Transaction.model'; 
+import { Transaction } from '../models/transaction.model'; 
 import { LimitOrder } from '../models/limitOrder.model';
 import { environment } from '../../environments/environment';
 import { HoldingDTO } from '../models/holding.model';
