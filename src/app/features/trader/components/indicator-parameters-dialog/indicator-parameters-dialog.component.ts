@@ -30,7 +30,7 @@ import { CommonModule } from '@angular/common';
     <div
       class="p-6 bg-white dark:!bg-gray-800 text-gray-900 dark:!text-gray-100 rounded-lg"
     >
-      <h2 class="text-xl font-semibold mb-4 dark!:text-white">
+      <h2 class="text-xl font-semibold mb-4 dark:!text-white">
         {{ data.indicator.name }} Parameters
       </h2>
       <mat-dialog-content>
