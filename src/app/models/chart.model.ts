@@ -6,6 +6,15 @@ export type ChartType =
   | 'Baseline'
   | 'Area';
 
+export interface ChartDataPoint {
+  time: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
 export const chartTypes = [
   {
     name: 'Candlestick',
