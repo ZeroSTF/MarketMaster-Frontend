@@ -1,0 +1,116 @@
+.global-leaderboard-container {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(18px);
+    border-radius: 1.5rem;
+    border: 1px solid var(--orange-gamer, #FB6805);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    padding: 2rem;
+  }
+  
+  .header h2 {
+    font-size: 1.5rem;
+    color: #FB6805;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .header .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glow {
+    0% {
+      text-shadow: 0 0 10px #ffe700, 0 0 20px #ffe700, 0 0 30px #ffd700;
+    }
+    100% {
+      text-shadow: 0 0 20px #ffd700, 0 0 30px #ffc700, 0 0 40px #ffb700;
+    }
+  }
+  
+  .leaderboard-content {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 1rem;
+  }
+  
+  .leaderboard-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .leaderboard-item {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .leaderboard-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+  }
+  
+  .rank-number {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    background: rgba(30, 136, 229, 0.8);
+  }
+  
+  .rank-top {
+    background: linear-gradient(45deg, #ffeb3b, #ffc107);
+  }
+  
+  .rank-second {
+    background: linear-gradient(45deg, #cfd8dc, #b0bec5);
+  }
+  
+  .rank-third {
+    background: linear-gradient(45deg, #d7ccc8, #a1887f);
+  }
+  
+  .leader-name {
+    font-size: 1.25rem;
+    margin-bottom: 0.2rem;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+  
+  .leader-profit {
+    font-size: 1rem;
+  }
+  
+  .leader-profit .text-green-400 {
+    color: #00e676;
+  }
+  
+  .leader-profit .text-red-400 {
+    color: #ff1744;
+  }
+  
+  .animate-bounce {
+    animation: bounce 1.8s infinite;
+  }
+  
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  

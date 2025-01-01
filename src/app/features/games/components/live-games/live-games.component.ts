@@ -17,7 +17,12 @@ export class LiveGamesComponent implements OnInit {
   openGames: GameDto[] = [];
   username: string = 'koussaykoukii'; // Replace with actual username if available dynamically
 
-  constructor(private gameService: GameService, private cdr: ChangeDetectorRef,private authService: AuthService,private router : Router) {}
+  constructor(
+    private gameService: GameService,
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.fetchUserGames();
@@ -52,11 +57,17 @@ export class LiveGamesComponent implements OnInit {
     });
   }
 
+  /**
+   * Navigates to the main game view for the selected game.
+   */
   openGame(game: GameDto): void {
     console.log(`Opening game: ${game.title}`);
-    // Logic to open the game
+    this.router.navigate([`/gamer/main/${game.id}`]);
   }
 
+  /**
+   * Navigates to the user's portfolio view for a specific game.
+   */
   viewPortfolio(game: GameDto): void {
     const user = this.authService.currentUser();
     console.log('Authenticated user:', user); // Debugging log
@@ -68,8 +79,10 @@ export class LiveGamesComponent implements OnInit {
       console.error('User not authenticated');
     }
   }
-  
 
+  /**
+   * Handles logic to join a game.
+   */
   joinGame(game: GameDto): void {
     console.log(`Joining game: ${game.title}`);
     // Logic to join the game

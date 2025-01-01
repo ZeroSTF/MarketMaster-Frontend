@@ -1,59 +1,59 @@
-/* General container styling */
-.leaderboard-container {
+/* Container Styling */
+.overview-details-container {
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  border-radius: 1rem;
+  backdrop-filter: blur(15px);
+  border-radius: 0.75rem;
   border: 1px solid var(--orange-gaamer, #FB6805);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   color: #ffffff;
+  overflow-y: auto;
+  max-height: 400px; /* Adjust based on layout needs */
 }
 
-/* Title styling */
-.leaderboard-title {
-  text-align: center;
-  color: var(--orange-gaamer, #FB6805);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+/* Player Item */
+.player-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
 }
 
-/* Header row styling */
-.leaderboard-header {
-  color: rgba(255, 255, 255, 0.7);
-  text-transform: uppercase;
-  text-align: left; /* Aligns header items uniformly */
-  gap: 1.3rem; /* Adds consistent spacing between columns */
+.player-item:hover {
+  transform: scale(1.02);
 }
 
-/* Player row styling */
-.leaderboard-row {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  text-align: left;
-  gap: 1rem; /* Adds consistent spacing between columns */
+.bg-active {
+  background: rgba(40, 167, 69, 0.1); /* Subtle green for active players */
 }
 
-/* Rank column */
-.rank {
-  color: var(--orange-gaamer, #FB6805);
-  text-align: center; /* Centers rank value */
+.bg-inactive {
+  background: rgba(255, 0, 0, 0.1); /* Subtle red for inactive players */
 }
 
-/* Player column */
-.player-avatar {
+/* Avatar */
+.user-avatar {
   width: 40px;
   height: 40px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--orange-gaamer, #FB6805);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.player-name {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+/* Rank */
+.rank {
+  min-width: 50px;
 }
 
-/* Profit column */
-.profit {
-  font-size: 1.1rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+.text-orange {
+  color: var(--orange-gaamer, #FB6805);
 }
 
-/* Trades column */
-.trades {
-  color: rgba(255, 255, 255, 0.7);
+.text-green {
+  color: #28a745;
+}
+
+.text-red {
+  color: #dc3545;
 }

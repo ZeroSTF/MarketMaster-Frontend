@@ -3,6 +3,7 @@ import { Injectable, signal, computed, OnDestroy } from '@angular/core';
 import { Asset } from '../models/asset.model';
 import { catchError, firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { MarketDataRequestDto, MarketDataResponseDto } from './game-chart.service';
 import { ChartDataPoint, ChartType, Indicator } from '../models/chart.model';
 
 
@@ -38,6 +39,8 @@ export class ChartService implements OnDestroy {
   readonly chartType = computed(() => this.chartTypeSignal());
 
   private readonly apiUrl = environment.flaskUrl;
+  private readonly apiUrl1 = environment.apiUrl;
+
 
   constructor(private http: HttpClient) {}
 
@@ -142,5 +145,41 @@ export class ChartService implements OnDestroy {
 
   ngOnDestroy(): void {
     this.clearDataRefresh();
+  }
+
+  async fetchGameMarketData(gameId: number, assetSymbol: string, lastPauseTimestamp: string) {
+    try {
+      const request: MarketDataRequestDto = { gameId, assetSymbol, lastPauseTimestamp };
+      const response = await firstValueFrom(
+        this.http
+          .post<MarketDataResponseDto>(`${this.apiUrl1}/games/market-data`, request)
+          .pipe(
+            catchError((error: HttpErrorResponse) => {
+              console.error('API Error:', error.message);
+              throw new Error(error.message);
+            })
+          )
+      );
+
+      // Process the past and upcoming market data
+      if (response?.pastMarketData?.length) {
+        const transformedPastData = response.pastMarketData.map((data) => ({
+          time: new Date(data.timestamp).getTime() / 1000,
+          open: data.open,
+          high: data.high,
+          low: data.low,
+          close: data.close,
+          volume: data.volume,
+        }));
+        this.updateHistoricalData(transformedPastData);
+      }
+
+      if (response?.upcomingMarketData?.length) {
+        // Optionally, handle upcoming data (e.g., store in a signal or use it for predictions)
+        console.log('Upcoming Market Data:', response.upcomingMarketData);
+      }
+    } catch (error) {
+      console.error('Error fetching game market data:', error);
+    }
   }
 }

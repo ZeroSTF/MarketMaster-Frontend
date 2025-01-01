@@ -1,18 +1,46 @@
-<div class="leaderboard-container p-6">
-  <h2 class="leaderboard-title text-2xl font-bold mb-6">Game Leaderboard</h2>
-  <div class="leaderboard-header grid grid-cols-[0.5fr,2fr,1fr,1fr] text-sm font-semibold border-b pb-2 mb-4">
-    <span>#</span>
-    <span>Player</span>
-    <span>Profit</span>
-    <span>Trades</span>
+<div class="overview-details-container p-4">
+  <!-- Header -->
+  <div class="mb-1  flex justify-between items-center">
+    <h3 class="text-lg font-semibold user-name">Leaderboard</h3>
+    <p class="text-sm text-gray-300">Top Players</p>
   </div>
-  <div *ngFor="let player of players; let i = index" class="leaderboard-row grid grid-cols-[0.5fr,2fr,1fr,1fr] items-center py-3">
-    <span class="rank font-semibold">{{ player.rank }}</span>
-    <div class="player-info flex items-center">
-      <img class="player-avatar rounded-full mr-3" [src]="player.avatar" alt="{{ player.name }}" />
-      <span class="player-name font-medium">{{ player.name }}</span>
+
+  <!-- Leaderboard List -->
+  <div>
+    <div
+      *ngFor="let player of players"
+      class="player-item flex items-center justify-between mb-3 p-3 rounded-md"
+      [ngClass]="player.isActive ? 'bg-active' : 'bg-inactive'"
+    >
+      <!-- Left: Avatar and Name -->
+      <div class="flex items-center">
+        <img
+          [src]="player.avatar"
+          alt="Avatar"
+          class="user-avatar rounded-full mr-3"
+        />
+        <div>
+          <h4 class="text-sm font-bold user-name">{{ player.name }}</h4>
+          <p class="text-xs text-gray-400">Trades: {{ player.trades }}</p>
+        </div>
+      </div>
+
+      <!-- Middle: Rank -->
+      <div class="rank text-center">
+        <p class="text-xs text-gray-300">Rank</p>
+        <h4 class="text-orange font-bold">{{ player.rank }}</h4>
+      </div>
+
+      <!-- Right: Profit -->
+      <div class="text-right">
+        <p
+          class="text-sm font-bold"
+          [ngClass]="player.profit >= 0 ? 'text-green' : 'text-red'"
+        >
+          ${{ player.profit }}
+        </p>
+        <p class="text-xs text-gray-400">Profit</p>
+      </div>
     </div>
-    <span class="profit font-semibold text-white">{{ player.profit | currency }}</span>
-    <span class="trades text-sm">{{ player.trades }}</span>
   </div>
 </div>

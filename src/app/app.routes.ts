@@ -107,7 +107,7 @@ export const routes: Routes = [
         component: GamePortfolioComponent,
       },
       {
-        path: 'main',
+        path: 'main/:gameId',
         component: GameMainComponent,
       },
       {
