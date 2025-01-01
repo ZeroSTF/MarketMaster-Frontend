@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatListModule } from '@angular/material/list';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { AuthService } from '../../../../auth/auth.service';
 
 @Component({
   selector: 'app-dashboard-sidebar',
@@ -17,6 +18,7 @@ export class DashboardSidebarComponent {
   @Output() toggle = new EventEmitter<void>();
   selectedButton: string = 'overview';
   isMobile = false;
+  authService = inject(AuthService);
 
   sidebarButtons = [
     { name: 'overview', label: 'Overview', icon: 'home', link: '/dashboard/overview'},

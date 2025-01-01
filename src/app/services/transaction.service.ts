@@ -2,13 +2,13 @@ import { Injectable, Signal, computed, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Transaction } from '../models/Transaction.model'; 
+import { Transaction } from '../models/Transaction.model';
 import { LimitOrder } from '../models/limitOrder.model';
 import { environment } from '../../environments/environment';
 import { HoldingDTO } from '../models/holding.model';
 import { OverviewDTO } from '../models/overview.model';
 import { WatchListDTO } from '../models/watchlist.model';
-import { BehaviorSubject} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Asset, PageResponse } from '../models/asset.model';
 import { BestWinner } from '../models/BestWinner.model';
 @Injectable({
@@ -16,22 +16,31 @@ import { BestWinner } from '../models/BestWinner.model';
 })
 export class TransactionService {
   private readonly API_URL = `${environment.apiUrl}`;
-  private readonly apiUrl = `${environment.apiUrl}/watchlist`
+  private readonly apiUrl = `${environment.apiUrl}/watchlist`;
   private watchlistSubject = new BehaviorSubject<Asset[]>([]); // Holds current list of assets
   public watchlist$ = this.watchlistSubject.asObservable();
   private readonly recentTransactionSignal = signal<Transaction | null>(null);
   private readonly recentOrderSignal = signal<LimitOrder | null>(null);
   private readonly recentWatchListSignal = signal<WatchListDTO | null>(null);
 
-  public readonly recentWatchList: Signal<WatchListDTO | null> = computed(() => this.recentWatchListSignal?.());
-  public readonly recentTransaction: Signal<Transaction | null> = computed(() => this.recentTransactionSignal?.());
-  public readonly recentOrder: Signal<LimitOrder | null> = computed(() => this.recentOrderSignal?.());
+  public readonly recentWatchList: Signal<WatchListDTO | null> = computed(() =>
+    this.recentWatchListSignal?.()
+  );
+  public readonly recentTransaction: Signal<Transaction | null> = computed(() =>
+    this.recentTransactionSignal?.()
+  );
+  public readonly recentOrder: Signal<LimitOrder | null> = computed(() =>
+    this.recentOrderSignal?.()
+  );
 
   constructor(private http: HttpClient) {}
 
-  addTransaction(username: string, transaction: Transaction): Observable<Transaction> {
+  addTransaction(
+    username: string,
+    transaction: Transaction
+  ): Observable<Transaction> {
     const url = `${this.API_URL}/tran/ajout/${username}`;
-    
+
     return this.http.post<Transaction>(url, transaction).pipe(
       tap((transaction) => this.recentTransactionSignal.set(transaction)),
       catchError(this.handleError)
@@ -41,7 +50,7 @@ export class TransactionService {
   addOrder(username: string, limitOrder: LimitOrder): Observable<LimitOrder> {
     const url = `${this.API_URL}/order/add/${username}`;
     return this.http.post<LimitOrder>(url, limitOrder).pipe(
-      tap((order) => this.recentOrderSignal.set(order)), 
+      tap((order) => this.recentOrderSignal.set(order)),
       catchError(this.handleError)
     );
   }
@@ -59,7 +68,7 @@ export class TransactionService {
   getHolding(username: string): Observable<HoldingDTO[]> {
     const url = `${this.API_URL}/portf/holding/${username}`;
     return this.http.get<HoldingDTO[]>(url).pipe(
-      tap((holdings) => console.log('Fetched holdings:', holdings)), 
+      tap((holdings) => console.log('Fetched holdings:', holdings)),
       catchError(this.handleError)
     );
   }
@@ -67,7 +76,7 @@ export class TransactionService {
   getTransaction(username: string): Observable<Transaction[]> {
     const url = `${this.API_URL}/portf/transaction/${username}`;
     return this.http.get<Transaction[]>(url).pipe(
-      tap((transaction) => console.log('Fetched holdings:', transaction)), 
+      tap((transaction) => console.log('Fetched holdings:', transaction)),
       catchError(this.handleError)
     );
   }
@@ -84,10 +93,10 @@ export class TransactionService {
   getWatchList(username: string): Observable<WatchListDTO[]> {
     const url = `${this.API_URL}/portf/watchlist/${username}`;
     return this.http.get<WatchListDTO[]>(url).pipe(
-      tap((watchlist) => console.log('Fetched whatchlist:', watchlist)), 
+      tap((watchlist) => console.log('Fetched whatchlist:', watchlist)),
       catchError(this.handleError)
     );
-  } 
+  }
 
   getUserWatchlist(userId: string): Observable<PageResponse<Asset>> {
     return this.http.get<PageResponse<Asset>>(`${this.apiUrl}/${userId}`);
@@ -95,14 +104,16 @@ export class TransactionService {
   // Add asset to the watchlist
   addAssetToWatchlist(asset: Asset): void {
     const currentWatchlist = this.watchlistSubject.value;
-    if (!currentWatchlist.find(item => item.symbol === asset.symbol)) {
+    if (!currentWatchlist.find((item) => item.symbol === asset.symbol)) {
       this.watchlistSubject.next([...currentWatchlist, asset]);
     }
   }
 
   // Remove asset from the watchlist
   removeAssetFromWatchlist(symbol: string): void {
-    const updatedWatchlist = this.watchlistSubject.value.filter(item => item.symbol !== symbol);
+    const updatedWatchlist = this.watchlistSubject.value.filter(
+      (item) => item.symbol !== symbol
+    );
     this.watchlistSubject.next(updatedWatchlist);
   }
 
@@ -118,16 +129,28 @@ export class TransactionService {
 
   addWatchList(username: string, symbol: string): Observable<WatchListDTO> {
     const url = `${this.API_URL}/portf/addwatchlist/${username}/${symbol}`;
-    return this.http.post<WatchListDTO>(url, {}).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .post<WatchListDTO>(url, {})
+      .pipe(catchError(this.handleError));
   }
 
   getBestWinners(): Observable<BestWinner[]> {
     return this.http.get<BestWinner[]>(`${this.API_URL}/portf/bestWinner`);
   }
   getLimitOrders(username: string): Observable<LimitOrder[]> {
-    return this.http.get<LimitOrder[]>(`${this.API_URL}/portf/LimitOrder/${username}`);
+    return this.http.get<LimitOrder[]>(
+      `${this.API_URL}/portf/LimitOrder/${username}`
+    );
+  }
+
+  findMaxQuantity(username: string, symbol: string): Observable<Transaction> {
+    const url = `${this.API_URL}/tran/max/${username}/${symbol}`;
+    return this.http.get<Transaction>(url);
+  }
+  deleteLimitOrder(username: string, limitOrder: LimitOrder): Observable<void> {
+    const url = `${this.API_URL}/order/delete/${username}`;
+    return this.http
+      .delete<void>(url, { body: limitOrder })
+      .pipe(catchError(this.handleError));
   }
 }
-

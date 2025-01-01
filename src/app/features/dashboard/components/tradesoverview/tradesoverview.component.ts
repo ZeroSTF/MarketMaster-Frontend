@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionService } from '../../../../services/transaction.service';
 import { Transaction } from '../../../../models/Transaction.model';
+import { AuthService } from '../../../../auth/auth.service';
 
 @Component({
   selector: 'app-tradesoverview',
@@ -14,10 +15,14 @@ export class TradesoverviewComponent implements OnInit {
   selectedTab: string = 'openTrades';
   transactionData: Transaction[] | null = null;
   username: string = 'zerostf';
+  private authService=inject(AuthService)
 
   constructor(private transactionService: TransactionService) {}
 
   ngOnInit(): void {
+    const currentUser=this.authService.currentUser();
+    if(currentUser){
+    this.username=currentUser.username;}
     this.selectedTab = 'openTrades';
     
     this.transactionService.getTransaction(this.username).subscribe(
