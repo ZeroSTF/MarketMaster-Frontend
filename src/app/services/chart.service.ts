@@ -3,16 +3,8 @@ import { Injectable, signal, computed, OnDestroy } from '@angular/core';
 import { Asset } from '../models/asset.model';
 import { catchError, firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { ChartType, Indicator } from '../models/chart.model';
+import { ChartDataPoint, ChartType, Indicator } from '../models/chart.model';
 
-interface ChartDataPoint {
-  time: number;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-}
 
 interface HistoricalDataResponse {
   data: {
