@@ -1,0 +1,53 @@
+/* Container Styling */
+.overview-details-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 0.75rem;
+    border: 1px solid var(--orange-gaamer, #FB6805);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+  }
+  
+  /* Table Styling */
+  .holdings-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .holdings-table thead tr {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .holdings-table th,
+  .holdings-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .holdings-table th {
+    text-align: left;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .holdings-table td {
+    font-size: 0.875rem;
+  }
+  
+  /* Highlight on hover */
+  .holdings-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Symbol Highlight */
+  .holdings-table td:first-child {
+    font-weight: bold;
+    color: var(--orange-gaamer, #FB6805);
+  }
+  
+  /* Responsive Scrolling */
+  .overflow-x-auto {
+    overflow-x: auto;
+  }
+  

@@ -1,50 +1,52 @@
-.live-events-container {
-    background: rgba(255, 255, 255, 0.15); /* Semi-transparent background */
-    backdrop-filter: blur(15px); /* Blurry background effect */
-    border-radius: 1rem; /* Rounded corners */
-    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); /* Elevated shadow for depth */
-    color: #ffffff; /* Text color */
-    max-height: 400px; /* Set a max height */
-    overflow-y: auto; /* Enable scrolling */
-  }
-  
-  /* Header */
-  .live-events-container h2 {
-    color: #ffffff;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); /* Soft shadow */
-  }
-  
-  /* Event Items */
-  .events-list .event-item {
-    background: rgba(255, 255, 255, 0.2); /* Transparent background */
-    backdrop-filter: blur(10px); /* Slight blur for depth */
-    border-radius: 0.5rem; /* Rounded edges */
-    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
-    transition: transform 0.2s, box-shadow 0.2s; /* Smooth hover effect */
-  }
-  
-  .events-list .event-item:hover {
-    transform: translateY(-2px); /* Lift card on hover */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
-  }
-  
-  .event-title {
-    color: #ffffff; /* Title color */
-  }
-  
-  .event-time {
-    color: rgba(255, 255, 255, 0.7); /* Softer white */
-  }
-  
-  .event-description {
-    color: rgba(255, 255, 255, 0.8); /* Softer white for description */
-  }
-  
-  .event-type {
-    display: inline-block;
-    padding: 0.25rem 0.5rem; /* Padding for event type label */
-    border-radius: 0.25rem; /* Rounded corners */
-  }
-  
+/* Container */
+.overview-details-container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 0.75rem;
+  border: 1px solid var(--orange-gaamer, #FB6805);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  overflow-y: auto;
+  max-height: 450px; /* Ensures it doesn't exceed container height */
+}
+
+/* News Item */
+.news-item {
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Align image and text vertically */
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.news-item:last-child {
+  border-bottom: none;
+}
+
+.news-item img {
+  width: 80px; /* Adjust image size */
+  height: 80px; /* Keep the image square */
+  object-fit: cover; /* Ensure the image doesn't stretch */
+  border-radius: 6px; /* Slight rounding for aesthetic */
+  margin-right: 1rem; /* Space between image and text */
+}
+
+.news-item h4 {
+  color: var(--orange-gaamer, #FB6805);
+  margin-bottom: 0.25rem;
+  font-size: 1rem; /* Adjust font size if needed */
+}
+
+.news-item p {
+  margin: 0.25rem 0;
+  color: rgba(255, 255, 255, 0.8); /* Softer white for readability */
+  font-size: 0.875rem; /* Slightly smaller text for descriptions */
+}
+
+/* Header */
+.user-name {
+  color: #ffffff;
+}
+
+.user-rank {
+  color: var(--orange-gaamer, #FB6805);
+}

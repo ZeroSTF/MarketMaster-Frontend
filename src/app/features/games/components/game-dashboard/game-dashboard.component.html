@@ -1,0 +1,53 @@
+<div *ngIf="gameState$ | async as gameState" class="game-dashboard-topbar">
+  <div class="game-info-section">
+    <div class="info-item game-title">
+      <div class="icon-wrapper">
+        <i class="fas fa-trophy"></i>
+      </div>
+      <div class="info-content">
+        <p class="label">Game Title</p>
+        <p class="value">{{ gameState.gameMetadata.title }}</p>
+      </div>
+    </div>
+
+    <div class="info-item game-id">
+      <div class="info-content">
+        <p class="label">Game ID</p>
+        <p class="value">{{ gameState.gameMetadata.id }}</p>
+      </div>
+    </div>
+
+    <div class="info-item prize-pool">
+      <div class="info-content">
+        <p class="label">Prize Pool</p>
+        <p class="value prize">1,000 $</p>
+      </div>
+    </div>
+
+    <div class="info-item player-cash">
+      <div class="info-content">
+        <p class="label">Your Cash</p>
+        <p class="value cash">5,000 $</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simulation Time Section -->
+  <div class="simulation-time">
+    <p class="label">Simulation Time</p>
+    <p class="value time">{{ currentSimulationTime | date:'shortTime' || 'Loading...' }}</p>
+  </div>
+
+  <div class="game-controls-section">
+    <button class="control-btn speed-down" (click)="decreaseSpeed()">
+      <i class="fas fa-minus"></i>
+    </button>
+    <button class="control-btn speed-up" (click)="increaseSpeed()">
+      <i class="fas fa-plus"></i>
+    </button>
+    <button class="control-btn pause-toggle" (click)="togglePause()">
+      <i *ngIf="!(isPaused$ | async)" class="fas fa-pause"></i>
+      <i *ngIf="(isPaused$ | async)" class="fas fa-play"></i>
+    </button>
+  </div>
+</div>

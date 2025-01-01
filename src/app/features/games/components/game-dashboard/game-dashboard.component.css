@@ -1,0 +1,94 @@
+.game-dashboard-topbar {
+  background: linear-gradient(135deg, #1e1e2a, #2a2a3a);
+  border-bottom: 2px solid #fb6805;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.game-info-section {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icon-wrapper {
+  background-color: rgba(251, 104, 5, 0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-wrapper i {
+  color: #fb6805;
+  font-size: 1.2rem;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.725rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a0aec0;
+  margin-bottom: 0.25rem;
+}
+
+.value {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.value.prize {
+  color: #48bb78;
+}
+
+.value.cash {
+  color: #4299e1;
+}
+
+.game-controls-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.control-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid #fb6805;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+  background-color: #fb6805;
+  transform: scale(1.1);
+  box-shadow: 0 4px 6px rgba(251, 104, 5, 0.3);
+}
+
+.control-btn i {
+  font-size: 1.25rem;
+}

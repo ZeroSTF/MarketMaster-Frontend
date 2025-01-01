@@ -1,0 +1,17 @@
+<div class="dialog-container">
+    <div class="news-card">
+      <img class="news-image" [src]="data.image" alt="news image" />
+      <div class="news-content">
+        <h2 class="news-title">{{ data.headline }}</h2>
+        <p class="news-category"><strong>Category:</strong> {{ data.category }}</p>
+        <p class="news-source"><strong>Source:</strong> {{ data.source }}</p>
+        <p class="news-date">
+          <strong>Published:</strong> {{ data.publishedDate | date: 'medium' }}
+        </p>
+        <p class="news-related"><strong>Related:</strong> {{ data.related }}</p>
+        <a class="news-link" [href]="data.url" target="_blank">Read Full Article</a>
+      </div>
+      <button mat-button class="close-btn" (click)="closeDialog()">Close</button>
+    </div>
+  </div>
+  

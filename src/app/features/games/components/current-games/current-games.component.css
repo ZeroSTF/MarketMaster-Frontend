@@ -1,112 +1,58 @@
 .games-leaderboard-container {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(18px);
-  border-radius: 1rem;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.4));
+  backdrop-filter: blur(20px);
+  border-radius: 1.2rem;
   border: 1px solid var(--orange-gamer, #FB6805);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
   color: #ffffff;
   padding: 2rem;
 }
 
 .header h2 {
   color: #ffffff;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+  font-size: 1.8rem;
 }
 
 .current-games-list .game-card {
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(20px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.5));
+  backdrop-filter: blur(25px);
   border-radius: 0.8rem;
-  border: 1px solid var(--orange-gamer, #FB6805);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(251, 104, 5, 0.8);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .current-games-list .game-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
 .game-title {
   color: #ffffff;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
 }
 
-.performance-label,
 .game-status {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.75);
 }
 
-.performance-score {
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: #ffaa00;
-  animation: bounce 1.5s infinite;
-}
-
-.leaderboard-section {
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(18px);
-  border-radius: 0.8rem;
-  border: 1px solid var(--orange-gamer, #FB6805);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  padding: 1.5rem;
-}
-
-.leaderboard-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.leaderboard-item {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 0.8rem;
-  border: 1px solid var(--orange-gamer, #FB6805);
-  padding: 1rem;
+.game-meta {
+  font-size: 0.9rem;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  transition: box-shadow 0.3s ease;
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.leaderboard-item:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+.join-btn {
+  background: var(--orange-gamer, #FB6805);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
-.rank-number {
-  font-size: 1.25rem;
-  color: #ffaa00;
-}
-
-.leader-name {
-  font-size: 1.1rem;
-  color: #ffffff;
-}
-
-.leader-score {
-  font-size: 1.75rem;
-  font-weight: 400;
-}
-
-.leader-score.text-green-400 {
-  color: #00e676;
-}
-
-.leader-score.text-red-400 {
-  color: #ff1744;
-}
-
-.join-game-button {
-  background-color: var(--orange-gamer, #FB6805);
-  color: #ffffff;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-.join-game-button:hover {
-  background-color: #ff8c00; /* Slightly lighter orange on hover */
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+.join-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
