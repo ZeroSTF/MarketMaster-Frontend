@@ -1,1 +1,154 @@
-<p>learning-course works!</p>
+<div class="h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 rounded-t-2xl">
+  <!-- Header -->
+  <header class="bg-white shadow-sm border-b border-blue-100 rounded-t-2xl">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between rounded-t-2xl">
+      <h1 class="text-2xl font-bold text-blue-900">{{ courseTitle() }}</h1>
+      <button 
+        (click)="toggleExplanation()"
+        class="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors flex items-center gap-2"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+        </svg>
+        {{ showExplanation ? 'Hide' : 'Show' }} Assistant
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="h-[calc(100vh-4rem)] max-w-7xl mx-auto px-4 py-6">
+    <!-- Error Message -->
+    <div *ngIf="error" class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+      {{ error }}
+    </div>
+
+    <div class="h-full flex gap-6">
+      <!-- Left: Course Content -->
+      <div class="flex-1 flex flex-col">
+        <div class="bg-white rounded-lg shadow-md p-6 flex-1 flex flex-col">
+          <!-- Navigation controls -->
+          <div class="flex justify-between items-center mb-6">
+            <button
+              (click)="previousSection()"
+              [disabled]="currentSectionIndex === 0"
+              class="px-4 py-2 bg-blue-600 text-white rounded-lg transition-colors hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" />
+              </svg>
+              Previous
+            </button>
+            <span class="text-blue-900 font-medium">
+              Section {{ currentSectionIndex + 1 }} of {{ sections().length }}
+            </span>
+            <button
+  (click)="currentSectionIndex === sections().length - 1 ? takeExam() : nextSection()"
+  [ngClass]="{
+    'bg-green-600 hover:bg-green-700': currentSectionIndex === sections().length - 1,
+    'bg-blue-600 hover:bg-blue-700': currentSectionIndex !== sections().length - 1
+  }"
+  class="px-4 py-2 text-white rounded-lg transition-colors flex items-center gap-2"
+>
+  {{ currentSectionIndex === sections().length - 1 ? 'Take Exam' : 'Next' }}
+  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+    <path
+      fill-rule="evenodd"
+      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+    />
+  </svg>
+</button>
+
+          </div>
+
+          <!-- Section Content -->
+          <div class="flex-1 border border-blue-100 rounded-lg overflow-auto bg-white p-6">
+            <div *ngIf="sections() && sections().length > 0; else noContent">
+              <h2 class="text-xl font-semibold text-blue-900 mb-4">
+                {{ sections()[currentSectionIndex].sectionTitle }}
+              </h2>
+              <div 
+                [innerHTML]="sections()[currentSectionIndex].sectionContent"
+                class="prose prose-blue max-w-none"
+              ></div>
+            </div>
+            
+            <ng-template #noContent>
+              <div *ngIf="!error" class="text-blue-600 flex items-center justify-center h-full">
+                <div class="animate-pulse">Loading course content...</div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Chat Interface -->
+      <div
+        *ngIf="showExplanation"
+        @slideInOut
+        class="w-96 bg-white rounded-lg scrollbar-hide shadow-md overflow-hidden"
+      >
+        <div class="flex flex-col h-full scrollbar-hide">
+          <div class="p-4 bg-blue-600 text-white">
+            <h3 class="text-lg font-semibold">Learning Assistant</h3>
+          </div>
+
+          <!-- Chat Messages -->
+          <div #chatContainer class="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-4">
+            <div
+              *ngFor="let message of chatMessages"
+              [ngClass]="{'ml-auto': message.role === 'user'}"
+              class="max-w-[80%] p-3 rounded-lg animate-fade-in"
+              [class.bg-blue-50]="message.role === 'user'"
+              [class.bg-gray-50]="message.role === 'assistant'"
+            >
+              <div class="text-sm text-blue-600 mb-1">
+                {{ message.role === 'user' ? 'You' : 'AI Assistant' }}
+              </div>
+              <div class="text-gray-800">{{ message.content }}</div>
+            </div>
+          </div>
+
+          <!-- Loading Indicator -->
+          <div *ngIf="isLoading" class="p-4 text-center">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-600 border-t-transparent"></div>
+          </div>
+          <div class="p-4 border-t">
+            <form (ngSubmit)="sendMessage()" class="flex gap-2">
+              <input 
+                type="text" 
+                [(ngModel)]="newMessage" 
+                name="message"
+                class="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Type your message..."
+              >
+              <button 
+                type="submit"
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                Send
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selection Tooltip -->
+  <div
+    *ngIf="showTooltip"
+    [style.left.px]="tooltipPosition.x"
+    [style.top.px]="tooltipPosition.y"
+    class="fixed transform -translate-x-1/2 tooltip-container"
+  >
+    <button
+      (click)="explainSelection()"
+      class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-lg"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+      </svg>
+      Explain Selection
+    </button>
+  </div>
+</div>

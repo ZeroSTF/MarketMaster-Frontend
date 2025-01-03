@@ -29,9 +29,12 @@
             class="w-16 h-16 rounded-full border-4 border-white"
           />
           <div>
-            <h2 class="text-xl font-medium">Adela Parkson</h2>
-            <p class="text-sm text-gray-500">estherasimmmple.com</p>
+            <h2 class="text-xl font-medium">{{ user?.firstName}}{{ user?.lastName}}</h2>
+            <p class="text-sm text-gray-500">{{ user?.username }}</p>
           </div>
+          
+          
+          
         </div>
         <div class="flex space-x-4">
           <!-- Certifications Button -->
@@ -104,7 +107,7 @@
         class="flex w-auto h-fit flex-col justify-between items-start bg-white shadow-md p-3 rounded-lg space-y-2"
       >
         <img
-          [src]="course.course.imageUrl || 'path/to/default-image.jpg'"
+          [src]="course.course.title || 'path/to/default-image.jpg'"
           [alt]="course.course.title"
           class="rounded-lg w-full h-40 object-cover mb-3"
         />

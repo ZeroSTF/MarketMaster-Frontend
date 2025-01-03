@@ -3,6 +3,7 @@ import { LearningService } from '../../../../services/learning.service';
 import { Course, UserProgress } from '../../../../models/learning.model';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../../../../auth/auth.service';
 
 @Component({
   selector: 'app-learning-overview',
@@ -14,7 +15,11 @@ import { MatIconModule } from '@angular/material/icon';
 export class LearningOverviewComponent {
   activeTab: string = 'certifications';
   private courseService = inject(LearningService);
+  private authService = inject(AuthService);
+
   courses = this.courseService.courses;
+  user = this.authService.currentUser();
+  
 
   certifications = computed(() => 
     this.courses().filter((course: UserProgress) => 
@@ -44,6 +49,8 @@ export class LearningOverviewComponent {
  
   // Method to get courses based on active tab
   getActiveCourses() {
+    console.log(this.user)
+
     switch (this.activeTab) {
       case 'certifications':
         return this.certifications();

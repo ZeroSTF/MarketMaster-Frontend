@@ -1,3 +1,4 @@
+import { EventInput } from '@fullcalendar/core/index.js';
 import { User } from './user.model';
 
 
@@ -7,16 +8,22 @@ import { User } from './user.model';
     description: string;
     category: string;
     level: string;
-    hasCertification?: boolean;
-    startDate: Date;
-    endDate?: Date;
-    imageUrl?: string;
     color?: string;
     status: 'not-started' | 'in-progress' | 'completed';
   }
+  export interface Section {
+    section: number;
+    sectionContent: string;
+    sectionTitle: string;
+  }
+  export interface CourseJson {
+    courseTitle: string;
+    sections: Section[];
+  }
+
   export interface UserProgress {
     course: Course;
-    User: User;
+    user: User;
     completed: boolean;
     score: number | null;
     progress: number;
@@ -50,4 +57,18 @@ import { User } from './user.model';
     duration: number;
     category: string;
     courseId: string;
+  }
+  export interface ExternalDropInfo {
+    draggedEl: HTMLElement;
+    date: Date;
+  }
+  export interface CalendarEvent extends EventInput {
+    extendedProps: CourseEventProps;
+  }
+
+  //video
+  export interface FraudState {
+    isMultipleUsers: boolean;
+    isFaceVerified: boolean;
+    error?: string;
   }

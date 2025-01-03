@@ -1,18 +1,16 @@
 <!-- Main Container -->
-<div class="flex h-full bg-gray-50/50">
+<div class="flex h-full bg-gradient-to-br from-blue-50 via-white to-blue-50 rounded-2xl">
   <!-- Calendar Section -->
-  <div class="flex-grow p-6">
-    <div class="bg-white rounded-2xl shadow-md h-full flex flex-col overflow-hidden border border-gray-100">
-      <div class="p-6 border-b border-gray-100">
-        <div class="flex justify-between items-center">
-          <div>
-            <h1 class="text-2xl font-semibold text-gray-800">Learning Schedule</h1>
-            <p class="text-sm text-gray-500 mt-1">Manage your learning journey</p>
-          </div>
+  <div class="flex-grow">
+    <div class="bg-transparent rounded-t-2xl shadow-md h-full flex flex-col overflow-hidden ">
+      <header class="bg-white shadow-sm border-b border-blue-100 rounded-t-2xl">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          <h1 class="text-2xl font-bold text-blue-900">Manage your learning journey</h1>
+          
         </div>
-      </div>
+      </header>
 
-      <div class="flex-grow p-6 bg-white">
+      <div class="flex-grow  bg-transparent">
         <full-calendar 
           [options]="calendarOptions()"
           class="w-full h-full !font-sans"
@@ -22,13 +20,17 @@
   </div>
 
   <!-- Sidebar -->
-  <div class="w-80 flex-shrink-0">
-    <div class="bg-white shadow-lg rounded-3xl p-4 h-full flex flex-col">
+  <div class="w-80 flex-shrink-0 ml-2">
+    <div class="bg-transparent shadow-lg rounded-t-3xl h-full flex flex-col">
       <!-- Sidebar Header -->
-      <div class="p-6 border-b border-gray-100">
-        <h2 class="text-xl font-semibold text-gray-800">Available Courses</h2>
-        <p class="text-sm text-gray-500 mt-1">Drag courses to schedule them</p>
-      </div>
+      <header class="bg-white  border-b border-blue-100 rounded-t-2xl">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          <h1 class="text-2xl font-bold text-blue-900">Available Courses</h1>
+          <!-- <p class="text-sm text-gray-500 mt-1">Drag courses to schedule them</p> -->
+          
+        </div>
+      </header>
+      
 
       <!-- Search Box -->
       <div class="px-6 pt-4">
@@ -65,15 +67,18 @@
         <div class="space-y-3">
           <div 
             *ngFor="let course of filteredCourses()"
-            class="group relative bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-300 cursor-move overflow-hidden"
+            class="course-item group relative bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-300"
+            [class.cursor-move]="!isDragging()"
+            [class.opacity-50]="isDragging()"
             [attr.data-course-id]="course.course.title"
             draggable="true"
-            (dragstart)="onDragStart($event, course.course)">
+            (dragstart)="onDragStart($event, course)"
+            (dragend)="onDragEnd()">
             
             <!-- Progress Bar Background -->
             <div class="absolute top-0 left-0 h-1 w-full bg-gray-100">
               <div class="h-full transition-all duration-300"
-                   [style.width]="course.progress"
+                   [style.width.%]="course.progress"
                    [ngClass]="{
                      'bg-green-500': course.progress === 100,
                      'bg-blue-500': course.progress > 0 && course.progress < 100,
@@ -102,10 +107,9 @@
                         [ngClass]="{
                           'bg-green-100 text-green-700': course.progress === 100,
                           'bg-blue-100 text-blue-700': course.progress > 0 && course.progress < 100,
-
                           'bg-gray-100 text-gray-700': course.progress === 0
                         }">
-                    {{course.progress}}
+                    {{course.progress}}%
                   </span>
                 </div>
               </div>
@@ -116,7 +120,7 @@
                   <button
                     *ngIf="course.progress === 0 && course.startDate ===''"
                     class="bg-blue-500 text-white px-4 py-2 rounded-md"
-                    (click)="startCourse(course.course)">
+                    (click)="startCourse(course)">
                     Start
                   </button>
               
