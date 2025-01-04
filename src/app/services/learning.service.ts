@@ -149,7 +149,6 @@ export class LearningService {
     const course = this._courses().find(c => c.course.title === courseId);
     if (!course) return Promise.reject('Course not found');
   
-    const newEndDate = new Date(newStartDate.getTime() + duration);
     const isCompleted = course.progress === 100;
     const isoDateStr = newStartDate.toISOString();
     console.log("date (ISO)", isoDateStr);
@@ -163,7 +162,6 @@ export class LearningService {
         const updatedProgress: UserProgress = {
           ...course,
           startDate: isoDateStr,
-          endDate: newEndDate.toISOString(),
           progress: isCompleted ? 0 : course.progress,
           completed: isCompleted ? false : course.completed,
           score: isCompleted ? 0 : course.score,

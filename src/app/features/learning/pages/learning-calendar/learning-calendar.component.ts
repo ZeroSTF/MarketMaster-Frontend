@@ -109,7 +109,6 @@ export class LearningCalendarComponent {
       id: course.course.title,
       title: course.course.title,
       start: course.startDate ? new Date(course.startDate) : undefined,
-      end: course.endDate ? new Date(course.endDate) : undefined,
       backgroundColor: this.getEventColor(course.progress),
       borderColor: this.getEventColor(course.progress),
       textColor: 'white',
