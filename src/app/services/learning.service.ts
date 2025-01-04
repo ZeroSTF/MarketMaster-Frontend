@@ -30,7 +30,7 @@ export class LearningService {
     this.fetchCourses();
   }
 
-  //courses
+  //course progress
   private readonly _courses = signal<UserProgress[]>([]);
   public readonly courses = computed(() => this._courses());
 
@@ -130,8 +130,8 @@ export class LearningService {
     if (!user) return;
   
     this.http.put<UserProgress>(
-      `${this.apiUrl}/courses/progress`, // Changed to send the full progress object
-      userProgress, // Sending the updated progress object in the body
+      `${this.apiUrl}/courses/progress`, 
+      userProgress,
       { params: new HttpParams().set('username', user.username) }
     ).subscribe({
       next: (updatedProgress) => {
@@ -140,6 +140,51 @@ export class LearningService {
       error: (error) => console.error('Error updating course progress:', error)
     });
   }
+
+  verifyAndUpdateCourseProgress(
+    courseId: string,
+    newStartDate: Date,
+    duration: number
+  ): Promise<boolean> {
+    const course = this._courses().find(c => c.course.title === courseId);
+    if (!course) return Promise.reject('Course not found');
+  
+    const newEndDate = new Date(newStartDate.getTime() + duration);
+    const isCompleted = course.progress === 100;
+    const isoDateStr = newStartDate.toISOString();
+    console.log("date (ISO)", isoDateStr);
+  
+    const message = isCompleted
+      ? `This course is already completed. Would you like to restart it with a new start date of ${newStartDate.toLocaleDateString()}?`
+      : `Would you like to update the course start date to ${newStartDate.toLocaleDateString()}?`;
+  
+    return new Promise((resolve) => {
+      if (confirm(message)) {
+        const updatedProgress: UserProgress = {
+          ...course,
+          startDate: isoDateStr,
+          endDate: newEndDate.toISOString(),
+          progress: isCompleted ? 0 : course.progress,
+          completed: isCompleted ? false : course.completed,
+          score: isCompleted ? 0 : course.score,
+          lastAccessed: this.shouldUpdateLastAccessed(course.progress)
+            ? newStartDate.toISOString()
+            : course.lastAccessed
+        };
+  
+        this.updateCourse(updatedProgress);
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  }
+  
+
+  private shouldUpdateLastAccessed(progress: number): boolean {
+    return progress > 0 && progress < 100;
+  }
+
   
 
   public getCourse(courseTitle: string): UserProgress | undefined {

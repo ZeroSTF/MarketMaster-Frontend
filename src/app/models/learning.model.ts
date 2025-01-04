@@ -11,6 +11,18 @@ import { User } from './user.model';
     color?: string;
     status: 'not-started' | 'in-progress' | 'completed';
   }
+  export interface UserProgress {
+    progressId?: number;
+    course: Course;
+    user: User;
+    completed: boolean;
+    score: number | null;
+    progress: number;
+    lastAccessed: string;
+    startDate: string;
+    endDate: string | null;
+  }
+  
   export interface Section {
     section: number;
     sectionContent: string;
@@ -21,16 +33,6 @@ import { User } from './user.model';
     sections: Section[];
   }
 
-  export interface UserProgress {
-    course: Course;
-    user: User;
-    completed: boolean;
-    score: number | null;
-    progress: number;
-    lastAccessed: string;
-    startDate: string;
-    endDate: string | null;
-  }
   
 
   export interface InterviewState {
