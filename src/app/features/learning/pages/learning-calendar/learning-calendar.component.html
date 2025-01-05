@@ -1,8 +1,8 @@
 <!-- Main Container -->
-<div class="flex h-full bg-gradient-to-br from-blue-50 via-white to-blue-50 rounded-2xl">
+<div class="flex h-full bg-gradient-to-br from-blue-50 via-white to-blue-50 rounded-2xl scrollbar-hide">
   <!-- Calendar Section -->
-  <div class="flex-grow">
-    <div class="bg-transparent rounded-t-2xl shadow-md h-full flex flex-col overflow-hidden ">
+  <div class="flex-grow scrollbar-hide">
+    <div class="bg-transparent rounded-t-2xl shadow-md h-full flex flex-col overflow-hidden scrollbar-hide ">
       <header class="bg-white shadow-sm border-b border-blue-100 rounded-t-2xl">
         <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <h1 class="text-2xl font-bold text-blue-900">Manage your learning journey</h1>
@@ -10,10 +10,10 @@
         </div>
       </header>
 
-      <div class="flex-grow  bg-transparent">
+      <div class="flex-grow  bg-transparent scrollbar-hide">
         <full-calendar 
           [options]="calendarOptions()"
-          class="w-full h-full !font-sans"
+          class="w-full h-full !font-sans scrollbar-hide"
         ></full-calendar>
       </div>
     </div>
@@ -21,7 +21,7 @@
 
   <!-- Sidebar -->
   <div class="w-80 flex-shrink-0 ml-2">
-    <div class="bg-transparent shadow-lg rounded-t-3xl h-full flex flex-col">
+    <div class="bg-white shadow-lg rounded-t-3xl h-full flex flex-col">
       <!-- Sidebar Header -->
       <header class="bg-white  border-b border-blue-100 rounded-t-2xl">
         <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -66,101 +66,67 @@
       <div class="flex-1 overflow-auto px-6 py-4 scrollbar-hide">
         <div class="space-y-3">
           <div 
-            *ngFor="let course of filteredCourses()"
-            class="course-item group relative bg-white border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-300"
-            [class.cursor-move]="!isDragging()"
-            [class.opacity-50]="isDragging()"
-            [attr.data-course-id]="course.course.title">
-            
-            <!-- Progress Bar Background -->
-            <div class="absolute top-0 left-0 h-1 w-full bg-gray-100">
-              <div class="h-full transition-all duration-300"
-                   [style.width.%]="course.progress"
-                   [ngClass]="{
-                     'bg-green-500': course.progress === 100,
-                     'bg-blue-500': course.progress > 0 && course.progress < 100,
-                     'bg-gray-400': course.progress === 0
-                   }">
-              </div>
-            </div>
+      *ngFor="let course of filteredCourses()"
+      class="course-item group relative bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300  cursor-pointer overflow-hidden"
+      [class.expanded]="course.isExpanded"
+      [attr.data-course-id]="course.course.title"
+      (click)="course.isExpanded = !course.isExpanded">
       
-            <!-- Main Content -->
-            <div class="p-4">
-              <!-- Header Section -->
-              <div class="flex items-start justify-between gap-4 mb-3">
-                <!-- Title and Description -->
-                <div class="flex-1 min-w-0"> <!-- min-w-0 helps with text truncation -->
-                  <h3 class="font-medium text-gray-900 truncate group-hover:text-blue-500 transition-colors">
-                    {{ course.course.title }}
-                  </h3>
-                  <p class="text-sm text-gray-500 mt-1 line-clamp-1 group-hover:line-clamp-2 transition-all">
-                    {{ course.course.description }}
-                  </p>
-                </div>
-                
-                <!-- Progress Badge -->
-                <div class="flex-shrink-0">
-                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium"
-                        [ngClass]="{
-                          'bg-green-100 text-green-700': course.progress === 100,
-                          'bg-blue-100 text-blue-700': course.progress > 0 && course.progress < 100,
-                          'bg-gray-100 text-gray-700': course.progress === 0
-                        }">
-                    {{course.progress}}%
-                  </span>
-                </div>
-              </div>
-      
-              <!-- Course Meta -->
-              <div class="flex items-center gap-3 text-xs text-gray-500">
-                <div class="inline-flex items-center px-2 py-1">
-                  <button
-                    *ngIf="course.progress === 0 && course.startDate ===''"
-                    class="bg-blue-500 text-white px-4 py-2 rounded-md"
-                    (click)="startCourse(course)">
-                    Start
-                  </button>
-              
-                  <button
-                    *ngIf="course.progress >= 0 && course.progress < 100 && course.startDate !==''  "
-                    class="bg-yellow-500 text-white px-4 py-2 rounded-md"
-                    (click)="resumeCourse(course)">
-                    Resume
-                  </button>
-              
-                  <button
-                    *ngIf="course.progress === 100"
-                    class="bg-green-500 text-white px-4 py-2 rounded-md"
-                    (click)="redoCourse(course)">
-                    Redo
-                  </button>
-                </div> 
-              
-                <!-- Program Button (Start Date Picker) -->
-                <!-- <div class="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
-                  <button
-                    class="bg-indigo-500 text-white px-4 py-2 rounded-md"
-                    (click)="selectStartDate(course)">
-                    Program
-                  </button>
-                </div>
-              
-                         
-                Level -->
-                <!-- <div class="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
-                  <span class="material-icons text-base mr-1">school</span>
-                  <span class="capitalize">{{ course.course.level }}</span>
-                </div> -->
-              
-                <!-- Category -->
-                <!-- <div class="inline-flex items-center px-2 py-1 bg-gray-50 rounded-md">
-                  <span class="material-icons text-base mr-1">category</span>
-                  <span class="capitalize">{{ course.course.category }}</span>
-                </div> -->
-              
-              </div>
-            </div>
-          </div>
+      <!-- Main Content -->
+      <div class="flex p-3 gap-3"> 
+        <!-- Course Image -->
+        <div class="w-28 h-24 flex-shrink-0 rounded-xl bg-gray-100 overflow-hidden">
+          <img 
+            alt="{{ course.course.title }}"
+            class="w-full h-full object-cover"
+            onerror="this.src='/api/placeholder/400/320'"
+          >
+        </div>
+
+        <!-- Content Section -->
+        <div class="flex-1 min-w-0 relative">
+          <!-- Title and Description -->
+          <h3 class="font-medium text-gray-900 mb-1 text-base transition-all duration-300 break-words"
+              [class.line-clamp-1]="!course.isExpanded">
+            {{ course.course.title }}
+          </h3>
+          <p class="text-sm text-gray-500 transition-all duration-300"
+             [class.line-clamp-2]="!course.isExpanded"
+             [class.mb-4]="!course.isExpanded"
+             [class.mb-8]="course.isExpanded">
+            {{ course.course.description }}
+          </p>
+
+          <!-- Action Button - Stop Event Propagation to prevent card expansion -->
+          <button
+            [ngClass]="{
+              'bg-blue-50 text-blue-600': course.progress === 0 && course.startDate === '',
+              'bg-transparent text-yellow-600': course.progress >= 0 && course.progress <100 && course.startDate !== '',
+              'bg-green-50 text-green-600': course.progress === 100
+            }"
+            class="absolute bottom-0 left-0 right-0 py-0.5 rounded-full text-sm font-medium transition-colors duration-300 hover:bg-opacity-80"
+            (click)="$event.stopPropagation(); 
+                    course.progress === 0 ? startCourse(course) : 
+                    course.progress === 100 ? redoCourse(course) : 
+                    resumeCourse(course)">
+            {{ course.progress === 0 ? 'Start Course' : 
+               course.progress === 100 ? 'Review Again' : 
+               'Continue Course' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress Bar-->
+      <div class="absolute bottom-0 left-0 right-0 h-1 bg-blue-50">
+        <div class="h-full transition-all duration-300"
+             [style.width.%]="course.progress"
+             [ngClass]="{
+               'bg-green-500': course.progress === 100,
+               'bg-yellow-600': course.progress > 0 && course.progress < 100,
+             }">
+        </div>
+      </div>
+    </div>
         </div>
       </div>
     </div>

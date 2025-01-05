@@ -21,6 +21,8 @@ import { User } from './user.model';
     lastAccessed: string;
     startDate: string;
     endDate: string | null;
+    isExpanded?: boolean;
+
   }
   
   export interface Section {

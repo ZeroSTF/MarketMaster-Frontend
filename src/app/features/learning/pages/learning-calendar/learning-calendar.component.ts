@@ -10,7 +10,6 @@ import { FormsModule } from '@angular/forms';
 import { LearningService } from '../../../../services/learning.service';
 import {
   UserProgress,
-  ExternalDropInfo,
   CalendarEvent,
 } from '../../../../models/learning.model';
 import { AuthService } from '../../../../auth/auth.service';
@@ -56,7 +55,24 @@ export class LearningCalendarComponent {
     eventDrop: this.handleEventDrop.bind(this),
     eventReceive: this.handleEventReceive.bind(this),
     eventClick: this.handleEventClick.bind(this),
-    
+    // Add custom CSS class names
+    viewClassNames: 'scrollbar-hide fc-scroller-hide',
+    dayCellClassNames: 'scrollbar-hide',
+    // Add styling directly to the calendar container
+    contentHeight: 'auto',
+    handleWindowResize: true,
+    views: {
+      dayGrid: {
+        // Add specific view options to hide scrollbars
+        scrollbarOverflow: 'hidden',
+        className: 'scrollbar-hide'
+      },
+      timeGrid: {
+        // Add specific view options to hide scrollbars
+        scrollbarOverflow: 'hidden',
+        className: 'scrollbar-hide'
+      }
+    }
   };
 
   // Calendar options computed signal
@@ -116,9 +132,7 @@ export class LearningCalendarComponent {
         description: course.course.description,
         progress: course.progress,
         level: course.course.level,
-        duration: course.endDate && course.startDate
-          ? new Date(course.endDate).getTime() - new Date(course.startDate).getTime()
-          : 0,
+        duration: 0,
         category: course.course.category,
         courseId: course.course.title,
       },
@@ -179,8 +193,8 @@ export class LearningCalendarComponent {
 
   renderEventContent = (info: any) => ({
     html: `
-      <div class="p-2">
-        <div class="font-medium text-sm">${info.event.title}</div>
+      <div class="p-2 scrollbar-hide">
+        <div class="font-medium text-xs">${info.event.title}</div>
         <div class="text-xs mt-1">Progress: ${info.event.extendedProps.progress}%</div>
       </div>
     `,

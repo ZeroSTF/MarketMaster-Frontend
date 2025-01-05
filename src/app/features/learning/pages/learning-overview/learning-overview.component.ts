@@ -4,11 +4,12 @@ import { Course, UserProgress } from '../../../../models/learning.model';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../../auth/auth.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-learning-overview',
   standalone: true,
-  imports: [MatIconModule, CommonModule],
+  imports: [MatIconModule, CommonModule, RouterModule],
   templateUrl: './learning-overview.component.html',
   styleUrl: './learning-overview.component.css'
 })
