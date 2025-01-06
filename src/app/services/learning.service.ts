@@ -34,6 +34,10 @@ export class LearningService {
   private readonly _courses = signal<UserProgress[]>([]);
   public readonly courses = computed(() => this._courses());
 
+  private readonly _currentUserProgress = signal<UserProgress | null>(null);
+  public readonly currentUserProgress = computed(() => this._currentUserProgress());
+
+
   private fetchCourses(): void {
     const user = this.authService.currentUser();
     if (!user) {
@@ -80,6 +84,34 @@ export class LearningService {
       },
     });
   }
+  public getCourseProgress(courseTitle: string): Observable<UserProgress[]> {
+    const user = this.authService.currentUser();
+    if (!user || !user.username) {
+      throw new Error('User must be logged in with a valid username to get course progress');
+    }
+
+    const formattedTitle = this.formatCourseTitle(courseTitle);
+
+    return this.http.get<UserProgress[]>(`${this.apiUrl}/courses/${formattedTitle}/progress/${user.username}`)
+      .pipe(
+        tap(progressList => {
+          console.log('Fetched course progress:', progressList);
+          if (progressList.length > 0) {
+            this._currentUserProgress.set(progressList[0]); // Update signal state
+          }
+        })
+      );
+  }
+  
+  private formatCourseTitle(title: string): string {
+    return title
+      .split(' ')         // Split by spaces
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize first letter
+      .join('');          // Remove spaces
+  }
+  
+  
+  
   public startCourse(courseTitle: string): Observable<UserProgress> {
     const user = this.authService.currentUser();
     if (!user) {
@@ -105,6 +137,7 @@ export class LearningService {
       })
     );
   }
+  
 
   public updateCourse(update: Partial<UserProgress>): void {
     if (!update.course?.title) return;

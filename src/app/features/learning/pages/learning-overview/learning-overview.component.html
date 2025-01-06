@@ -106,11 +106,12 @@
         *ngFor="let course of getActiveCourses()"
         class="flex w-auto h-fit flex-col justify-between items-start bg-white shadow-md p-3 rounded-lg space-y-2"
       >
-        <img
-          [src]="course.course.title || 'path/to/default-image.jpg'"
-          [alt]="course.course.title"
-          class="rounded-lg w-full h-40 object-cover mb-3"
-        />
+      <img
+      [src]="'/images/' + course.course.title + '.png'"
+      [alt]="course.course.title"
+      class="rounded-lg w-full h-40 object-cover mb-3"
+    />
+    
         <div class="flex items-center justify-between w-full">
           <div
             class="flex justify-center items-center text-white text-xs rounded-md px-2 py-1"

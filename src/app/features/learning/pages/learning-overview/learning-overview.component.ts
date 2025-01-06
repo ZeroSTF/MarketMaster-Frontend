@@ -40,11 +40,14 @@ export class LearningOverviewComponent {
     )
   );
 
-  comingCourses = computed(() => 
-    this.courses().filter((course: UserProgress) => 
-      course.progress === 0 && course.startDate !== ""
-    )
+  comingCourses = computed(() =>
+    this.courses().filter((course: UserProgress) => {
+      const today = new Date();
+      const startDate = new Date(course.startDate);
+      return startDate > today;
+    })
   );
+  
 
 
  

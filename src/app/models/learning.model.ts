@@ -76,3 +76,8 @@ import { User } from './user.model';
     isFaceVerified: boolean;
     error?: string;
   }
+
+  export interface OpenAIResponse {
+    choices: { message: { content: string } }[];
+  }
+  

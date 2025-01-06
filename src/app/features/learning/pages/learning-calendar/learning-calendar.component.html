@@ -48,19 +48,22 @@
       </div>
 
       <!-- Filter Tabs -->
-      <div class="flex gap-2 px-6 pt-4 pb-2 overflow-x-auto scrollbar-hide">
-        <button 
-          *ngFor="let filter of filters"
-          (click)="setActiveFilter(filter.name)"
-          [class.bg-blue-500]="activeFilter() === filter.name"
-          [class.text-white]="activeFilter() === filter.name"
-          [class.text-gray-700]="activeFilter() !== filter.name"
-          class="px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200">
-          <span class="material-icons text-base mr-1.5 align-text-bottom">{{filter.icon}}</span>
-          {{filter.label}}
-          
-        </button>
-      </div>
+<div class="flex gap-2 px-6 pt-4 pb-2 overflow-x-auto scrollbar-hide">
+  <button
+    *ngFor="let filter of filters"
+    (click)="setActiveFilter(filter.name)"
+    [class.bg-blue-50]="filter.name === 'all' && activeFilter() === filter.name"
+    [class.text-blue-500]="filter.name === 'all' && activeFilter() === filter.name"
+    [class.bg-yellow-50]="filter.name === 'inProgress' && activeFilter() === filter.name"
+    [class.text-yellow-600]="filter.name === 'inProgress' && activeFilter() === filter.name"
+    [class.bg-green-50]="filter.name === 'completed' && activeFilter() === filter.name"
+    [class.text-green-500]="filter.name === 'completed' && activeFilter() === filter.name"
+    [class.text-gray-70]="activeFilter() !== filter.name"
+    class="px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200">
+    {{ filter.label }}
+  </button>
+</div>
+
 
       <!-- Course List -->
       <div class="flex-1 overflow-auto px-6 py-4 scrollbar-hide">
@@ -77,6 +80,7 @@
         <!-- Course Image -->
         <div class="w-28 h-24 flex-shrink-0 rounded-xl bg-gray-100 overflow-hidden">
           <img 
+          [src]="'/images/' + course.course.title + '.png'"
             alt="{{ course.course.title }}"
             class="w-full h-full object-cover"
             onerror="this.src='/api/placeholder/400/320'"
