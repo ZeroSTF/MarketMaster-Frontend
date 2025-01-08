@@ -21,6 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-watchListoverview',
@@ -34,7 +35,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     MatSelectModule,
     MatIconModule,
-    AssetdetailsComponent,
   ],
   templateUrl: './watchlist.component.html',
   styleUrls: ['./watchlist.component.css'],
@@ -45,6 +45,7 @@ export class WatchlistComponent implements OnInit {
   public bestWinners: BestWinner[] = [];
 
   private assetService = inject(AssetService);
+  private router = inject(Router);
 
   readonly columns = [
     { field: 'logoUrl', label: 'Logo' },
@@ -201,5 +202,9 @@ export class WatchlistComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.assetService.ngOnDestroy();
+  }
+
+  goToExplore(): void {
+    this.router.navigate(['/dashboard/discover']);
   }
 }

@@ -54,7 +54,7 @@
     </div>
 
     <!-- Table Container -->
-    <div class="relative overflow-x-auto scrollbar-hide min-h-96">
+    <div class="relative overflow-x-auto scrollbar-hide min-h-60">
       <!-- Loading State -->
       <div *ngIf="isLoading() && !isEmpty()" class="absolute inset-0 bg-white/75 z-10 flex items-center justify-center">
         <img src="images/LogoMM.png" alt="Logo" class="w-full h-12 animate-bounce">
@@ -74,7 +74,7 @@
             {{ column.label }}
           </mat-header-cell>
 
-          <mat-cell *matCellDef="let stock" class="text-xs py-1.5 scrollbar-hide">
+          <mat-cell *matCellDef="let stock" class="text-xs py-1.5 scrollbar-hide cursor-pointer" (click)="goToExplore()">
             <ng-container [ngSwitch]="column.field">
               <ng-container *ngSwitchCase="'logoUrl'">
                 <img [src]="'https://financialmodelingprep.com/image-stock/' + stock.symbol + '.png'"
