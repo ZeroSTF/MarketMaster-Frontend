@@ -32,7 +32,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
 
   // Core signals
-  private readonly userSignal = signal<User | null>(null);
+  public readonly userSignal = signal<User | null>(null);
   private readonly tokenSignal = signal<TokenResponse | null>(null);
   private readonly loadingSignal = signal<boolean>(false);
   private readonly errorSignal = signal<string | null>(null);
