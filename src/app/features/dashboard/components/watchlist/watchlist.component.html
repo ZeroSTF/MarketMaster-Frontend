@@ -13,13 +13,13 @@
     <table class="w-full text-left table-auto">
       <thead class="text-xs text-gray-500">
         <tr>
-          <th class="py-2 pr-2 font-normal">Name</th>
-          <th class="py-2 px-2 font-normal">Username</th>
-          <th class="py-2 px-2 font-normal text-right">Price</th>
+          <th class="py-2 pr-2 font-bold">Name</th>
+          <th class="py-2 px-2 font-bold">Username</th>
+          <th class="py-2 px-2 font-bold text-right">Gains</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let winner of bestWinners" class="text-sm">
+        <tr *ngFor="let winner of bestWinners" class="text-blue-950 font-bold text-xs">
           <td class="py-1 pr-2">
             {{ winner.firstName }} {{ winner.lastName }}
           </td>
@@ -33,7 +33,7 @@
   <div class="bg-white rounded-lg  w-full scrollbar-hide shadow-[0px_2px_7px_0px_rgba(33,150,243,0.5)]">
     <header class="bg-white  border-blue-100 rounded-t-2xl">
       <div
-        class="max-w-7xl mx-auto  py-3 px-3  flex items-center justify-between"
+        class="max-w-7xl mx-auto  pb-0 pt-2 px-3  flex items-center justify-between"
       >
         <h1 class="text-sm font-bold text-blue-900">
           Watch-List
@@ -41,7 +41,7 @@
       </div>
     </header>
     <!-- Search and Filters Stack -->
-    <div class="flex flex-col space-y-2 mb-3">
+    <div class="flex flex-col space-y-2 mb-3 px-3" >
       <!-- Search -->
       <input type="text" placeholder="Search watchlist..." [value]="searchControl()" (input)="onSearchChange($event)"
         class="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none" />
@@ -66,7 +66,7 @@
     </div>
 
     <!-- Table Container -->
-    <div class="relative overflow-x-auto scrollbar-hide min-h-60">
+    <div class="relative overflow-x-auto scrollbar-hide  pb-2" style="height: 210px;">
       <!-- Loading State -->
       <div *ngIf="isLoading() && !isEmpty()" class="absolute inset-0 bg-white/75 z-10 flex items-center justify-center">
         <img src="images/LogoMM.png" alt="Logo" class="w-full h-12 animate-bounce">
@@ -79,14 +79,14 @@
       </div>
 
       <!-- Table -->
-      <mat-table [dataSource]="stockDataSource" matSort class="w-full scrollbar-hide" *ngIf="!isLoading()">
+      <mat-table [dataSource]="stockDataSource" matSort class="w-full scrollbar-hide overflow-hidden" *ngIf="!isLoading()">
         <ng-container *ngFor="let column of columns" [matColumnDef]="column.field" class="scrollbar-hide">
           <mat-header-cell *matHeaderCellDef mat-sort-header
-            class="bg-blue-50 text-xs text-blue-900 font-medium py-2  scrollbar-hide">
+            class="bg-white text-xs text-blue-900 font-medium py-2  scrollbar-hide">
             {{ column.label }}
           </mat-header-cell>
 
-          <mat-cell *matCellDef="let stock" class="text-xs py-1.5 scrollbar-hide cursor-pointer" (click)="goToExplore()">
+          <mat-cell *matCellDef="let stock" class="text-xs py-1.5 overflow-hidden scrollbar-hide cursor-pointer bg-white" (click)="goToExplore()">
             <ng-container [ngSwitch]="column.field">
               <ng-container *ngSwitchCase="'logoUrl'">
                 <img [src]="'https://financialmodelingprep.com/image-stock/' + stock.symbol + '.png'"
@@ -113,7 +113,7 @@
       </mat-table>
 
       <!-- Paginator -->
-      <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons class="bg-blue-50 text-xs">
+      <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons class="bg-white text-xs">
       </mat-paginator>
     </div>
   </div>
