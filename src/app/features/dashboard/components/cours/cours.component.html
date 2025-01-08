@@ -1,28 +1,128 @@
-<div class="bg-white rounded-lg shadow-lg h-full flex flex-col p-1">
-    <!-- Title Section -->
-    <div class="pb-0 pl-2 border-b border-gray-200">
-      <h2 class="text-base font-bold text-[#01013D]">Courses</h2>
+<div class="bg-white rounded-lg shadow-lg h-full flex flex-col ">
+  <header class="bg-white shadow-sm border-b border-blue-100 rounded-t-2xl">
+    <div
+      class="max-w-7xl mx-auto  py-3 px-3  flex items-center justify-between"
+    >
+      <h1 class="text-sm font-bold text-blue-900">
+        Continue your learning journey
+      </h1>
     </div>
-  
-    <!-- Tab Bar Section for Chapters (Scrollable) -->
-    <div class="overflow-x-auto">
-      <div class="flex space-x-2 py-2 text-xs border-b border-gray-200">
-        <button
-          *ngFor="let chapter of chapters; let i = index"
-          class="whitespace-nowrap px-2 py-1 font-semibold text-gray-600 hover:text-[#01013D] focus:text-[#01013D] focus:border-b-2 focus:border-blue-500"
-          (click)="selectChapter(i)"
-          [class.active]="selectedChapter === i">
-          {{ chapter.name }}
-        </button>
-      </div>
+  </header>
+    <!-- Filter Tabs -->
+    <div class="flex gap-2 pl-2  pt-3   scrollbar-hide">
+      <button
+        *ngFor="let filter of filters"
+        (click)="setActiveFilter(filter.name)"
+        [class.bg-blue-50]="
+          filter.name === 'all' && activeFilter() === filter.name
+        "
+        [class.text-blue-500]="
+          filter.name === 'all' && activeFilter() === filter.name
+        "
+        [class.bg-yellow-50]="
+          filter.name === 'inProgress' && activeFilter() === filter.name
+        "
+        [class.text-yellow-600]="
+          filter.name === 'inProgress' && activeFilter() === filter.name
+        "
+        [class.bg-green-50]="
+          filter.name === 'completed' && activeFilter() === filter.name
+        "
+        [class.text-green-500]="
+          filter.name === 'completed' && activeFilter() === filter.name
+        "
+        [class.text-gray-70]="activeFilter() !== filter.name"
+        class="px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200"
+      >
+        {{ filter.label }}
+      </button>
     </div>
-  
-    <!-- Content Section for the Selected Chapter -->
-    <div class="pt-3 flex-grow overflow-auto text-sm text-gray-700 leading-tight">
-      <div *ngIf="selectedChapterContent">
-        <div *ngFor="let topic of selectedChapterContent.topics" class="mb-2 p-2 bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm">
-          <p class="font-semibold">{{ topic.title }}</p>
-          <p>{{ topic.description }}</p>
+
+    <!-- Course List -->
+    <div class="flex-1 overflow-auto px-1 py-1 scrollbar-hide">
+      <div class="">
+        <div
+          *ngFor="let course of filteredCourses()"
+          class="course-item group relative bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden"
+          [class.expanded]="course.isExpanded"
+          [attr.data-course-id]="course.course.title"
+          (click)="course.isExpanded = !course.isExpanded"
+        >
+          <!-- Main Content -->
+          <div class="flex p-3 gap-3">
+            <!-- Course Image -->
+            <div
+              class="w-28 h-24 flex-shrink-0 rounded-xl bg-gray-100 overflow-hidden"
+            >
+              <img
+                [src]="'/images/' + course.course.title + '.png'"
+                alt="{{ course.course.title }}"
+                class="w-full h-full object-cover"
+                onerror="this.src='/api/placeholder/400/320'"
+              />
+            </div>
+
+            <!-- Content Section -->
+            <div class="flex-1 min-w-0 relative">
+              <!-- Title and Description -->
+              <h3
+                class="font-medium text-gray-900 mb-1 text-base transition-all duration-300 break-words"
+                [class.line-clamp-1]="!course.isExpanded"
+              >
+                {{ course.course.title }}
+              </h3>
+              <p
+                class="text-sm text-gray-500 transition-all duration-300"
+                [class.line-clamp-2]="!course.isExpanded"
+                [class.mb-4]="!course.isExpanded"
+                [class.mb-8]="course.isExpanded"
+              >
+                {{ course.course.description }}
+              </p>
+
+              <!-- Action Button - Stop Event Propagation to prevent card expansion -->
+              <button
+                [ngClass]="{
+                  'bg-blue-50 text-blue-600':
+                    course.progress === 0 && course.startDate === '',
+                  'bg-transparent text-yellow-600':
+                    course.progress >= 0 &&
+                    course.progress < 100 &&
+                    course.startDate !== '',
+                  'bg-green-50 text-green-600': course.progress === 100
+                }"
+                class="absolute bottom-0 left-0 right-0 py-0.5 rounded-full text-sm font-medium transition-colors duration-300 hover:bg-opacity-80"
+                (click)="
+                  $event.stopPropagation();
+                  course.progress === 0
+                    ? startCourse(course)
+                    : course.progress === 100
+                    ? redoCourse(course)
+                    : resumeCourse(course)
+                "
+              >
+                {{
+                  course.progress === 0
+                    ? "Start Course"
+                    : course.progress === 100
+                    ? "Review Again"
+                    : "Continue Course"
+                }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Progress Bar-->
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-blue-50">
+            <div
+              class="h-full transition-all duration-300"
+              [style.width.%]="course.progress"
+              [ngClass]="{
+             'bg-green-500': course.progress === 100,
+             'bg-yellow-600': course.progress > 0 && course.progress < 100,
+           }"
+            ></div>
+          </div>
         </div>
       </div>
     </div>
