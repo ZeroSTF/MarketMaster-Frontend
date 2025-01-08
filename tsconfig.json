@@ -19,6 +19,7 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
+    "allowSyntheticDefaultImports": true,
     "lib": [
       "ES2022",
       "dom"
@@ -32,5 +33,9 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/utils/opencv.d.ts" 
+  ]
 }

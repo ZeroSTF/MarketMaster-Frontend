@@ -4,15 +4,11 @@ import { Router, RouterModule } from '@angular/router';
 import { LearningService } from '../../../../services/learning.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { FormsModule } from '@angular/forms';
-import { UserProgress } from '../../../../models/learning.model';
-import { AuthService } from '../../../../auth/auth.service';
-import { environment } from '../../../../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-learning-course',
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule],
+  imports: [RouterModule, CommonModule, FormsModule ],
   templateUrl: './learning-course.component.html',
   styleUrl: './learning-course.component.css',
   animations: [
@@ -30,7 +26,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class LearningCourseComponent implements OnInit {
   @ViewChild('chatContainer') chatContainer!: ElementRef;
 
-  currentSectionIndex = 1;
+  currentSectionIndex = 0;
   selectedText = '';
   showExplanation = false;
   isLoading = false;
@@ -38,16 +34,14 @@ export class LearningCourseComponent implements OnInit {
   tooltipPosition = { x: 0, y: 0 };
   showTooltip = false;
   error: string | null = null;
+  
 
   newMessage = '';
+  
   private router = inject(Router);
   private learningService = inject(LearningService);
-  private authService = inject(AuthService);
-  private httpClient = inject(HttpClient)
-
   sections = this.learningService.sections;
   courseTitle = this.learningService.courseTitle;
-  courses = this.learningService.courses;
 
   @HostListener('document:selectionchange', ['$event'])
   onSelectionChange() {
@@ -78,54 +72,18 @@ export class LearningCourseComponent implements OnInit {
 
   
 
-  
+  async ngOnInit() {
+    console.log('Component initializing' , this.courseTitle());
+    
+    
+  }
 
   nextSection() {
-    console.log('Starting nextSection()', {
-      currentIndex: this.currentSectionIndex,
-      totalSections: this.sections()?.length
-    });
-  
     if (this.sections() && this.currentSectionIndex < this.sections().length - 1) {
-     
-      // Get course progress
-      this.learningService.getCourseProgress(this.courseTitle()).subscribe({
-        next: (progressList) => {
-          const userProgress = progressList.length > 0 ? progressList[0] : null;
-  
-          if (userProgress) {
-            // Determine the section corresponding to progress percentage
-            const progressSection = Math.floor(userProgress.progress / 10);
-  
-            if (this.currentSectionIndex > progressSection) {
-              console.log('Updating progress for new section', {
-                currentIndex: this.currentSectionIndex,
-                progressSection: progressSection,
-                oldProgress: userProgress.progress,
-                newProgress: (this.currentSectionIndex) * 10
-              });
-  
-              const updatedProgress: Partial<UserProgress> = {
-                course: userProgress.course,
-                user: userProgress.user,
-                progress: (this.currentSectionIndex) * 10,
-                lastAccessed: new Date().toISOString()
-              };
-  
-              this.learningService.updateCourse(updatedProgress);
-            } else {
-              console.log('No progress update needed - section already completed');
-            }
-          } 
-  
-          this.currentSectionIndex++;
-          this.resetChat();
-        },
-        error: (error) => console.error('Error getting course progress:', error)
-      });
+      this.currentSectionIndex++;
+      this.resetChat();
     }
   }
-  
 
   previousSection() {
     if (this.currentSectionIndex > 0) {
@@ -142,104 +100,138 @@ export class LearningCourseComponent implements OnInit {
     this.chatMessages = [];
   }
 
-  async ngOnInit() {}
-
   async explainSelection() {
     if (!this.selectedText) return;
-
+  
     this.isLoading = true;
     this.showTooltip = false;
     this.showExplanation = true;
-
+  
     try {
-      // Send the selected text to Hugging Face model
-      const response = await this.sendMessageToApi(this.selectedText);
-
-      // Add user and assistant messages
-      this.chatMessages.push(
-        { role: 'user', content: `Explain: "${this.selectedText}"` },
-        { role: 'assistant', content: response }
-      );
-
-      // Scroll to the bottom of the chat container
+      const prompt = `Explain: "${this.selectedText}"`;
+      const apiResponse = await this.learningService.sendMessageToApi(prompt);
+      
+      // Add user's selected text to chat
+      this.chatMessages.push({
+        role: "user",
+        content: this.selectedText
+      });
+  
+      // Handle the API response
+      let explanation = 'No explanation available.';
+      
+      if (apiResponse && Array.isArray(apiResponse) && apiResponse.length > 0) {
+        // Handle array response
+        const responseText = apiResponse[0].generated_text;
+        if (responseText) {
+          // Remove the original prompt and clean up the explanation
+          explanation = responseText
+            .replace(prompt, '')
+            .trim()
+            // Remove any leading/trailing quotation marks
+            .replace(/^["']|["']$/g, '')
+            // Remove any leading/trailing whitespace or newlines
+            .trim();
+            
+          if (!explanation) {
+            explanation = 'No explanation available.';
+          }
+        }
+      } else if (apiResponse?.generated_text) {
+        // Handle direct object response
+        explanation = apiResponse.generated_text
+          .replace(prompt, '')
+          .trim()
+          .replace(/^["']|["']$/g, '')
+          .trim();
+      }
+  
+      // Add AI response to chat
+      this.chatMessages.push({
+        role: "assistant",
+        content: explanation
+      });
+  
+      // Scroll to bottom
       setTimeout(() => {
         if (this.chatContainer) {
-          this.chatContainer.nativeElement.scrollTop =
+          this.chatContainer.nativeElement.scrollTop = 
             this.chatContainer.nativeElement.scrollHeight;
         }
       });
     } catch (error) {
-      console.error('Failed to get explanation:', error);
+      console.error("Failed to get explanation:", error);
+      this.chatMessages.push({
+        role: "assistant",
+        content: "I apologize, but I encountered an error while generating the explanation. Please try again."
+      });
     } finally {
       this.isLoading = false;
     }
   }
-
-  async sendMessageToApi(message: string): Promise<string> {
-    const url = 'https://api-inference.huggingface.co/models/gpt2';
-    
-    const headers = new HttpHeaders({
-      'Authorization': 'Bearer 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', // Replace with your Hugging Face API token
-      'Content-Type': 'application/json',
-    });
-  
-    const body = {
-      inputs: message, // Directly passing the message here
-    };
-  
-    try {
-      const response: any = await this.httpClient.post(url, body, { headers }).toPromise();
-      console.log('Response from API:', response); // Debugging
-  
-      if (response && response[0]?.generated_text) {
-        return response[0].generated_text; // Assuming response contains a generated text
-      } else {
-        throw new Error('No valid response from API');
-      }
-    } catch (error) {
-      console.error('Error sending message to API:', error);
-      return 'Error processing your request';
-    }
-  }
   
   
   
   
-  
-
   sendMessage() {
     if (!this.newMessage.trim()) return;
-
+  
     this.isLoading = true;
-
-    // Add user message to chat
+  
+    // Add user message
     this.chatMessages.push({
       role: 'user',
       content: this.newMessage
     });
-
+  
     // Clear input
+    const userMessage = this.newMessage;
     this.newMessage = '';
-
-    // Send the message to the API and get the response
-    this.sendMessageToApi(this.newMessage).then(response => {
-      // Add assistant's response to chat
-      this.chatMessages.push({
-        role: 'assistant',
-        content: response
-      });
-
-      this.isLoading = false;
-
-      // Scroll to the bottom of the chat container
-      setTimeout(() => {
-        if (this.chatContainer) {
-          this.chatContainer.nativeElement.scrollTop =
-            this.chatContainer.nativeElement.scrollHeight;
+  
+    // Call the API to fetch the assistant's response
+    this.learningService.sendMessageToApi(userMessage)
+      .then((apiResponse) => {
+        // Handle the API response
+        let assistantMessage = 'No response from AI.';
+        
+        if (apiResponse && Array.isArray(apiResponse) && apiResponse.length > 0) {
+          // Handle array response
+          const responseText = apiResponse[0]?.generated_text;
+          if (responseText) {
+            assistantMessage = responseText;
+          }
+        } else if (apiResponse?.generated_text) {
+          // Handle direct object response
+          assistantMessage = apiResponse.generated_text;
         }
+  
+        // Add assistant response to chat
+        this.chatMessages.push({
+          role: 'assistant',
+          content: assistantMessage
+        });
+  
+        // Scroll to bottom
+        setTimeout(() => {
+          if (this.chatContainer) {
+            this.chatContainer.nativeElement.scrollTop = 
+              this.chatContainer.nativeElement.scrollHeight;
+          }
+        });
+  
+        this.isLoading = false;
+      })
+      .catch((error) => {
+        console.error("Failed to get AI response:", error);
+        this.chatMessages.push({
+          role: 'assistant',
+          content: "I apologize, but I encountered an error while generating the response. Please try again."
+        });
+  
+        this.isLoading = false;
       });
-    });
-  } 
+  }
+    
 
   toggleExplanation() {
     this.showExplanation = !this.showExplanation;

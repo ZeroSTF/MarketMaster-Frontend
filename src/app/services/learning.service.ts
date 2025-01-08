@@ -795,6 +795,50 @@ export class LearningService {
   //   }
   // }
 // }
+
+
+async sendMessageToApi(inputText: string): Promise<any> {
+  const apiUrl = "https://api-inference.huggingface.co/models/gpt2";
+  const headers = {
+    Authorization: `Bearer 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`,
+    "Content-Type": "application/json",
+  };
+
+  const body = JSON.stringify({
+    inputs: inputText,
+    parameters: {
+      max_length: 150,
+      temperature: 0.7,
+      top_p: 0.9,
+      do_sample: true
+    }
+  });
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers,
+      body,
+    });
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("API Response:", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to fetch explanation:", error);
+    throw error;
+  }
+}
+
+
+
+
+
+  
   }
 
 

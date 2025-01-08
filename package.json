@@ -45,6 +45,7 @@
     "@types/prismjs": "^1.26.4",
     "@types/socket.io-client": "^3.0.0",
     "@types/three": "^0.171.0",
+    "@vladmandic/face-api": "^1.7.14",
     "angular-calendar": "^0.31.1",
     "angular-in-memory-web-api": "^0.18.0",
     "bootstrap": "^5.3.3",
