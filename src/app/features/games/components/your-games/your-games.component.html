@@ -1,58 +1,73 @@
 <div class="matches-container p-6">
-  <h3 class="tab-title font-bold mb-2">Your Games</h3>
+  <h3 class="tab-title font-bold mb-4 text-gradient">Your Games</h3>
 
   <!-- Tabs -->
-  <div class="tabs flex justify-around mb-4">
-    <button class="tab" [class.active]="selectedTab === 'UPCOMING'" (click)="selectTab('UPCOMING')">Upcoming</button>
-    <button class="tab" [class.active]="selectedTab === 'ACTIVE'" (click)="selectTab('ACTIVE')">Open</button>
-    <button class="tab" [class.active]="selectedTab === 'COMPLETED'" (click)="selectTab('COMPLETED')">Closed</button>
-    <button class="tab" [class.active]="selectedTab === 'CANCELLED'" (click)="selectTab('CANCELLED')">Cancelled</button>
+  <div class="tabs flex justify-around mb-6">
+   
+    <button 
+      class="tab px-6 py-2 rounded-full transition-all duration-300" 
+      [class.active]="selectedTab === 'ACTIVE'" 
+      (click)="selectTab('ACTIVE')"
+    >
+      Open
+    </button>
+    <button 
+    class="tab px-6 py-2 rounded-full transition-all duration-300" 
+    [class.active]="selectedTab === 'UPCOMING'" 
+    (click)="selectTab('UPCOMING')"
+  >
+    Upcoming
+  </button>
+    <button 
+      class="tab px-6 py-2 rounded-full transition-all duration-300" 
+      [class.active]="selectedTab === 'COMPLETED'" 
+      (click)="selectTab('COMPLETED')"
+    >
+      Closed
+    </button>
+   
   </div>
 
   <!-- Tab Content -->
   <div class="tab-content">
+
+    <!-- Active Games -->
+    <div *ngIf="selectedTab === 'ACTIVE'" class="tab-list">
+      <h3 class="font-bold mt-2 mb-4 text-xl">Open Games</h3>
+      <ul>
+        <li *ngFor="let game of activeGames" class="game-item p-6 mb-4 glow-hover">
+          <h4 class="game-title font-semibold text-lg">{{ game.title }}</h4>
+          <p class="game-date text-gray-400">Ends in: 1 week</p>
+        </li>
+      </ul>
+    </div>
+
+    
     <!-- Upcoming Games -->
     <div *ngIf="selectedTab === 'UPCOMING'" class="tab-list">
-      <h3 class="font-bold mt-2 mb-3">Upcoming Games</h3>
+      <h3 class="font-bold mt-2 mb-4 text-xl">Upcoming Games</h3>
       <ul>
-        <li *ngFor="let game of upcomingGames" class="game-item p-4 mb-4">
-          <h4 class="game-title font-semibold">{{ game.title }}</h4>
+        <li *ngFor="let game of upcomingGames" class="game-item p-6 mb-4 glow-hover">
+          <h4 class="game-title font-semibold text-lg">{{ game.title }}</h4>
           <p class="game-date text-gray-400">Starts on: {{ game.simulationStartDate | date }}</p>
         </li>
       </ul>
     </div>
 
-    <!-- Active Games -->
-    <div *ngIf="selectedTab === 'ACTIVE'" class="tab-list">
-      <h3 class="font-bold mt-2 mb-3">Open Games</h3>
-      <ul>
-        <li *ngFor="let game of activeGames" class="game-item p-4 mb-4">
-          <h4 class="game-title font-semibold">{{ game.title }}</h4>
-          <p class="game-date text-gray-400">Ends in: {{ game.simulationEndDate | date }}</p>
-        </li>
-      </ul>
-    </div>
+    
 
     <!-- Completed Games -->
     <div *ngIf="selectedTab === 'COMPLETED'" class="tab-list">
-      <h3 class="font-bold mt-2 mb-3">Closed Games</h3>
+      <h3 class="font-bold mt-2 mb-4 text-xl">Closed Games</h3>
       <ul>
-        <li *ngFor="let game of completedGames" class="game-item p-4 mb-4">
-          <h4 class="game-title font-semibold">{{ game.title }}</h4>
+        <li *ngFor="let game of completedGames" class="game-item p-6 mb-4 glow-hover">
+          <h4 class="game-title font-semibold text-lg">{{ game.title }}</h4>
           <p class="game-date text-gray-400">Closed on: {{ game.simulationEndDate | date }}</p>
         </li>
       </ul>
     </div>
 
     <!-- Cancelled Games -->
-    <div *ngIf="selectedTab === 'CANCELLED'" class="tab-list">
-      <h3 class="font-bold mt-2 mb-3">Cancelled Games</h3>
-      <ul>
-        <li *ngFor="let game of cancelledGames" class="game-item p-4 mb-4">
-          <h4 class="game-title font-semibold">{{ game.title }}</h4>
-          <p class="game-date text-gray-400">Cancelled on: {{ game.simulationEndDate | date }}</p>
-        </li>
-      </ul>
-    </div>
+    
   </div>
 </div>

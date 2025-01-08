@@ -19,7 +19,7 @@ import { LearningTestComponent } from './features/learning/components/learning-t
 import { BuySellComponent } from './features/buy-sell/buy-sell.component';
 import { PreviewOrderComponent } from './features/preview-order/preview-order.component';
 import { LearningCourseComponent } from './features/learning/pages/learning-course/learning-course.component';
-
+import { noAuthGuard } from './auth/guards/no-auth.guard';
 
 export const routes: Routes = [
   {
@@ -27,18 +27,20 @@ export const routes: Routes = [
     redirectTo: 'dashboard/overview',
     pathMatch: 'full',
   },
-  
 
   // AUTH ROUTES
   {
     path: 'login',
     loadComponent: () =>
       import('./features/login/login.component').then((m) => m.LoginComponent),
+    canActivate: [noAuthGuard],
   },
   {
     path: 'test',
     loadComponent: () =>
-      import('./features/games/components/market-data/market-data.component').then((m) => m.MarketDataComponent),
+      import(
+        './features/games/components/market-data/market-data.component'
+      ).then((m) => m.MarketDataComponent),
   },
   {
     path: 'signup',
@@ -46,10 +48,13 @@ export const routes: Routes = [
       import('./features/signup/signup.component').then(
         (m) => m.SignupComponent
       ),
-  },{
+    canActivate: [noAuthGuard],
+  },
+  {
     path: 'buysell',
     component: BuySellComponent,
-  },{
+  },
+  {
     path: 'preview-order',
     component: PreviewOrderComponent,
   },
@@ -94,7 +99,8 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
     ],
-  },{
+  },
+  {
     path: 'gamer',
     component: GamesLayoutComponent,
     children: [
@@ -121,7 +127,6 @@ export const routes: Routes = [
       },
     ],
   },
-
 
   // LEARNING ROUTES
   {
@@ -151,5 +156,4 @@ export const routes: Routes = [
       },
     ],
   },
-
 ];

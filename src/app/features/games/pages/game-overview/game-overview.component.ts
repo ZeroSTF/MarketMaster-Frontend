@@ -8,10 +8,11 @@ import { CurrentGamesComponent } from '../../components/current-games/current-ga
 import { LiveEventsComponent } from '../../components/live-events/live-events.component';
 import { YourGamesComponent } from '../../components/your-games/your-games.component';
 import { GlobalLeaderboardComponent } from '../../components/global-leaderboard/global-leaderboard.component';
+import { AchievementsProgressComponent } from '../../components/achievements-progress/achievements-progress.component';
 @Component({
   selector: 'app-game-overview',
   standalone: true,
-  imports: [CommonModule,OverviewdetailsComponent,QuickMatchComponent,CurrentGamesComponent,LiveEventsComponent,YourGamesComponent,GlobalLeaderboardComponent],
+  imports: [CommonModule,OverviewdetailsComponent,QuickMatchComponent,CurrentGamesComponent,LiveEventsComponent,YourGamesComponent,GlobalLeaderboardComponent,AchievementsProgressComponent],
   templateUrl: './game-overview.component.html',
   styleUrl: './game-overview.component.css'
 })

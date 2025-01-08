@@ -1,71 +1,93 @@
+/* Container */
 .overview-details-container {
-    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
-    backdrop-filter: blur(15px); /* Blurry background effect */
-    border-radius: 0.75rem; /* Rounded corners */
-    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Softer, more visible shadow */
-    color: #ffffff; /* White text color for visibility */
-  }
-  
-  /* Avatar */
-  .user-avatar {
-    width: 50px;
-    height: 50px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for pop effect */
-  }
-  
-  /* User Name and Rank */
-  .user-name {
-    color: #ffffff; /* Bright white for contrast */
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); /* Subtle shadow to stand out */
-  }
-  
-  .user-rank {
-    color: var(--orange-gaamer, #FB6805);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  }
-  
-  /* Portfolio Value */
-  .portfolio-value h3 {
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* Text shadow to make text pop */
-  }
-  
-  /* Metric Boxes */
-  .metric-box {
-    background: rgba(255, 255, 255, 0.2); /* Increased opacity for contrast */
-    backdrop-filter: blur(12px); /* Slight blur */
-    border-radius: 0.5rem; /* Rounded corners */
-    border: 1px solid var(--orange-gaamer, #FB6805); /* Thin orange border */
-    color: #ffffff;
-    text-align: center;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2); /* Slight shadow for more depth */
-  }
-  
-  .metric-box p {
-    color: rgba(255, 255, 255, 0.7); /* Softer white for labels */
-  }
-  
-  .metric-box h3 {
-    color: #ffffff; /* Bright white for the numbers */
-  }
-  
-  /* Achievements */
-  .achievement-badge {
-    color: #ffffff;
-  }
-  
-  .achievement-badge i {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Slight shadow for icons */
-  }
-  
-  /* Performance Graph */
-  .performance-graph img {
-    width: 100%;
-    border-radius: 0.5rem;
-    background: rgba(255, 255, 255, 0.1); /* Blurred background effect */
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--orange-gaamer, #FB6805);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2); /* Added shadow for depth */
-  }
-  
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(20px); /* Stronger blur effect */
+  border-radius: 1.5rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+  color: #ffffff; /* White text color */
+  padding: 1.5rem; /* More padding */
+}
+
+/* Gradient Text for User Name */
+.text-gradient {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* User Avatar with Glow Border */
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgba(251, 104, 5, 0.5); /* Orange border */
+  box-shadow: 0 0 10px rgba(251, 104, 5, 0.5); /* Glow effect */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+  box-shadow: 0 0 20px rgba(251, 104, 5, 0.8); /* Stronger glow on hover */
+}
+
+/* Portfolio Value */
+.portfolio-value h3 {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* Text shadow to make text pop */
+}
+
+/* Metric Boxes */
+.metric-box {
+  background: rgba(255, 255, 255, 0.2); /* Increased opacity for contrast */
+  backdrop-filter: blur(12px); /* Slight blur */
+  border-radius: 1rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Thin orange border */
+  color: #ffffff;
+  text-align: center;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2); /* Slight shadow for depth */
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s; /* Smooth hover effect */
+}
+
+.metric-box:hover {
+  transform: translateY(-4px); /* Lift card on hover */
+  box-shadow: 0 8px 24px rgba(251, 104, 5, 0.4); /* Glowing orange shadow */
+  background: rgba(255, 255, 255, 0.25); /* Slightly brighter background */
+}
+
+.metric-box p {
+  color: rgba(255, 255, 255, 0.7); /* Softer white for labels */
+}
+
+.metric-box h3 {
+  color: #ffffff; /* Bright white for the numbers */
+}
+
+/* Achievements */
+.achievement-badge {
+  color: #ffffff;
+  transition: transform 0.2s;
+}
+
+.achievement-badge:hover {
+  transform: scale(1.1); /* Slight zoom on hover */
+}
+
+/* Gradient Icons for Achievements */
+.text-gradient-yellow {
+  background: linear-gradient(45deg, #FFD700, #FB6805);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-green {
+  background: linear-gradient(45deg, #00FF00, #00CC00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-red {
+  background: linear-gradient(45deg, #FF0000, #CC0000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

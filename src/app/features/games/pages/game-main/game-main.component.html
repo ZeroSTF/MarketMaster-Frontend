@@ -12,7 +12,7 @@
       <app-game-holdings></app-game-holdings>
     </div>
     <div class="flex-grow p-2">
-      <app-trade-form></app-trade-form>
+      <app-trade-form (transactionSubmit)="processTransaction($event)"></app-trade-form>
     </div>
 
    
