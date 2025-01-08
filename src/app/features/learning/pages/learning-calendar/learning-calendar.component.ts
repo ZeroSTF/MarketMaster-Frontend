@@ -40,6 +40,7 @@ export class LearningCalendarComponent {
     { name: 'inProgress', label: 'In Progress', icon: 'pending' },
     { name: 'completed', label: 'Completed', icon: 'task_alt' },
   ];
+  
 
   private baseCalendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
