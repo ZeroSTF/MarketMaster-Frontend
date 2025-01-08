@@ -1,0 +1,49 @@
+/* Container */
+.achievements-progress-container {
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    backdrop-filter: blur(20px); /* Blur effect */
+    border-radius: 1.5rem; /* Rounded corners */
+    border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+    color: #ffffff; /* White text color */
+    padding: 1.5rem; /* Padding */
+  }
+  
+  /* Gradient Text for Title */
+  .text-gradient {
+    background: linear-gradient(45deg, #FB6805, #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+  }
+  
+  /* Achievement Item */
+  .achievement-item {
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    backdrop-filter: blur(12px); /* Slight blur */
+    border-radius: 1rem; /* Rounded corners */
+    border: 1px solid rgba(251, 104, 5, 0.3); /* Thin orange border */
+    padding: 1rem; /* Padding */
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s; /* Smooth hover effect */
+  }
+  
+  .achievement-item:hover {
+    transform: translateY(-4px); /* Lift card on hover */
+    box-shadow: 0 8px 24px rgba(251, 104, 5, 0.4); /* Glowing orange shadow */
+    background: rgba(255, 255, 255, 0.15); /* Slightly brighter background */
+  }
+  
+  /* Progress Bar */
+  .progress-bar {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .progress {
+    transition: width 0.5s ease; /* Smooth progress animation */
+  }
+  
+  /* Gradient Progress Bars */
+  .bg-gradient-to-r {
+    background-image: linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-to));
+  }

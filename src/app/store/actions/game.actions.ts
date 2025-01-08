@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { GameStateDto } from '../../models/game-state-dto';
 import { MarketDataStreamDto } from '../../models/market-data-stream.model';
 import { MarketDataResponseDto } from '../../models/market-data-response.model';
+import { TransactionDto } from '../../services/game.service';
 
 export const loadGameState = createAction(
   '[Game] Load Game State',
@@ -59,4 +60,17 @@ export const persistSimulationTime = createAction(
   props<{ updatedTime: string; gameParticipationId: number }>()
 );
 
+export const makeTransaction = createAction(
+  '[Game] Make Transaction',
+  props<{ transaction: TransactionDto }>()
+);
 
+export const makeTransactionSuccess = createAction(
+  '[Game] Make Transaction Success',
+  props<{ transaction: TransactionDto }>() // Add payload
+);
+
+export const makeTransactionFailure = createAction(
+  '[Game] Make Transaction Failure',
+  props<{ error: any }>()
+);

@@ -17,7 +17,6 @@ import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';  // Import MatProgressSpinnerModule
 
-
 @Component({
   selector: 'app-create-match-dialog',
   standalone: true,
@@ -36,7 +35,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';  
     MatDialogModule,
     MatIconModule,
     MatProgressSpinnerModule
-    
   ],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
@@ -63,24 +61,35 @@ export class CreateMatchDialogComponent {
   onSubmit(): void {
     if (this.createMatchForm.valid) {
       this.loading = true;
+
+      // Fetch the username from localStorage
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const username = user?.username; // Extract the username from the user object
+
+      if (!username) {
+        console.error('Username not found in localStorage');
+        this.loading = false;
+        return;
+      }
+
       const { startDate, startTime, endDate, endTime, ...rest } = this.createMatchForm.value;
 
       try {
         // Combine and validate timestamps
         const startTimestamp = this.combineDateAndTime(startDate, startTime);
         const endTimestamp = this.combineDateAndTime(endDate, endTime);
-      
+
         if (startTimestamp >= endTimestamp) {
           throw new Error('End time must be after start time.');
         }
-      
+
         const newGame: NewGameDto = {
           ...rest,
           startTimestamp: startTimestamp.toISOString(),
           endTimestamp: endTimestamp.toISOString(),
-          username: 'koussaykoukii',
+          username: username, // Use the dynamically fetched username
         };
-      
+
         this.gameService.createGame(newGame).pipe(
           finalize(() => (this.loading = false)),
           catchError((error: any) => {  // Use any to handle the error
@@ -98,7 +107,7 @@ export class CreateMatchDialogComponent {
             this.dialogRef.close(true); // Close modal on success
           }
         });
-      
+
       } catch (error) {
         // Handle synchronous errors (e.g., invalid date/time format)
         console.error(error instanceof Error ? error.message : 'Unknown error');

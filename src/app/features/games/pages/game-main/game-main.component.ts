@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { loadGameState } from '../../../../store/actions/game.actions';
+import { loadGameState, makeTransaction } from '../../../../store/actions/game.actions';
 import { GameState } from '../../../../store/actions/game.reducer';
 import { GameDashboardComponent } from '../../components/game-dashboard/game-dashboard.component';
 import { ChandelierGraphComponent } from '../../components/chandelier-graph/chandelier-graph.component';
@@ -14,6 +14,7 @@ import { GameNewsComponent } from '../../components/game-news/game-news.componen
 import { GameHoldingsComponent } from '../../components/game-holdings/game-holdings.component';
 import { selectGameData, selectIsPaused, selectSpeed } from '../../../../store/actions/game.selectors';
 import { GameStateDto } from '../../../../models/game-state-dto';
+import { TransactionDto } from '../../../../services/game.service';
 
 @Component({
   selector: 'app-game-main',
@@ -26,7 +27,7 @@ import { GameStateDto } from '../../../../models/game-state-dto';
     HoldingsComponent,
     TradeFormComponent,
     GameNewsComponent,
-    GameHoldingsComponent
+    GameHoldingsComponent,
   ],
   templateUrl: './game-main.component.html',
   styleUrls: ['./game-main.component.css'],
@@ -52,8 +53,13 @@ export class GameMainComponent implements OnInit {
     this.speed$ = this.store.select(selectSpeed);
 
     // Debugging: Log the game state to the console
-    this.gameState$.subscribe(state => {
+    this.gameState$.subscribe((state) => {
       console.log('Game State:', state);
     });
+  }
+
+  processTransaction(transaction: TransactionDto): void {
+    console.log('Processing Transaction:', transaction);
+    this.store.dispatch(makeTransaction({ transaction }));
   }
 }

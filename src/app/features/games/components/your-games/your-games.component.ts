@@ -11,7 +11,7 @@ import { GameDto, GameStatus } from '../../../../models/game.model';
   styleUrls: ['./your-games.component.css']
 })
 export class YourGamesComponent implements OnInit {
-  selectedTab: string = 'UPCOMING';
+  selectedTab: string = 'ACTIVE';
   upcomingGames: GameDto[] = [];
   activeGames: GameDto[] = [];
   completedGames: GameDto[] = [];
@@ -20,7 +20,16 @@ export class YourGamesComponent implements OnInit {
   constructor(private gameService: GameService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    const username = 'koussaykoukii'; // Replace with actual username if available dynamically
+    // Fetch the username from localStorage
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const username = user?.username; // Extract the username from the user object
+
+    if (!username) {
+      console.error('Username not found in localStorage');
+      return;
+    }
+
+    // Fetch user games using the username
     this.gameService.getUserGames(username).subscribe({
       next: (games) => {
         this.organizeGamesByStatus(games);

@@ -1,18 +1,27 @@
-/* Container Styling */
+/* Container */
 .overview-details-container {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  border-radius: 0.75rem;
-  border: 1px solid var(--orange-gaamer, #FB6805);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(20px); /* Stronger blur effect */
+  border-radius: 1.5rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+  color: #ffffff; /* Text color */
+  padding: 1.5rem; /* More padding */
+}
+
+/* Header with Gradient Text */
+.text-gradient {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
 }
 
 /* Form Layout */
 form {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 1.5rem; /* Increased gap */
 }
 
 @media (min-width: 768px) {
@@ -25,44 +34,46 @@ form {
 .form-input,
 .form-select {
   width: 100%;
-  padding: 0.5rem 0.75rem;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 0.5rem;
-  color: #ffffff;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s;
+  padding: 0.75rem 1rem; /* Larger padding */
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+  border: 1px solid rgba(255, 255, 255, 0.4); /* Subtle border */
+  border-radius: 0.75rem; /* Rounded corners */
+  color: #ffffff; /* White text */
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Inner shadow */
+  transition: all 0.3s ease;
 }
 
 .form-input:focus,
 .form-select:focus {
-  border-color: var(--orange-gaamer, #FB6805);
+  border-color: rgba(251, 104, 5, 0.8); /* Orange border on focus */
   outline: none;
-  box-shadow: 0 0 4px var(--orange-gaamer, #FB6805);
+  box-shadow: 0 0 8px rgba(251, 104, 5, 0.4); /* Glow effect on focus */
 }
 
 .form-input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.6); /* Softer white for placeholder */
 }
 
-/* Button Styling */
+/* Submit Button */
 button {
-  background-color: var(--orange-gaamer, #FB6805);
+  background: linear-gradient(45deg, #FB6805, #FF4500); /* Gradient background */
   border: none;
-  border-radius: 0.5rem;
-  color: #ffffff;
+  border-radius: 0.75rem; /* Rounded corners */
+  color: #ffffff; /* White text */
   cursor: pointer;
   font-weight: bold;
-  padding: 0.75rem;
+  padding: 0.75rem 1.5rem; /* Larger padding */
   text-align: center;
-  transition: background-color 0.2s ease-in-out, transform 0.2s;
+  transition: all 0.3s ease;
 }
 
 button:hover {
-  background-color: #fb8c05;
-  transform: scale(1.02);
+  background: linear-gradient(45deg, #FF4500, #FB6805); /* Reverse gradient on hover */
+  transform: scale(1.05); /* Slight zoom on hover */
+  box-shadow: 0 4px 12px rgba(251, 104, 5, 0.4); /* Glow effect on hover */
 }
 
 button:active {
-  background-color: #d45902;
+  background: linear-gradient(45deg, #D45902, #FB6805); /* Darker gradient on click */
+  transform: scale(0.98); /* Slight shrink on click */
 }
