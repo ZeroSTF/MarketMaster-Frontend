@@ -26,6 +26,7 @@ export class AssetService {
   readonly bestWinners = computed(() => this.bestWinnersSignal());
   readonly userAssets = computed(() => this.userAssetsSignal());
   readonly assets = computed(() => this.assetsSignal());
+
   private readonly apiFlask = environment.flaskUrl;
   private readonly apiUrl = environment.apiUrl;
 
@@ -51,6 +52,8 @@ export class AssetService {
         })
       );
   }
+
+  // Get paginated watchlist
   getAllWatchList(page: number = 0, size: number = 20, username: string): void {
     const params = new HttpParams()
       .set('page', page.toString())

@@ -83,7 +83,7 @@ export class DashboardExploreComponent implements OnDestroy {
     return data.filter((asset) => {
       const matchesSearch =
         searchTerm === '' || asset.symbol.toLowerCase().includes(searchTerm);
-      const matchesSector = sector === 'all' || asset.symbol === sector;
+      const matchesSector = sector === 'all' || asset.sector === sector;
       const matchesTrend =
         trend === 'all' ||
         (trend === 'up' ? asset.priceChange > 0 : asset.priceChange < 0);
@@ -118,6 +118,7 @@ export class DashboardExploreComponent implements OnDestroy {
   private updateDataSource() {
     const filteredData = this.filteredAssets();
     this.stockDataSource.data = filteredData;
+    console.log('filtered data', filteredData);
 
     const hasInitialData = this.assets().length > 0;
     const hasValidData =

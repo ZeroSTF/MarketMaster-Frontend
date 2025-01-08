@@ -17,9 +17,29 @@
                     <select [value]="sectorControl()" (change)="onSectorChange($event)"
                         class="w-full px-4 py-2 border font-medium border-gray-300 rounded-lg bg-white text-gray-500 hover:shadow-md focus:ring-2 focus:ring-blue-950 focus:border-blue-950 focus:outline-none transition-shadow duration-200">
                         <option value="all">All Sectors</option>
-                        <option value="tech">Technology</option>
-                        <option value="finance">Finance</option>
-                        <option value="health">Healthcare</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Energy">Energy</option>
+                        <option value="Consumer Goods">Consumer Goods</option>
+                        <option value="Industrials">Industrials</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Telecommunications">Telecommunications</option>
+                        <option value="Materials">Materials</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Media">Media</option>
+                        <option value="Hospitality">Hospitality</option>
+                        <option value="Education">Education</option>
+                        <option value="Government">Government</option>
+                        <option value="Agriculture">Agriculture</option>
+                        <option value="Pharmaceuticals">Pharmaceuticals</option>
+                        <option value="Automotive">Automotive</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Aerospace">Aerospace</option>
+                        <option value="Mining">Mining</option>
+                        <option value="Entertainment">Entertainment</option>
                     </select>
                 </div>
 
@@ -56,7 +76,8 @@
                 </div>
 
                 <div class="flex-grow overflow-auto">
-                    <mat-table [dataSource]="stockDataSource" matSort class="w-full min-w-full table-fixed">
+                    <mat-table [dataSource]="stockDataSource" matSort class="w-full min-w-full table-fixed"
+                        *ngIf="!isLoading()">
                         <ng-container *ngFor="let column of columns" [matColumnDef]="column.field">
                             <mat-header-cell *matHeaderCellDef mat-sort-header
                                 class="bg-blue-600 text-blue-950 text-left font-semibold sticky top-0 z-10">
@@ -67,9 +88,9 @@
                                 [ngClass]="{'opacity-0': !stock, 'bg-white font-bold': true, 'whitespace-normal': true}">
                                 <ng-container [ngSwitch]="column.field">
                                     <ng-container *ngSwitchCase="'logoUrl'">
-                                        <img [src]="'images/' + stock.symbol + '.png'" [alt]="stock.symbol + ' logo'"
-                                            class="w-6 h-6 rounded-full" loading="lazy"
-                                            onerror="this.src='images/default.png'">
+                                        <img [src]="'https://financialmodelingprep.com/image-stock/' + stock.symbol + '.png'"
+                                            [alt]="stock.symbol + ' logo'" class="w-6 h-6 rounded-full bg-gray-900"
+                                            loading="lazy" onerror="this.src='images/default.png'">
                                     </ng-container>
 
                                     <span *ngSwitchCase="'currentPrice'">
