@@ -2,7 +2,7 @@
   <div class="max-w-6xl mx-auto">
     <!-- Header -->
     <header class="mb-8 text-center">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">test level test name</h1>
+      <h1 class="text-2xl font-bold text-blue-900 mb-2">{{courseTitle}}</h1>
       <p class="text-gray-400">Best of Luck!</p>
     </header>
 
@@ -26,12 +26,70 @@
       </div>
 
       <!-- User Camera Section -->
+      <!-- User Camera Section -->
       <div class="bg-black/30 rounded-xl p-4 aspect-video relative overflow-hidden">
-        <video #userVideo 
-               class="w-full h-full object-cover rounded-lg transform scale-x-[-1]" 
-               autoplay 
-               playsinline>
-        </video>
+        <!-- Loading State -->
+  <div *ngIf="faceState().isLoading" 
+  class="absolute inset-0 flex items-center justify-center bg-black/50 z-20">
+<div class="text-center">
+ <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mb-4"></div>
+ <p class="text-white font-medium">Loading face detection...</p>
+</div>
+</div>
+
+<!-- Error State -->
+<div *ngIf="faceState().error" 
+  class="absolute inset-0 flex items-center justify-center bg-red-500/50 z-20">
+<div class="text-center px-6 py-4">
+ <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white mb-4 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+ </svg>
+ <p class="text-white font-medium">{{ faceState().error }}</p>
+</div>
+</div>
+        <!-- Face Detection Alerts -->
+        <div *ngIf="faceState().detectionActive" 
+             class="absolute inset-0 flex items-center justify-center z-10">
+          <!-- Multiple Faces Alert -->
+          <div *ngIf="faceState().faceCount > 1" 
+               class="bg-red-500/90 backdrop-blur-sm px-6 py-4 rounded-lg shadow-lg animate-bounce">
+            <div class="flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span class="text-white font-medium">Multiple faces detected!</span>
+            </div>
+          </div>
+          
+          <!-- No Face Alert -->
+          <div *ngIf="faceState().faceCount === 0" 
+               class="bg-yellow-500/90 backdrop-blur-sm px-6 py-4 rounded-lg shadow-lg animate-pulse">
+            <div class="flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-white font-medium">No face detected</span>
+            </div>
+          </div>
+          
+
+          
+        </div>
+        
+        <!-- Video Element -->
+        <video #userVideo class="w-full h-full object-cover rounded-lg" autoplay playsinline></video>
+        
+        <!-- Face Detection Status -->
+        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-full">
+          <span class="text-white text-sm font-medium">Faces: {{ faceState().faceCount }}</span>
+        </div>
+
+        <!-- Retake Reference Button -->
+        <button (click)="retakeReference()"
+                class="absolute top-4 left-4 bg-blue-500/90 hover:bg-blue-600/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-white text-sm font-medium transition-colors">
+          Retake Reference
+        </button>
+        
         
         <!-- Recording Indicator -->
         <div *ngIf="interviewState().isListening" 
@@ -48,7 +106,7 @@
       <div *ngIf="!interviewState().isActive" class="flex justify-center">
         <button
           (click)="startInterview()"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg 
+          class="bg-blue-50 hover:bg-orange-50 text-blue-600 px-6 py-3 rounded-lg 
                  font-semibold transition-all transform hover:scale-105 
                  flex items-center gap-2 shadow-lg">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

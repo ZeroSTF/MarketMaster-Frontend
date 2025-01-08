@@ -50,3 +50,27 @@
 :host ::ng-deep .fc-timegrid-slot {
   height: 3rem !important;
 }
+
+.course-item {
+  transition: max-height 0.3s ease-in-out;
+  max-height: 120px;
+  width: 100%;
+}
+
+.course-item.expanded {
+  max-height: 300px;
+}
+
+.line-clamp-1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
