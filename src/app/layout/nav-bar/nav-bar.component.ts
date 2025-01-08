@@ -28,7 +28,7 @@ import { ClickOutsideDirective } from '../../Utils/click-outside.directive';
   styles: [``],
 })
 export class NavBarComponent {
-  private authService = inject(AuthService);
+  authService = inject(AuthService);
   private router = inject(Router);
   darkModeService = inject(DarkModeService);
 
@@ -39,6 +39,12 @@ export class NavBarComponent {
     this.isOpen = !this.isOpen;
   }
 
+  openMenuIfClosed() {
+    if (!this.isOpen) {
+      this.toggleMenu();
+    }
+  }
+  
   toggleMenu2() {
     this.isOpen2 = !this.isOpen2;
   }
