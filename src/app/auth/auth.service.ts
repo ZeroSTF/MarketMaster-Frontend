@@ -16,7 +16,6 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-import { jwtDecode } from "jwt-decode";
 
 import {
   SignupRequest,
@@ -230,20 +229,4 @@ export class AuthService {
 
     return throwError(() => new Error(errorMessage));
   }
-  public username(): string | null{
-    const storedToken = localStorage.getItem('tokenResponse');
-    if (storedToken) {
-      const DecodedToken : any = jwtDecode(storedToken);
-      console.log(DecodedToken);
-      return DecodedToken.sub;
-     
-    }
-    return null
-   }
-}
-interface DecodedToken {
-  username?: string;
-  sub?: string;
-  email?: string;
-  // Add other expected token claims
 }
