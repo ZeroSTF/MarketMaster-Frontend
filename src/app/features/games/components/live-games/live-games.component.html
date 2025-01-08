@@ -1,29 +1,27 @@
-<div class="live-games-container p-4">
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-lg font-semibold">Live Games</h2>
-      <i class="fas fa-gamepad text-2xl"></i>
-    </div>
-  
-    <!-- Current User Games -->
-    <div class="mb-4">
-      <h3 class="text-md font-semibold mb-2">Your Active Games</h3>
-      <div *ngFor="let game of userGames" class="game-box p-4 mb-2">
-        <p class="text-sm mb-2">Game: {{ game.title }}</p>
-        <div class="buttons flex justify-between">
-          <button class="game-btn open-btn" (click)="openGame(game)">Open</button>
-          <button class="game-btn portfolio-btn" (click)="viewPortfolio(game)">Portfolio</button>
-        </div>
-      </div>
-    </div>
-  
-    <!-- Open Games -->
-    <div>
-      <h3 class="text-md font-semibold mb-2">Available Games</h3>
-      <div *ngFor="let game of openGames" class="game-box p-4 mb-2">
-        <p class="text-sm mb-2">Game: {{ game.title }}</p>
-        <button class="game-btn join-btn" (click)="joinGame(game)">Join</button>
+<div class="live-games-container p-6">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-gradient">Live Games</h2>
+    <i class="fas fa-gamepad text-3xl text-gradient-orange animate-pulse"></i>
+  </div>
+
+  <!-- Current User Games -->
+  <div class="mb-6">
+    <h3 class="text-lg font-semibold mb-4 text-white">Your Active Games</h3>
+    <div *ngFor="let game of userGames" class="game-box p-6 mb-4 glow-hover">
+      <p class="text-sm mb-4 text-gray-300">Game: {{ game.title }}</p>
+      <div class="buttons flex justify-between">
+        <button class="game-btn open-btn px-6 py-2" (click)="openGame(game)">Open</button>
       </div>
     </div>
   </div>
-  
+
+  <!-- Open Games -->
+  <div>
+    <h3 class="text-lg font-semibold mb-4 text-white">Available Games</h3>
+    <div *ngFor="let game of openGames" class="game-box p-6 mb-4 glow-hover">
+      <p class="text-sm mb-4 text-gray-300">Game: {{ game.title }}</p>
+      <button class="game-btn join-btn px-6 py-2" (click)="joinGame(game)">Join</button>
+    </div>
+  </div>
+</div>

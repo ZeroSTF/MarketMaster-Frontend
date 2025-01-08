@@ -1,4 +1,4 @@
-<nav (clickOutside)="isOpen ? toggleMenu() : null"
+<nav
   class="flex items-center justify-between mx-2 px-4 py-2 max-w-full min-w-72 shadow-[0px_4px_4px_rgba(0,0,0,0.25)] backdrop-blur-[10px] rounded-2xl bg-white dark:!bg-gray-800 transition-colors duration-300">
 
   <!-- Logo -->
@@ -26,7 +26,7 @@
       class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-blue-500">Dashboard</a>
     <a routerLink="/trader" routerLinkActive="!text-blue-500"
       class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-blue-500">Trade</a>
-    <a href="#"
+    <a routerLink="/gamer/overview" routerLinkActive="!text-blue-500"
       class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-blue-500">Games</a>
     <a routerLink="/learning"
       class="text-gray-400 font-semibold no-underline transition-colors duration-200 hover:text-blue-500">Learn</a>
@@ -55,25 +55,38 @@
 
     <!-- Avatar and Dropdown Menu -->
     <div class="relative">
-      <img class="w-9 h-9 rounded-full cursor-pointer transition-transform duration-300 hover:scale-105"
-        src="images/SidebarAvatar.png" alt="Avatar" (click)="toggleMenu()" />
+      <div class="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center cursor-pointer"
+        (click)="openMenuIfClosed()">
+        <span class="text-lg font-bold text-gray-600 dark:text-gray-300 select-none">
+          {{authService.currentUser()?.firstName?.charAt(0)}}{{authService.currentUser()?.lastName?.charAt(0)}}
+        </span>
+      </div>
       <!-- Dropdown -->
-      <div *ngIf="isOpen" class="absolute right-0 mt-2 w-48 bg-white dark:!bg-gray-700 shadow-lg rounded-lg z-50">
+      <div *ngIf="isOpen" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 shadow-lg rounded-lg z-50"
+        (clickOutside)="toggleMenu()">
         <ul class="py-1">
-          <li *ngFor="let link of ['Dashboard', 'Trader', 'Gamer', 'Learn']"
-            class="text-gray-700 dark:!text-gray-300 hover:bg-gray-100 dark:!hover:bg-gray-600 transition-all">
-            <a href="#" class="block lg:hidden px-4 py-2 text-gray-600 dark:!text-gray-300 font-semibold no-underline"
-              (click)="toggleMenu()">{{ link }}</a>
-          </li>
-          <li class="border-t border-gray-200 dark:!border-gray-600 block lg:hidden"></li>
+          <!-- Dynamic Menu Links -->
+          <!-- <ng-container *ngFor="let link of ['Dashboard', 'Trader', 'Gamer', 'Learn']">
+            <li class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all">
+              <a href="#" class="block px-4 py-2 font-semibold no-underline" (click)="toggleMenu()">
+                {{ link }}
+              </a>
+            </li>
+          </ng-container> -->
+
+          <!-- Divider -->
+          <!-- <li class="border-t border-gray-200 dark:border-gray-600"></li> -->
+
+          <!-- Logout Button -->
           <li>
-            <button (click)="logout()"
-              class="px-4 py-2 text-gray-600 dark:!text-gray-300 font-semibold no-underline transition-colors duration-200 hover:bg-gray-100 dark:!hover:bg-gray-600">
+            <button (click)="logout()" class="px-4 py-2 w-full text-left font-semibold no-underline transition-colors duration-200 
+               text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
               Log out
             </button>
           </li>
         </ul>
       </div>
+
     </div>
   </div>
 

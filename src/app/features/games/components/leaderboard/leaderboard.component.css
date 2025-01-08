@@ -1,59 +1,77 @@
-/* General container styling */
-.leaderboard-container {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  border-radius: 1rem;
-  border: 1px solid var(--orange-gaamer, #FB6805);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
-  color: #ffffff;
+/* Container */
+.overview-details-container {
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(20px); /* Stronger blur effect */
+  border-radius: 1rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+  color: #ffffff; /* Text color */
+  overflow-y: auto; /* Enable scrolling */
+  max-height: 400px; /* Adjust based on layout needs */
+  padding: 1rem; /* Padding */
 }
 
-/* Title styling */
-.leaderboard-title {
-  text-align: center;
-  color: var(--orange-gaamer, #FB6805);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+/* Header with Gradient Text */
+.text-gradient {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
 }
 
-/* Header row styling */
-.leaderboard-header {
-  color: rgba(255, 255, 255, 0.7);
-  text-transform: uppercase;
-  text-align: left; /* Aligns header items uniformly */
-  gap: 1.3rem; /* Adds consistent spacing between columns */
+/* Player Item */
+.player-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem; /* Padding */
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(10px); /* Slight blur for depth */
+  border-radius: 0.75rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.2); /* Subtle orange border */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Light shadow */
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s; /* Smooth hover effect */
 }
 
-/* Player row styling */
-.leaderboard-row {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  text-align: left;
-  gap: 1rem; /* Adds consistent spacing between columns */
+/* Glow Effect on Hover */
+.glow-hover:hover {
+  transform: translateY(-2px); /* Slight lift on hover */
+  box-shadow: 0 6px 20px rgba(251, 104, 5, 0.4); /* Glow effect on hover */
+  background: rgba(255, 255, 255, 0.15); /* Slightly brighter background */
 }
 
-/* Rank column */
+/* Active and Inactive Backgrounds */
+.bg-active {
+  background: rgba(40, 167, 69, 0.1); /* Subtle green for active players */
+}
+
+.bg-inactive {
+  background: rgba(255, 0, 0, 0.1); /* Subtle red for inactive players */
+}
+
+/* Avatar */
+.user-avatar {
+  width: 40px; /* Same size as before */
+  height: 40px; /* Same size as before */
+  border: 2px solid rgba(251, 104, 5, 0.5); /* Subtle orange border */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Light shadow */
+  border-radius: 50%; /* Circular shape */
+}
+
+/* Rank */
 .rank {
-  color: var(--orange-gaamer, #FB6805);
-  text-align: center; /* Centers rank value */
+  min-width: 50px; /* Same width as before */
 }
 
-/* Player column */
-.player-avatar {
-  width: 40px;
-  height: 40px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+.text-orange {
+  color: var(--orange-gaamer, #FB6805); /* Orange for rank */
 }
 
-.player-name {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+/* Profit Colors */
+.text-green {
+  color: #28a745; /* Green for positive profit */
 }
 
-/* Profit column */
-.profit {
-  font-size: 1.1rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-/* Trades column */
-.trades {
-  color: rgba(255, 255, 255, 0.7);
+.text-red {
+  color: #dc3545; /* Red for negative profit */
 }

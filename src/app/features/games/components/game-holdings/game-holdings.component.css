@@ -1,0 +1,67 @@
+/* Container */
+.overview-details-container {
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(20px); /* Stronger blur effect */
+  border-radius: 1rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+  color: #ffffff; /* Text color */
+  padding: 1rem; /* Padding */
+}
+
+/* Header with Gradient Text */
+.text-gradient {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Gradient Text for Symbol */
+.text-gradient-orange {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Table Styling */
+.holdings-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.holdings-table thead tr {
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+  backdrop-filter: blur(10px); /* Slight blur for depth */
+}
+
+.holdings-table th,
+.holdings-table td {
+  padding: 0.75rem; /* Padding for cells */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+}
+
+.holdings-table th {
+  text-align: left;
+  font-size: 0.875rem; /* Smaller font size */
+  text-transform: uppercase; /* Uppercase text */
+  letter-spacing: 0.05em; /* Spaced letters */
+  color: rgba(255, 255, 255, 0.7); /* Softer white */
+}
+
+.holdings-table td {
+  font-size: 0.875rem; /* Smaller font size */
+  color: rgba(255, 255, 255, 0.8); /* Softer white */
+}
+
+/* Glow Effect on Hover */
+.glow-hover:hover {
+  background: rgba(255, 255, 255, 0.1); /* Slightly brighter background */
+  transform: translateY(-2px); /* Slight lift on hover */
+  box-shadow: 0 4px 12px rgba(251, 104, 5, 0.4); /* Glow effect on hover */
+}
+
+/* Responsive Scrolling */
+.overflow-x-auto {
+  overflow-x: auto;
+}

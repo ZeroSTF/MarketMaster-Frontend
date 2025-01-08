@@ -1,0 +1,50 @@
+<div class="global-leaderboard-container p-6">
+  <!-- Section Header -->
+  <div class="header flex justify-between items-center mb-8">
+    <h2 class="text-3xl font-bold text-center tracking-wider glow-text">
+      Global Leaderboard
+    </h2>
+    <i class="fas fa-crown text-5xl text-gradient-yellow animate-glow"></i> <!-- Crown Icon -->
+  </div>
+
+  <!-- Leaderboard List -->
+  <div class="leaderboard-content">
+    <ul class="leaderboard-list">
+      <li 
+        *ngFor="let leader of leaderboard; let i = index" 
+        class="leaderboard-item p-5 flex justify-between items-center glow-hover"
+      >
+        <!-- Rank and Info -->
+        <div class="leader-info flex items-center">
+          <span 
+            class="rank-number font-bold text-xl flex justify-center items-center"
+            [ngClass]="{ 'rank-top': i === 0, 'rank-second': i === 1, 'rank-third': i === 2 }"
+          >
+            #{{ i + 1 }}
+          </span>
+          <div class="leader-details ml-4">
+            <h4 class="leader-name font-semibold text-xl text-white glow-text">
+              {{ leader.username }}
+            </h4>
+            <p class="leader-profit text-sm text-gray-400">
+              Total Profit: 
+              <span 
+                [class.text-green-400]="leader.profit > 0" 
+                [class.text-red-400]="leader.profit < 0"
+                class="font-bold"
+              >
+                {{ leader.profit | number: '1.2-2' }}$
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Crown Icon for Top Rank -->
+        <i 
+          *ngIf="i === 0" 
+          class="fas fa-trophy text-gradient-yellow text-3xl drop-shadow-lg animate-bounce"
+        ></i>
+      </li>
+    </ul>
+  </div>
+</div>

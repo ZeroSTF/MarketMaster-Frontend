@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
-import { Transaction} from '../../models/transaction.model';
 import { LimitOrder } from '../../models/limitOrder.model';
 import { CurrencyPipe, DatePipe,NgIf } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -9,6 +8,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TransactionService } from '../../services/transaction.service';
+import { AuthService } from '../../auth/auth.service';
+import { Transaction } from '../../models/Transaction.model';
 @Component({
   selector: 'app-preview-order',
   standalone: true,
@@ -26,7 +27,8 @@ import { TransactionService } from '../../services/transaction.service';
 export class PreviewOrderComponent implements OnInit {
   transaction: Transaction | null = null;
   limitOrder: LimitOrder | null = null;
-
+  private username:string ='';
+  private authService=inject(AuthService)
   constructor(private router: Router,private transactionService :TransactionService) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { transaction?: Transaction; limitOrder?: LimitOrder };
@@ -34,17 +36,22 @@ export class PreviewOrderComponent implements OnInit {
     this.limitOrder = state?.limitOrder || null;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const currentUser=this.authService.currentUser();
+    if(currentUser){
+    this.username=currentUser.username;
+  }
+}
 
   onConfirm(): void {
     console.log('Order confirmed');
     if (this.transaction) {
-        this.transactionService.addTransaction("gaddour77", this.transaction).subscribe(
+        this.transactionService.addTransaction(this.username, this.transaction).subscribe(
             (response) => console.log('Transaction confirmed in backend', response),
             (error) => console.error('Error confirming transaction', error)
         );
     } else if (this.limitOrder) {
-        this.transactionService.addOrder("zerostf", this.limitOrder).subscribe(
+        this.transactionService.addOrder(this.username, this.limitOrder).subscribe(
             (response) => console.log('LimitOrder confirmed in backend', response),
             (error) => console.error('Error confirming order', error)
         );

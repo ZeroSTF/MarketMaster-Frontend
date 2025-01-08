@@ -1,63 +1,75 @@
+/* Container */
 .matches-container {
-    background: rgba(255, 255, 255, 0.15); /* Semi-transparent background */
-    backdrop-filter: blur(15px); /* Blurry background effect */
-    border-radius: 1rem; /* Rounded corners */
-    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); /* Elevated shadow for depth */
-    color: #ffffff; /* Text color */
-  }
-  
-  /* Tabs */
-  .tabs {
-    display: flex;
-    justify-content: space-around;
-  }
-  
-  .tab {
-    background: transparent; /* No background for tabs */
-    color: #ffffff; /* White text */
-    border: none; /* No border */
-    padding: 10px 20px; /* Padding for clickable area */
-    cursor: pointer; /* Pointer cursor */
-    transition: color 0.3s; /* Smooth color transition */
-  }
-  
-  .tab:hover {
-    color: var(--orange-gaamer, #FB6805); /* Change color on hover */
-  }
-  
-  .tab.active {
-    border-bottom: 2px solid var(--orange-gaamer, #FB6805); /* Active tab indicator */
-  }
-  
-  /* Tab Content */
-  .tab-content {
-    margin-top: 20px;
-  }
-  
-  .tab-title {
-    color: #ffffff; /* White title color */
-  }
-  
-  .game-item {
-    background: rgba(255, 255, 255, 0.2); /* Transparent background */
-    backdrop-filter: blur(10px); /* Slight blur for depth */
-    border-radius: 0.5rem; /* Rounded edges */
-    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
-    transition: transform 0.2s, box-shadow 0.2s; /* Smooth hover effect */
-  }
-  
-  .game-item:hover {
-    transform: translateY(-2px); /* Lift card on hover */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
-  }
-  
-  .game-title {
-    color: #ffffff; /* Title color */
-  }
-  
-  .game-date {
-    color: rgba(255, 255, 255, 0.7); /* Softer white for date */
-  }
-  
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(25px); /* Stronger blur effect */
+  border-radius: 1.5rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5); /* Deeper shadow */
+  color: #ffffff; /* White text color */
+  padding: 2rem; /* More padding */
+}
+
+/* Gradient Text for Title */
+.text-gradient {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1.5rem;
+}
+
+.tab {
+  background: rgba(255, 255, 255, 0.1); /* Transparent background */
+  color: rgba(255, 255, 255, 0.7); /* Softer white for text */
+  border: none; /* No border */
+  padding: 0.75rem 1.5rem; /* Padding for clickable area */
+  cursor: pointer; /* Pointer cursor */
+  transition: all 0.3s ease; /* Smooth transition */
+  border-radius: 9999px; /* Fully rounded corners */
+}
+
+.tab:hover {
+  background: rgba(251, 104, 5, 0.3); /* Orange background on hover */
+  color: #ffffff; /* Bright white text on hover */
+}
+
+.tab.active {
+  background: linear-gradient(45deg, #FB6805, #FFD700); /* Gradient background for active tab */
+  color: #ffffff; /* Bright white text */
+  box-shadow: 0 4px 12px rgba(251, 104, 5, 0.4); /* Glow effect */
+}
+
+/* Tab Content */
+.tab-content {
+  margin-top: 1.5rem;
+}
+
+/* Game Items */
+.game-item {
+  background: rgba(255, 255, 255, 0.2); /* Transparent background */
+  backdrop-filter: blur(20px); /* Stronger blur */
+  border-radius: 1rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Soft shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.game-item:hover {
+  transform: translateY(-6px); /* Lift card on hover */
+  box-shadow: 0 8px 24px rgba(251, 104, 5, 0.5); /* Glow effect on hover */
+  background: rgba(255, 255, 255, 0.25); /* Slightly brighter background */
+}
+
+.game-title {
+  color: #ffffff; /* Bright white for title */
+}
+
+.game-date {
+  color: rgba(255, 255, 255, 0.7); /* Softer white for date */
+}

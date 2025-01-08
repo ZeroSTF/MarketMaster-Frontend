@@ -1,22 +1,20 @@
 <!-- Desktop Sidebar -->
 <div *ngIf="!isMobile" 
-     class="h-full flex flex-col bg-white mx-2 my-2 shadow-lg rounded-3xl px-4 pt-4 pb-16 transition-all duration-500 ease-in-out w-auto"
+     class="h-full flex flex-col bg-white mx-2 my-2 shadow-lg rounded-3xl px-4 pt-4 pb-16 transition-all duration-500 ease-in-out"
      [ngClass]="{ 
-       'w-64 opacity-100': !hidden, 
-       'w-16 opacity-0': hidden 
+       'opacity-100': !hidden, 
+       'opacity-0': hidden 
      }"
-     [ngStyle]="{ 'overflow': hidden ? 'hidden' : 'visible' }">
+     [ngStyle]="{
+       'overflow': hidden ? 'hidden' : 'visible',
+       'minWidth': hidden ? '4rem' : '16rem', 
+       'maxWidth': hidden ? '4rem' : '20rem'
+     }">
 
-  <!-- Header Section -->
-  <div class="flex justify-between items-center mb-4">
-    <h1 class="text-xl font-semibold">Learning Ressources</h1>
-    <button class="text-gray-400">
-      <span class="material-icons">more_horiz</span>
-    </button>
-  </div>
+  
 
   <!-- Search Section -->
-  <div class="relative mb-4">
+  <div class="relative mb-4" *ngIf="showSearch">
     <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
       <span class="material-icons text-lg">search</span>
     </span>
@@ -28,70 +26,74 @@
     >
   </div>
 
-  <!-- Filter Section -->
-  <div class="flex items-center mb-4">
-    <button class="flex items-center space-x-1 text-sm">
-      <span>{{selectedFilter}}</span>
-      <span class="material-icons text-sm">expand_more</span>
-    </button>
-    <span class="ml-auto text-sm text-gray-500">{{totalCourses}} courses</span>
-  </div>
+  
 
   <!-- Course List -->
-  <nav class="flex-grow flex flex-col space-y-3 overflow-auto scrollbar-hide">
-    <div *ngFor="let course of courses" 
-     class="flex w-[260px] h-auto flex-col justify-between items-start bg-white shadow-md p-3 rounded-lg space-y-2">
-
-  <!-- Header Section with TimeLeft and Actions -->
-  <div class="flex items-center justify-between w-full">
-    <!-- Time Left Badge -->
-    <div class="flex justify-center items-center bg-black text-white text-xs rounded-md px-2 py-1">
-      {{course.timeLeft}}
+  <nav class="flex-grow flex flex-col space-y-3 overflow-auto scrollbar-hide" *ngIf="!hidden">
+    <!-- Total Learning Time -->
+    <div class="bg-blue-50 rounded-lg p-4">
+      <h2 class="text-lg font-semibold text-blue-600">Total Learning Time</h2>
+      <p class="text-2xl font-bold text-gray-800 mt-2">1h 30m</p>
     </div>
 
-    <!-- Edit and More Options Buttons -->
-    <div class="flex space-x-1">
-      <button class="text-gray-400 hover:text-gray-600">
-        <span class="material-icons text-base">edit</span>
-      </button>
-      <button class="text-gray-400 hover:text-gray-600">
-        <span class="material-icons text-base">more_vert</span>
-      </button>
+    <!-- Completed Activities -->
+    <div class="bg-green-50 rounded-lg p-4">
+      <h2 class="text-lg font-semibold text-green-600">Activities Completed</h2>
+      <p class="text-2xl font-bold text-gray-800 mt-2">2</p>
     </div>
-  </div>
 
-  <!-- Course Title -->
-  <h3 class="font-semibold text-sm text-gray-800 truncate">{{course.title}}</h3>
-
-  <!-- Course Description -->
-  <p class="text-xs text-gray-500 leading-tight truncate">{{course.description}}</p>
-
-  <!-- Footer with Date and Time -->
-  <div class="flex justify-between w-full text-xs text-gray-500">
-    <div class="flex items-center space-x-1">
-      <span class="material-icons text-blue-500 text-base">calendar_today</span>
-      <span>{{course.date}}</span>
+    <!-- Streaks -->
+    <div class="bg-yellow-50 rounded-lg p-4">
+      <h2 class="text-lg font-semibold text-yellow-600">Current Streak</h2>
+      <p class="text-2xl font-bold text-gray-800 mt-2">2 Days</p>
     </div>
-    <div class="flex items-center space-x-1">
-      <span class="material-icons text-orange-500 text-base">access_time</span>
-      <span>{{course.time}}</span>
-    </div>
-  </div>
-</div>
 
+    <!-- Weekly Engagement -->
+    <div class="bg-purple-50 rounded-lg p-4">
+      <h2 class="text-lg font-semibold text-purple-600">Weekly Engagement</h2>
+      <div class="mt-2 flex items-center space-x-2">
+        <div class="bg-purple-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold">
+          15
+        </div>
+        <p class="text-sm text-gray-600">Sessions this week</p>
+      </div>
+    </div>
+
+    <!-- Top Learning Categories -->
+    <!-- <div class="bg-gray-50 rounded-lg p-4">
+      <h2 class="text-lg font-semibold text-gray-600">Top Learning Categories</h2>
+      <ul class="mt-2 space-y-1 text-sm">
+        <li>📚 Programming</li>
+        <li>🌍 Languages</li>
+        <li>🔬 Science</li>
+      </ul>
+    </div> -->
+
+    <!-- Peer Activity Comparison -->
+    <div class="bg-red-50 rounded-lg p-4">
+      <h2 class="text-lg font-semibold text-red-600">Peer Activity</h2>
+      <p class="text-sm text-gray-600 mt-2">
+        You’ve completed <span class="font-bold text-red-500">85%</span> more activities than your peers.
+      </p>
+    </div>
   </nav>
-  <div class="flex flex-wrap">
+
+  
+
+  <!-- Sidebar Buttons -->
+  <div class="flex flex-wrap mt-4 border-t pt-4">
     <button *ngFor="let btn of sidebarButtons" 
-            [routerLink]="btn.link"   
-           (click)="clickSideButton(btn.name)" 
-            class="w-1/2 flex flex-col items-center text-gray-400 hover:text-blue-500 p-2"
-            [ngClass]="{'text-blue-500': selectedButton === btn.name}">
+    [routerLink]="btn.link"   
+    (click)="clickSideButton(btn.name)" 
+    class="w-1/2 flex flex-col items-center text-gray-400 hover:text-blue-500 p-2"
+    [ngClass]="{
+      'text-blue-500': selectedButton === btn.name,
+      'text-gray-400': selectedButton !== btn.name
+    }">
       <span class="material-icons text-2xl">{{btn.icon}}</span>
       <span class="text-xs mt-1">{{btn.label}}</span>
     </button>
   </div>
-  
-  
 </div>
 
 <!-- Mobile Bottom Bar -->

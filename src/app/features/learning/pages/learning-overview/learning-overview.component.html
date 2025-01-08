@@ -1,6 +1,6 @@
-<div class="h-screen w-full flex flex-wrap">
+<div class="h-screen w-full flex flex-wrap bg-gradient-to-br from-blue-50 via-white to-blue-50">
+  <!-- Header Section -->
   <div class="w-full h-44 overflow-hidden rounded-2xl relative">
-    <!-- Background image with blur and darkening -->
     <div class="relative w-full h-full rounded-2xl">
       <img
         src="images/SideHEader.png"
@@ -8,20 +8,17 @@
         class="w-full h-full object-cover rounded-2xl filter blur-sm brightness-50"
       />
     </div>
-
-    <!-- Logo, Line, and Text -->
     <div class="absolute inset-0 flex flex-col items-center justify-center">
-      <!-- Logo -->
       <img
         src="images/LogoMMWhite.png"
         alt="Logo"
         class="w-60 h-16 mb-1 object-cover"
       />
-
-      <!-- Text and Link -->
       <p class="text-white text-lg">Welcome Back!</p>
     </div>
   </div>
+
+  <!-- Profile Section -->
   <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
     <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg -mt-8 mb-3">
       <div class="flex items-center justify-between p-6">
@@ -32,85 +29,101 @@
             class="w-16 h-16 rounded-full border-4 border-white"
           />
           <div>
-            <h2 class="text-xl font-medium">Adela Parkson</h2>
-            <p class="text-sm text-gray-500">estherasimmmple.com</p>
+            <h2 class="text-xl font-medium">{{ user?.firstName}}{{ user?.lastName}}</h2>
+            <p class="text-sm text-gray-500">{{ user?.username }}</p>
           </div>
+          
+          
+          
         </div>
         <div class="flex space-x-4">
+          <!-- Certifications Button -->
           <button
+            class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
+            [ngClass]="{ 'text-blue-600': activeTab === 'certifications' }"
+            (click)="activeTab = 'certifications'"
+          >
+            <span>Certifications</span>
+            <span class="bg-purple-600 text-white px-2 py-1 rounded-full text-xs">
+              {{ certifications().length }}
+            </span>
+          </button>
+
+          <!-- Completed Courses Button -->
+          <!-- <button
             class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
             [ngClass]="{ 'text-blue-600': activeTab === 'completed' }"
             (click)="activeTab = 'completed'"
           >
-            <span>Completed Courses</span>
-            <span
-              class="bg-green-600 text-white px-2 py-1 rounded-full text-xs"
-              >{{ completedCoursesList().length }}</span
-            >
-          </button>
+            <span>Completed</span>
+            <span class="bg-green-600 text-white px-2 py-1 rounded-full text-xs">
+              {{ completedCourses().length }}
+            </span>
+          </button> -->
 
-          <!-- Ongoing Courses Button -->
+          <!-- In Progress Courses Button -->
           <button
             class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
             [ngClass]="{ 'text-blue-600': activeTab === 'ongoing' }"
             (click)="activeTab = 'ongoing'"
           >
-            <span>Ongoing Courses</span>
-            <span
-              class="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs"
-              >{{ ongoingCoursesList().length }}</span
-            >
+            <span>In Progress</span>
+            <span class="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs">
+              {{ inProgressCourses().length }}
+            </span>
           </button>
 
-          <!-- Pending Tasks Button -->
+          <!-- Coming Courses Button -->
           <button
             class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
-            [ngClass]="{ 'text-blue-600': activeTab === 'pending' }"
-            (click)="activeTab = 'pending'"
+            [ngClass]="{ 'text-blue-600': activeTab === 'coming' }"
+            (click)="activeTab = 'coming'"
           >
-            <span>Pending</span>
-            <span
-              class="bg-red-500 text-white px-2 py-1 rounded-full text-xs"
-              >{{ pendingTasks() }}</span
-            >
+            <span>Coming</span>
+            <span class="bg-gray-500 text-white px-2 py-1 rounded-full text-xs">
+              {{ comingCourses().length }}
+            </span>
+          </button>
+          <button mat-raised-button color="blue-500" >
+            <mat-icon>description</mat-icon>
           </button>
         </div>
-
       </div>
     </div>
   </div>
 
-  <!-- Course List -->
-<div class="h-full w-full mx-auto px-4 sm:px-6 lg:px-8">
-  <div>
-
-    <h2 class="text-xl font-bold text-gray-800 mb-4">Your Courses</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- Course List Section -->
+  <div class="h-full w-full mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">
+      {{ activeTab === 'certifications' ? 'Your Certifications' :
+         activeTab === 'completed' ? 'Completed Courses' :
+         activeTab === 'ongoing' ? 'Courses In Progress' :
+         'Upcoming Courses' }}
+    </h2>
+    <!-- Scrollable Course List -->
+    <div class="h-[60vh] overflow-y-auto scrollbar-hide grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div
-        *ngFor="
-          let course of activeTab === 'completed'
-            ? completedCoursesList()
-            : activeTab === 'ongoing'
-            ? ongoingCoursesList()
-            : courses()
-        "
-        class="flex w-auto h-auto flex-col justify-between items-start bg-white shadow-md p-3 rounded-lg space-y-2"
+        *ngFor="let course of getActiveCourses()"
+        class="flex w-auto h-fit flex-col justify-between items-start bg-white shadow-md p-3 rounded-lg space-y-2"
       >
-        <!-- Course Image -->
-        <img
-          [src]="course.thumbnailUrl"
-          [alt]="course.title"
-          class="rounded-lg w-full h-40 object-cover mb-3"
-        />
-
-        <!-- Header Section with TimeLeft and Actions -->
+      <img
+      [src]="'/images/' + course.course.title + '.png'"
+      [alt]="course.course.title"
+      class="rounded-lg w-full h-40 object-cover mb-3"
+    />
+    
         <div class="flex items-center justify-between w-full">
-          <!-- Progress or Time Left -->
-          <div class="flex justify-center items-center bg-black text-white text-xs rounded-md px-2 py-1">
+          <div
+            class="flex justify-center items-center text-white text-xs rounded-md px-2 py-1"
+            [ngClass]="{
+              'bg-purple-600': course.completed,
+              'bg-green-600': course.progress === 100,
+              'bg-yellow-500': course.progress > 0 && course.progress < 100,
+              'bg-gray-500': course.progress === 0
+            }"
+          >
             {{ course.progress }}% Completed
           </div>
-
-          <!-- Edit and More Options Buttons -->
           <div class="flex space-x-1">
             <button class="text-gray-400 hover:text-gray-600">
               <span class="material-icons text-base">edit</span>
@@ -120,33 +133,21 @@
             </button>
           </div>
         </div>
-
-        <!-- Course Title -->
         <h3 class="font-semibold text-sm text-gray-800 truncate">
-          {{ course.title }}
+          {{ course.course.title }}
         </h3>
-
-        <!-- Course Description -->
         <p class="text-xs text-gray-500 leading-tight truncate">
-          {{ course.description }}
+          {{ course.course.description }}
         </p>
-
-        <!-- Footer with Date and Time -->
         <div class="flex justify-between w-full text-xs text-gray-500">
-          <!-- Release Date -->
           <div class="flex items-center space-x-1">
             <span class="material-icons text-blue-500 text-base">calendar_today</span>
-            <span>{{ course.releaseDate | date: 'shortDate' }}</span>
+            <span>{{ course.startDate | date: 'shortDate' }}</span>
           </div>
-          <!-- Duration -->
-          <div class="flex items-center space-x-1">
-            <span class="material-icons text-orange-500 text-base">access_time</span>
-            <span>{{ course.duration }} hours</span>
-          </div>
+          
         </div>
       </div>
     </div>
   </div>
-</div>
-
+  
 </div>

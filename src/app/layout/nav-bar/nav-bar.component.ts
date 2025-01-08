@@ -7,9 +7,9 @@ import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, NgModel } from '@angular/forms';
-import { ClickOutsideDirective } from '../../utils/click-outside.directive';
 import { AuthService } from '../../auth/auth.service';
 import { DarkModeService } from '../../services/dark-mode.service';
+import { ClickOutsideDirective } from '../../Utils/click-outside.directive';
 
 @Component({
   selector: 'app-nav-bar',
@@ -22,14 +22,13 @@ import { DarkModeService } from '../../services/dark-mode.service';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatMenuTrigger,
     ClickOutsideDirective,
   ],
   templateUrl: './nav-bar.component.html',
   styles: [``],
 })
 export class NavBarComponent {
-  private authService = inject(AuthService);
+  authService = inject(AuthService);
   private router = inject(Router);
   darkModeService = inject(DarkModeService);
 
@@ -40,6 +39,12 @@ export class NavBarComponent {
     this.isOpen = !this.isOpen;
   }
 
+  openMenuIfClosed() {
+    if (!this.isOpen) {
+      this.toggleMenu();
+    }
+  }
+  
   toggleMenu2() {
     this.isOpen2 = !this.isOpen2;
   }

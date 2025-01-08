@@ -3,16 +3,9 @@ import { Injectable, signal, computed, OnDestroy } from '@angular/core';
 import { Asset } from '../models/asset.model';
 import { catchError, firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { ChartType } from '../models/chart.model';
+import { MarketDataRequestDto, MarketDataResponseDto } from './game-chart.service';
+import { ChartDataPoint, ChartType, Indicator } from '../models/chart.model';
 
-interface ChartDataPoint {
-  time: number;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-}
 
 interface HistoricalDataResponse {
   data: {
@@ -33,7 +26,7 @@ interface HistoricalDataResponse {
 export class ChartService implements OnDestroy {
   private historicalDataSignal = signal<ChartDataPoint[]>([]);
   private timeframeSignal = signal<string>('D');
-  private indicatorsSignal = signal<string[]>(['VOL']);
+  private indicatorsSignal = signal<Indicator[]>([]);
   private selectedAssetSignal = signal<Asset | null>(null);
   private chartTypeSignal = signal<ChartType>('Candlestick');
 
@@ -46,6 +39,8 @@ export class ChartService implements OnDestroy {
   readonly chartType = computed(() => this.chartTypeSignal());
 
   private readonly apiUrl = environment.flaskUrl;
+  private readonly apiUrl1 = environment.apiUrl;
+
 
   constructor(private http: HttpClient) {}
 
@@ -112,13 +107,13 @@ export class ChartService implements OnDestroy {
     }
   }
 
-  addIndicator(indicator: string) {
+  addIndicator(indicator: Indicator) {
     this.indicatorsSignal.update((current) => [...current, indicator]);
   }
 
-  removeIndicator(indicator: string) {
+  removeIndicator(indicator: Indicator) {
     this.indicatorsSignal.update((current) =>
-      current.filter((ind) => ind !== indicator)
+      current.filter((ind) => ind.type !== indicator.type)
     );
   }
 
@@ -150,5 +145,41 @@ export class ChartService implements OnDestroy {
 
   ngOnDestroy(): void {
     this.clearDataRefresh();
+  }
+
+  async fetchGameMarketData(gameId: number, assetSymbol: string, lastPauseTimestamp: string) {
+    try {
+      const request: MarketDataRequestDto = { gameId, assetSymbol, lastPauseTimestamp };
+      const response = await firstValueFrom(
+        this.http
+          .post<MarketDataResponseDto>(`${this.apiUrl1}/games/market-data`, request)
+          .pipe(
+            catchError((error: HttpErrorResponse) => {
+              console.error('API Error:', error.message);
+              throw new Error(error.message);
+            })
+          )
+      );
+
+      // Process the past and upcoming market data
+      if (response?.pastMarketData?.length) {
+        const transformedPastData = response.pastMarketData.map((data) => ({
+          time: new Date(data.timestamp).getTime() / 1000,
+          open: data.open,
+          high: data.high,
+          low: data.low,
+          close: data.close,
+          volume: data.volume,
+        }));
+        this.updateHistoricalData(transformedPastData);
+      }
+
+      if (response?.upcomingMarketData?.length) {
+        // Optionally, handle upcoming data (e.g., store in a signal or use it for predictions)
+        console.log('Upcoming Market Data:', response.upcomingMarketData);
+      }
+    } catch (error) {
+      console.error('Error fetching game market data:', error);
+    }
   }
 }

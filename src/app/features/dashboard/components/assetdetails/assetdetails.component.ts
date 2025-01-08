@@ -10,9 +10,13 @@ import { Router } from '@angular/router';
 import { TransactionService } from '../../../../services/transaction.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
-import { StockPredictionResponse } from '../../../../models/StockPredictionResponse.model';
 import { MatDialog } from '@angular/material/dialog';
 import { OptionformComponent } from '../optionform/optionform.component';
+import { Chart, registerables } from 'chart.js';
+import { ChangeDetectorRef } from '@angular/core';
+import { AuthService } from '../../../../auth/auth.service';
+
+Chart.register(...registerables);
 @Component({
   selector: 'app-asset-details',
   standalone: true,
@@ -36,10 +40,15 @@ export class AssetdetailsComponent implements OnInit {
   public selectedAsset = this.assetService.selectedAsset;
   public showPredictionWidget = false;
   public predictedPrice: number | null = null;
-  public predictedChange: number | null = null;
+  public predictedChange: number | null = 0; // Default value of 0
   public selectedSymbol: string | null = null;
   public predictionDuration = 1;
   public isLoadingPrediction = false;
+  public chart: any; // Chart.js instance
+  public chartLabels: string[] = []; // Dates for the chart
+  public chartData: number[] = []; // Prices for the chart
+  private authService = inject(AuthService);
+  private username: string = '';
 
   result: any;
   error: string | null = null;
@@ -49,9 +58,14 @@ export class AssetdetailsComponent implements OnInit {
     { id: 3, headline: 'New Product Launch Announced' },
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private cdr: ChangeDetectorRef) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    const currentUser = this.authService.currentUser();
+    if (currentUser) {
+      this.username = currentUser.username;
+    }
+  }
 
   navigateToBuySell() {
     const asset = this.selectedAsset();
@@ -65,13 +79,15 @@ export class AssetdetailsComponent implements OnInit {
   addWatchList() {
     const asset = this.selectedAsset();
     if (asset) {
-      this.transactionService.addWatchList('gaddour77', asset.symbol).subscribe({
-        next: () =>
-          this.snackBar.open('Added to watchlist!', 'Close', {
-            duration: 3000,
-          }),
-        error: (err) => console.error(err),
-      });
+      this.transactionService
+        .addWatchList(this.username, asset.symbol)
+        .subscribe({
+          next: () =>
+            this.snackBar.open('Added to watchlist!', 'Close', {
+              duration: 3000,
+            }),
+          error: (err) => console.error(err),
+        });
     }
   }
   openPredictWidget(symbol: string): void {
@@ -81,25 +97,34 @@ export class AssetdetailsComponent implements OnInit {
 
   closePredictWidget(): void {
     this.showPredictionWidget = false;
+    this.chartLabels = [];
+    this.chartData = [];
     this.predictedPrice = null;
     this.predictedChange = null;
   }
 
   confirmPrediction(): void {
     if (this.selectedSymbol) {
-      this.isLoadingPrediction = true; // Show loading spinner
-      this.assetService.predictStock(this.selectedSymbol, true).subscribe({
-        next: (response: StockPredictionResponse) => {
-          this.predictedPrice = response.predicted_price;
+      this.isLoadingPrediction = true;
+
+      this.assetService.predictStock(this.selectedSymbol, true, 14).subscribe({
+        next: (response) => {
+          this.chartLabels = response.predicted_prices.map((p) => p.date);
+          this.chartData = response.predicted_prices.map((p) => p.price);
+
+          this.predictedPrice =
+            response.predicted_prices[
+              response.predicted_prices.length - 1
+            ].price;
           this.predictedChange = response.predicted_change;
-          this.isLoadingPrediction = false; // Hide loading spinner
+
+          this.isLoadingPrediction = false;
+
+          this.initializeChart();
         },
-        error: (err) => {
-          console.error(err);
-          this.snackBar.open('Failed to predict price', 'Close', {
-            duration: 3000,
-          });
-          this.isLoadingPrediction = false; // Hide loading spinner
+        error: (error) => {
+          console.error('Prediction Error:', error);
+          this.isLoadingPrediction = false;
         },
       });
     }
@@ -108,7 +133,67 @@ export class AssetdetailsComponent implements OnInit {
     // Open the OptionForm component in a dialog
     this.dialog.open(OptionformComponent, {
       width: '400px', // Optional: You can define the width of the dialog
-      data: { asset: this.selectedAsset() }
+      data: { asset: this.selectedAsset() },
     });
+  }
+
+  initializeChart(): void {
+    this.cdr.detectChanges(); // Ensure DOM changes are applied
+    const canvas = document.getElementById(
+      'predictionChart'
+    ) as HTMLCanvasElement;
+
+    if (!canvas) {
+      console.error(
+        'Canvas element not found after ChangeDetectorRef.detectChanges()'
+      );
+      return;
+    }
+
+    if (this.chart) {
+      this.chart.destroy();
+    }
+
+    this.chart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: this.chartLabels,
+        datasets: [
+          {
+            label: 'Predicted Prices',
+            data: this.chartData,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderWidth: 2,
+            tension: 0.4,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+          },
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Date',
+            },
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Price ($)',
+            },
+          },
+        },
+      },
+    });
+
+    console.log('Chart successfully created');
   }
 }

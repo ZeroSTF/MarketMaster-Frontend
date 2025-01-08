@@ -1,45 +1,178 @@
-<div class="bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-lg mx-auto mt-10">
-  <h2 class="text-xl font-bold text-center mb-4">Course Test</h2>
+<div class="min-h-screen bg-gradient-to-br from-white via-white to-blue-50 p-6 rounded-3xl shadow-md border border-blue-100/10 backdrop-filter backdrop-blur-sm ">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <header class="mb-8 text-center">
+      <h1 class="text-2xl font-bold text-blue-900 mb-2">{{courseTitle}}</h1>
+      <p class="text-gray-400">Best of Luck!</p>
+    </header>
 
-  <!-- Button to Start Test -->
-  <div class="flex justify-center mb-4">
-    <button
-      class="bg-blue-500 text-white py-2 px-4 rounded-full flex items-center gap-2"
-      (click)="startTest()"
-    >
-      <span class="material-icons">quiz</span>
-      <span>Ask Question</span>
-    </button>
+    <!-- Main Interview Interface -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- AI Avatar Section -->
+      <div class="bg-black/30 rounded-xl p-4 aspect-video relative overflow-hidden">
+        <canvas #avatarCanvas class="w-full h-full"></canvas>
+        
+        
+        <!-- Speaking Indicator -->
+        <div *ngIf="interviewState().isSpeaking" 
+             class="absolute bottom-4 left-4 flex items-center gap-2 bg-blue-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
+          <div class="flex space-x-1">
+            <div class="w-1.5 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+            <div class="w-1.5 h-3 bg-blue-500 rounded-full animate-pulse delay-75"></div>
+            <div class="w-1.5 h-3 bg-blue-500 rounded-full animate-pulse delay-150"></div>
+          </div>
+          <span class="text-blue-200 text-sm font-medium">Speaking</span>
+        </div>
+      </div>
+
+      <!-- User Camera Section -->
+      <!-- User Camera Section -->
+      <div class="bg-black/30 rounded-xl p-4 aspect-video relative overflow-hidden">
+        <!-- Loading State -->
+  <div *ngIf="faceState().isLoading" 
+  class="absolute inset-0 flex items-center justify-center bg-black/50 z-20">
+<div class="text-center">
+ <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mb-4"></div>
+ <p class="text-white font-medium">Loading face detection...</p>
+</div>
+</div>
+
+<!-- Error State -->
+<div *ngIf="faceState().error" 
+  class="absolute inset-0 flex items-center justify-center bg-red-500/50 z-20">
+<div class="text-center px-6 py-4">
+ <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white mb-4 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+ </svg>
+ <p class="text-white font-medium">{{ faceState().error }}</p>
+</div>
+</div>
+        <!-- Face Detection Alerts -->
+        <div *ngIf="faceState().detectionActive" 
+             class="absolute inset-0 flex items-center justify-center z-10">
+          <!-- Multiple Faces Alert -->
+          <div *ngIf="faceState().faceCount > 1" 
+               class="bg-red-500/90 backdrop-blur-sm px-6 py-4 rounded-lg shadow-lg animate-bounce">
+            <div class="flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span class="text-white font-medium">Multiple faces detected!</span>
+            </div>
+          </div>
+          
+          <!-- No Face Alert -->
+          <div *ngIf="faceState().faceCount === 0" 
+               class="bg-yellow-500/90 backdrop-blur-sm px-6 py-4 rounded-lg shadow-lg animate-pulse">
+            <div class="flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-white font-medium">No face detected</span>
+            </div>
+          </div>
+          
+
+          
+        </div>
+        
+        <!-- Video Element -->
+        <video #userVideo class="w-full h-full object-cover rounded-lg" autoplay playsinline></video>
+        
+        <!-- Face Detection Status -->
+        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-full">
+          <span class="text-white text-sm font-medium">Faces: {{ faceState().faceCount }}</span>
+        </div>
+
+        <!-- Retake Reference Button -->
+        <button (click)="retakeReference()"
+                class="absolute top-4 left-4 bg-blue-500/90 hover:bg-blue-600/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-white text-sm font-medium transition-colors">
+          Retake Reference
+        </button>
+        
+        
+        <!-- Recording Indicator -->
+        <div *ngIf="interviewState().isListening" 
+             class="absolute bottom-4 left-4 flex items-center gap-2 bg-red-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
+          <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+          <span class="text-red-200 text-sm font-medium">Listening</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interview Controls -->
+    <div class="mt-8 space-y-6">
+      <!-- Start Button -->
+      <div *ngIf="!interviewState().isActive" class="flex justify-center">
+        <button
+          (click)="startInterview()"
+          class="bg-blue-50 hover:bg-orange-50 text-blue-600 px-6 py-3 rounded-lg 
+                 font-semibold transition-all transform hover:scale-105 
+                 flex items-center gap-2 shadow-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+          </svg>
+          Start Interview
+        </button>
+      </div>
+
+      <!-- Current Question & Answer Display -->
+      <div *ngIf="interviewState().isActive" 
+     class="bg-white/10 backdrop-blur-sm rounded-lg p-6 space-y-4 border border-blue-100/10">
+  <!-- Progress -->
+  <div class="flex items-center justify-between text-sm text-blue-100 mb-4">
+    <span>Question {{ interviewState().currentQuestionIndex + 1 }} of {{ 5 }}</span>
+    <span *ngIf="interviewState().silenceStartTime" class="text-yellow-400">
+      Listening...
+    </span>
   </div>
 
-  <!-- Button to Start Recording-->
-  <div class="flex justify-center mb-4" *ngIf="!isRecording">
-    <button
-      class="bg-green-500 text-white py-2 px-4 rounded-full flex items-center gap-2"
-      (click)="startRecording()"
-    >
-      <span class="material-icons">mic</span>
-      <span>Start Recording</span>
-    </button>
-  </div>
+  <!-- Question -->
+  <!-- In template -->
+<div class="space-y-2">
+  <h3 class="text-gray-800 text-sm font-medium">Current Question:</h3>
+  <p class="text-gray-900 text-lg font-medium">{{ currentQuestion() }}</p>
+</div>
 
-  <!-- Button to Stop Recording-->
-  <div class="flex justify-center mb-4" *ngIf="isRecording">
-    <button
-      class="bg-red-500 text-white py-2 px-4 rounded-full flex items-center gap-2"
-      (click)="stopRecording()"
-    >
-      <span class="material-icons">mic_off</span>
-      <span>Stop Recording</span>
-    </button>
-  </div>
+<!-- Editable Transcript -->
+<div *ngIf="interviewState().transcript" class="space-y-2">
+  <textarea 
+    [(ngModel)]="interviewState().transcript"
+    class="w-full bg-white rounded-lg p-4 text-gray-800 border border-gray-200 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 min-h-[100px] shadow-sm"
+  ></textarea>
+  <button 
+    (click)="submitEditedAnswer()"
+    class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium shadow-sm">
+    Submit Answer & Continue
+  </button>
+</div>
 
-  <!-- Display Question and Captured Answer -->
-  <div class="bg-white p-4 rounded-md shadow-sm">
-    <p class="font-semibold">Current Question:</p>
-    <p class="text-gray-700 mb-2">{{ currentQuestion }}</p>
+<!-- Previous Answer -->
+<!-- <div *ngIf="interviewState().lastAnswer" class="border-t border-gray-200 pt-4 mt-4">
+  <h3 class="text-gray-800 text-sm font-medium mb-2">Previous Answer:</h3>
+  <p class="text-gray-700">{{ interviewState().lastAnswer }}</p>
+</div>
+</div> -->
 
-    <p class="font-semibold">User Answer:</p>
-    <p *ngIf="capturedAnswer">Captured Answer: {{ capturedAnswer }}</p>
+      
+    </div>
+    <!-- Interview Status -->
+    <div *ngIf="interviewState().isActive" 
+    class="fixed bottom-6 right-6 bg-black/50 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+ <div class="flex items-center gap-4">
+   <div class="flex items-center gap-2">
+     <div class="w-2 h-2 rounded-full"
+          [ngClass]="{'bg-green-500': interviewState().isListening, 'bg-gray-500': !interviewState().isListening}">
+     </div>
+     <span class="text-sm text-gray-300">Microphone</span>
+   </div>
+   <div class="flex items-center gap-2">
+     <div class="w-2 h-2 rounded-full"
+          [ngClass]="{'bg-blue-500': interviewState().isSpeaking, 'bg-gray-500': !interviewState().isSpeaking}">
+     </div>
+     <span class="text-sm text-gray-300">Speaker</span>
+   </div>
+ </div>
+</div>
   </div>
 </div>

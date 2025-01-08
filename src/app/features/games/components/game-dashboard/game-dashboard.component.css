@@ -1,0 +1,163 @@
+/* Container */
+.game-dashboard-topbar {
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(20px); /* Stronger blur effect */
+  border-bottom: 2px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  color: #ffffff; /* Text color */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem; /* Same padding as before */
+  font-family: 'Inter', sans-serif;
+}
+
+/* Game Info Section */
+.game-info-section {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem; /* Same gap as before */
+}
+
+/* Info Items */
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Same gap as before */
+}
+
+/* Icon Wrapper */
+.icon-wrapper {
+  background: rgba(251, 104, 5, 0.2); /* Semi-transparent background */
+  border-radius: 50%; /* Circular shape */
+  width: 40px; /* Same size as before */
+  height: 40px; /* Same size as before */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.icon-wrapper:hover {
+  transform: scale(1.1); /* Slight zoom on hover */
+  box-shadow: 0 4px 12px rgba(251, 104, 5, 0.4); /* Glow effect on hover */
+}
+
+/* Gradient Text for Icon */
+.text-gradient-orange {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Info Content */
+.info-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Labels */
+.label {
+  font-size: 0.725rem; /* Same size as before */
+  text-transform: uppercase; /* Uppercase text */
+  letter-spacing: 0.05em; /* Spaced letters */
+  color: rgba(255, 255, 255, 0.7); /* Softer white */
+  margin-bottom: 0.25rem; /* Same margin as before */
+}
+
+/* Values */
+.value {
+  font-size: 1.125rem; /* Same size as before */
+  font-weight: 600; /* Bold text */
+}
+
+.value.prize {
+  color: #48bb78; /* Green for prize */
+}
+
+.value.cash {
+  color: #4299e1; /* Blue for cash */
+}
+
+/* Simulation Time Section */
+.simulation-time {
+  text-align: center;
+}
+
+.simulation-time .label {
+  font-size: 0.725rem; /* Same size as before */
+  text-transform: uppercase; /* Uppercase text */
+  letter-spacing: 0.05em; /* Spaced letters */
+  color: rgba(255, 255, 255, 0.7); /* Softer white */
+  margin-bottom: 0.25rem; /* Same margin as before */
+}
+
+.simulation-time .value.time {
+  font-size: 1.125rem; /* Same size as before */
+  font-weight: 600; /* Bold text */
+}
+
+/* Game Controls Section */
+.game-controls-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Same gap as before */
+}
+
+/* Control Buttons */
+.control-btn {
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  border-radius: 50%; /* Circular shape */
+  width: 45px; /* Same size as before */
+  height: 45px; /* Same size as before */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff; /* White text */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+  background: rgba(251, 104, 5, 0.5); /* Brighter background on hover */
+  transform: scale(1.1); /* Slight zoom on hover */
+  box-shadow: 0 4px 12px rgba(251, 104, 5, 0.4); /* Glow effect on hover */
+}
+
+.control-btn i {
+  font-size: 1.25rem; /* Same size as before */
+}
+/* Game Over Message */
+.game-over-message {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(251, 104, 5, 0.3);
+  border-radius: 5px;
+  text-align: center;
+}
+
+.game-over-message h2 {
+  color: #c62828;
+}
+
+.game-over-message button {
+  background: rgba(251, 104, 5, 0.5);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.game-over-message button:hover {
+  background: rgba(251, 104, 5, 0.7);
+}
+
+/* Disabled Buttons */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

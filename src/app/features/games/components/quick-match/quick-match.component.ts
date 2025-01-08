@@ -21,6 +21,8 @@ export class QuickMatchComponent {
   openCreateMatchDialog(): void {
     const dialogRef = this.dialog.open(CreateMatchDialogComponent, {
       width: '600px',
+      panelClass: 'custom-dialog-container', // Add this line
+
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -1,0 +1,76 @@
+:host ::ng-deep .fc {
+  --fc-border-color: #e5e7eb;
+  --fc-today-bg-color: #eff6ff;
+  --fc-event-bg-color: #3b82f6;
+  --fc-event-border-color: #2563eb;
+  --fc-event-text-color: #ffffff;
+  --fc-page-bg-color: #ffffff;
+}
+
+:host ::ng-deep .fc .fc-toolbar {
+  padding: 1rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+:host ::ng-deep .fc .fc-toolbar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+:host ::ng-deep .fc .fc-button {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  text-transform: capitalize;
+}
+
+:host ::ng-deep .fc .fc-button-primary:not(:disabled).fc-button-active,
+:host ::ng-deep .fc .fc-button-primary:not(:disabled):active {
+  background: #3b82f6;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+:host ::ng-deep .fc-event {
+  border-radius: 0.375rem;
+  padding: 0.25rem;
+  margin: 0.125rem;
+  border: none;
+  transition: all 0.2s;
+}
+
+:host ::ng-deep .fc-event:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+:host ::ng-deep .fc-timegrid-slot {
+  height: 3rem !important;
+}
+
+.course-item {
+  transition: max-height 0.3s ease-in-out;
+  max-height: 120px;
+  width: 100%;
+}
+
+.course-item.expanded {
+  max-height: 300px;
+}
+
+.line-clamp-1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}

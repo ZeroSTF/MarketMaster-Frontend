@@ -13,6 +13,7 @@ import {
 } from '@debut/indicators';
 import { LineData } from 'lightweight-charts';
 import { ChartService } from '../services/chart.service';
+import { Indicator } from '../models/chart.model';
 
 @Directive({
   selector: '[chartIndicators]',
@@ -27,6 +28,7 @@ export class ChartIndicatorsDirective {
   private mainChart: TVChart<any> | null = null;
   //private volumeChart: TVChart<any> | null = null;
   private additionalSeries: Record<string, any> = {};
+  private indicatorValues: Record<string, LineData[]> = {};
 
   constructor() {
     effect(() => {
@@ -45,8 +47,11 @@ export class ChartIndicatorsDirective {
     });
   }
 
-  private updateIndicators(indicators: string[] = []) {
-    // Remove existing additional series
+  private updateIndicators(indicators: Indicator[] = []) {
+    // Clear indicator values
+    this.indicatorValues = {};
+
+    // Clear additional series
     Object.keys(this.additionalSeries).forEach((key) => {
       const series = this.additionalSeries[key];
       if (Array.isArray(series)) {
@@ -63,34 +68,43 @@ export class ChartIndicatorsDirective {
       delete this.additionalSeries[key];
     });
 
+    if (indicators.length === 0) {
+      return;
+    }
+
     indicators.forEach((indicator) => {
-      switch (indicator) {
+      // Extract parameters with their values
+      const params = indicator.parameters
+        ? indicator.parameters.map((p) => p.value ?? p.default)
+        : [];
+
+      switch (indicator.type) {
         case 'SMA':
-          this.addMovingAverage('SMA', 20);
+          this.addMovingAverage('SMA', params[0] ?? 20);
           break;
         case 'EMA':
-          this.addMovingAverage('EMA', 20);
+          this.addMovingAverage('EMA', params[0] ?? 20);
           break;
         case 'WMA':
-          this.addMovingAverage('WMA', 20);
+          this.addMovingAverage('WMA', params[0] ?? 20);
           break;
         case 'RSI':
-          this.addRSI(14);
+          this.addRSI(params[0] ?? 14);
           break;
         case 'MACD':
-          this.addMACD(12, 26, 9);
+          this.addMACD(params[0] ?? 12, params[1] ?? 26, params[2] ?? 9);
           break;
         case 'BB':
-          this.addBollingerBands(20, 2);
+          this.addBollingerBands(params[0] ?? 20, params[1] ?? 2);
           break;
         case 'Stochastic':
-          this.addStochasticOscillator(14, 3);
+          this.addStochasticOscillator(params[0] ?? 14, params[1] ?? 3);
           break;
         case 'CCI':
-          this.addCCI(20);
+          this.addCCI(params[0] ?? 20);
           break;
         case 'ATR':
-          this.addATR(14);
+          this.addATR(params[0] ?? 14);
           break;
       }
     });
@@ -133,6 +147,7 @@ export class ChartIndicatorsDirective {
 
     series.series?.setData(maData);
     this.additionalSeries[type] = series.series;
+    this.indicatorValues[`${type} ${length}`] = maData;
   }
 
   private addRSI(length: number = 14) {
@@ -155,6 +170,7 @@ export class ChartIndicatorsDirective {
 
     series.series?.setData(rsiData);
     this.additionalSeries['RSI'] = series.series;
+    this.indicatorValues[`RSI ${length}`] = rsiData;
   }
 
   private addMACD(
@@ -196,6 +212,8 @@ export class ChartIndicatorsDirective {
     signalSeries.series?.setData(signalData);
 
     this.additionalSeries['MACD'] = [macdSeries.series, signalSeries.series];
+    this.indicatorValues['MACD'] = macdData;
+    this.indicatorValues['MACD Signal'] = signalData;
   }
 
   private addBollingerBands(length: number = 20, stdDev: number = 2) {
@@ -244,6 +262,9 @@ export class ChartIndicatorsDirective {
       middleBandSeries.series,
       lowerBandSeries.series,
     ];
+    this.indicatorValues['Upper BB'] = upperBandData;
+    this.indicatorValues['Middle BB'] = middleBandData;
+    this.indicatorValues['Lower BB'] = lowerBandData;
   }
 
   private addStochasticOscillator(
@@ -287,6 +308,9 @@ export class ChartIndicatorsDirective {
       stochSeries.series,
       signalSeries.series,
     ];
+
+    this.indicatorValues['Stochastic K'] = stochData;
+    this.indicatorValues['Stochastic D'] = signalData;
   }
 
   private addCCI(length: number = 20) {
@@ -310,6 +334,7 @@ export class ChartIndicatorsDirective {
 
     series.series?.setData(cciData);
     this.additionalSeries['CCI'] = series.series;
+    this.indicatorValues[`CCI ${length}`] = cciData;
   }
 
   private addATR(length: number = 14) {
@@ -333,5 +358,10 @@ export class ChartIndicatorsDirective {
 
     series.series?.setData(atrData);
     this.additionalSeries['ATR'] = series.series;
+    this.indicatorValues[`ATR ${length}`] = atrData;
+  }
+
+  getIndicatorValues(): Record<string, LineData[]> {
+    return this.indicatorValues;
   }
 }

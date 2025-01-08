@@ -1,71 +1,66 @@
-<div class="trade-form bg-gray-800 text-white p-4 rounded-lg shadow-md">
-    <h3 class="text-lg font-semibold mb-4">Trade Form</h3>
-    <form [formGroup]="tradeForm" (ngSubmit)="onSubmit()">
-      <!-- Asset Input -->
-      <div class="mb-4">
-        <label for="asset" class="block text-sm font-medium">Asset</label>
-        <input
-          id="asset"
-          type="text"
-          formControlName="asset"
-          placeholder="Enter asset symbol (e.g., AAPL)"
-          class="mt-1 p-2 w-full bg-gray-700 text-white rounded"
-          required
-        />
-        <div *ngIf="tradeForm.get('asset')?.invalid && tradeForm.get('asset')?.touched" class="text-red-500 text-sm">
-          Asset is required.
-        </div>
-      </div>
-  
-      <!-- Quantity Input -->
-      <div class="mb-4">
-        <label for="quantity" class="block text-sm font-medium">Quantity</label>
-        <input
-          id="quantity"
-          type="number"
-          formControlName="quantity"
-          class="mt-1 p-2 w-full bg-gray-700 text-white rounded"
-          min="1"
-          required
-        />
-        <div *ngIf="tradeForm.get('quantity')?.invalid && tradeForm.get('quantity')?.touched" class="text-red-500 text-sm">
-          Quantity must be at least 1.
-        </div>
-      </div>
-  
-      <!-- Action Select -->
-      <div class="mb-4">
-        <label for="action" class="block text-sm font-medium">Action</label>
-        <select
-          id="action"
-          formControlName="action"
-          class="mt-1 p-2 w-full bg-gray-700 text-white rounded"
-        >
-          <option value="buy">Buy</option>
-          <option value="sell">Sell</option>
-        </select>
-      </div>
-  
-      <!-- Price Display -->
-      <div class="mb-4">
-        <label for="price" class="block text-sm font-medium">Price</label>
-        <input
-          id="price"
-          type="text"
-          formControlName="price"
-          class="mt-1 p-2 w-full bg-gray-700 text-white rounded"
-          [attr.disabled]="true"
-        />
-      </div>
-  
-      <!-- Submit Button -->
-      <button
-        type="submit"
-        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-        [attr.disabled]="tradeForm.invalid"
-      >
-        Submit Trade
-      </button>
-    </form>
+<div class="overview-details-container p-6">
+  <!-- Header -->
+  <div class="mb-6">
+    <h3 class="text-2xl font-bold text-gradient">Trade Form</h3>
+    <p class="text-sm text-gray-300">Quickly place your trade below</p>
   </div>
-  
+
+  <!-- Form Fields -->
+  <form [formGroup]="tradeForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Stock Symbol -->
+    <div>
+      <label for="symbol" class="block text-sm text-gray-300 mb-2">Stock Symbol</label>
+      <input
+        id="symbol"
+        type="text"
+        class="form-input"
+        formControlName="asset"
+        placeholder="e.g., AAPL"
+      />
+    </div>
+
+    <!-- Trade Type -->
+    <div>
+      <label for="tradeType" class="block text-sm text-gray-300 mb-2">Trade Type</label>
+      <select id="tradeType" class="form-select" formControlName="action">
+        <option value="buy">Buy</option>
+        <option value="sell">Sell</option>
+      </select>
+    </div>
+
+    <!-- Quantity -->
+    <div>
+      <label for="quantity" class="block text-sm text-gray-300 mb-2">Quantity</label>
+      <input
+        id="quantity"
+        type="number"
+        class="form-input"
+        formControlName="quantity"
+        placeholder="Enter quantity"
+      />
+    </div>
+
+    <!-- Price -->
+    <div>
+      <label for="price" class="block text-sm text-gray-300 mb-2">Price</label>
+      <input
+        id="price"
+        type="number"
+        class="form-input"
+        formControlName="price"
+        placeholder="Enter price"
+      />
+    </div>
+  </form>
+
+  <!-- Submit Button -->
+  <div class="mt-6">
+    <button
+      type="button"
+      (click)="onSubmit()"
+      class="w-full py-3 px-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-lg shadow-lg transition-all transform hover:scale-105"
+    >
+      Place Trade
+    </button>
+  </div>
+</div>

@@ -27,14 +27,14 @@
   <!-- Indicators -->
   <div class="flex items-center">
     <button mat-button [matMenuTriggerFor]="indicatorMenu"
-      class="!text-gray-700 dark:!text-gray-200 hover:!bg-gray-100 dark:hover:!bg-gray-700">
+      class="text-gray-700 dark:!text-gray-200 hover:bg-gray-100 dark:hover:!bg-gray-700">
       <mat-icon class="mr-2">add_chart</mat-icon>
       Indicators
     </button>
     <mat-menu #indicatorMenu="matMenu" class="dark:!bg-gray-800">
       @for (indicator of indicators; track indicator.type) {
-      <button mat-menu-item (click)="toggleIndicator(indicator)" class="flex items-center gap-2 w-full px-4 py-2 text-gray-700 dark:text-gray-200
-                 hover:bg-gray-100 dark:hover:bg-gray-700" [class.text-primary-500]="indicator.active">
+      <button mat-menu-item (click)="toggleIndicator(indicator)" class="flex items-center gap-2 w-full px-4 py-2 text-gray-700 dark:!text-gray-200
+                 hover:bg-gray-100 dark:hover:!bg-gray-700" [class.text-primary-500]="indicator.active">
         <mat-icon>{{indicator.icon}}</mat-icon>
         <span>{{indicator.name}}</span>
         @if (indicator.active) {
@@ -48,7 +48,7 @@
   <!-- Settings -->
   <div>
     <button mat-icon-button [matMenuTriggerFor]="settingsMenu" matTooltip="Chart Settings"
-      class="!text-gray-700 dark:!text-gray-200 hover:!bg-gray-100 dark:hover:!bg-gray-700">
+      class="text-gray-700 dark:!text-gray-200 hover:bg-gray-100 dark:hover:!bg-gray-700">
       <mat-icon>settings</mat-icon>
     </button>
     <mat-menu #settingsMenu="matMenu" class="dark:!bg-gray-800">
