@@ -1,0 +1,55 @@
+{
+  "courseTitle": "Introduction to Stock Trading",
+  "sections": [
+    {
+      "section": 1,
+      "sectionTitle": "Basics of Stock Market",
+      "sectionContent": "The stock market is a platform where investors buy and sell shares of companies. It serves as a critical part of the global economy by enabling businesses to raise capital and allowing investors to earn returns. The two primary types of financial markets are the primary market, where new securities are issued, and the secondary market, where existing securities are traded."
+    },
+    {
+      "section": 2,
+      "sectionTitle": "Key Terminology",
+      "sectionContent": "Understanding stock market terminology is essential for any investor. Stocks represent ownership in a company, while shares are the individual units of stock. IPOs (Initial Public Offerings) occur when a company sells shares to the public for the first time. Dividends are a portion of a company’s earnings paid to shareholders, and market capitalization measures a company’s total value based on its stock price."
+    },
+    {
+      "section": 3,
+      "sectionTitle": "How Stock Prices Are Determined",
+      "sectionContent": "Stock prices are influenced by supply and demand dynamics. If more people want to buy a stock than sell it, the price increases, and vice versa. Economic indicators, company performance, and market sentiment play significant roles in determining stock prices."
+    },
+    {
+      "section": 4,
+      "sectionTitle": "Understanding Stock Indices",
+      "sectionContent": "Stock indices measure the performance of a group of stocks, providing a snapshot of the market’s health. Major indices like the S&P 500, Dow Jones, and NASDAQ track large, publicly traded companies. They help investors gauge overall market trends."
+    },
+    {
+      "section": 5,
+      "sectionTitle": "Different Types of Stocks",
+      "sectionContent": "Stocks can be categorized into various types. Blue-chip stocks are well-established and financially stable. Growth stocks are companies expected to grow at an above-average rate, while value stocks are undervalued compared to their intrinsic value. Penny stocks are low-priced and highly speculative."
+    },
+    {
+      "section": 6,
+      "sectionTitle": "Stock Market Participants",
+      "sectionContent": "Stock market participants include individual investors, institutional investors, and traders. Individual investors buy and sell stocks for personal portfolios. Institutional investors, such as mutual funds and pension funds, invest on a larger scale. Day traders engage in frequent, short-term trades, while long-term investors focus on sustained growth."
+    },
+    {
+      "section": 7,
+      "sectionTitle": "Basics of Technical Analysis",
+      "sectionContent": "Technical analysis involves studying price charts and patterns to predict future stock movements. Key indicators include moving averages, which smooth out price data, and the Relative Strength Index (RSI), which measures momentum. Candlestick patterns provide visual cues about market sentiment."
+    },
+    {
+      "section": 8,
+      "sectionTitle": "Basics of Fundamental Analysis",
+      "sectionContent": "Fundamental analysis examines a company’s financial health to determine its stock’s value. Key metrics include financial statements, the P/E ratio (Price-to-Earnings ratio), and earnings reports. This analysis helps investors identify undervalued or overvalued stocks."
+    },
+    {
+      "section": 9,
+      "sectionTitle": "Risk Management in Stock Trading",
+      "sectionContent": "Risk management is crucial in stock trading. Diversification, or spreading investments across different assets, reduces risk. Setting stop-loss orders limits potential losses, and managing emotions ensures rational decision-making."
+    },
+    {
+      "section": 10,
+      "sectionTitle": "Platforms and Tools for Trading",
+      "sectionContent": "Various platforms and tools are available for stock trading. Popular platforms include Robinhood, E*TRADE, and TD Ameritrade. Analysis tools like Yahoo Finance and simulation platforms like Investopedia’s Stock Simulator allow investors to practice and refine their strategies."
+    }
+  ]
+}
