@@ -9,71 +9,81 @@ import { AuthService } from '../../../../auth/auth.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './tradesoverview.component.html',
-  styleUrls: ['./tradesoverview.component.css']
+  styleUrls: ['./tradesoverview.component.css'],
 })
 export class TradesoverviewComponent implements OnInit {
-  selectedTab: string = 'openTrades';
-  transactionData: Transaction[] | null = null;
+  selectedTab: string = 'openTrades'; // Default selected tab
+  transactionData: Transaction[] | null = null; // Raw transaction data
+  filteredTransactions: Transaction[] = []; // Filtered transactions based on the tab
   username: string = 'zerostf';
-  private authService=inject(AuthService)
+  private authService = inject(AuthService);
 
   constructor(private transactionService: TransactionService) {}
 
   ngOnInit(): void {
-    const currentUser=this.authService.currentUser();
-    if(currentUser){
-    this.username=currentUser.username;}
-    this.selectedTab = 'openTrades';
-    
+    // Get the current user
+    const currentUser = this.authService.currentUser();
+    if (currentUser) {
+      this.username = currentUser.username;
+    }
+
+    // Fetch transaction data
     this.transactionService.getTransaction(this.username).subscribe(
       (data: Transaction[]) => {
         this.transactionData = data;
-        console.log('transaction data fetched:', data);
+        console.log('Transaction data fetched:', data);
+
+        // Filter data based on the default selected tab
+        this.filterTransactions();
       },
       (error) => {
         console.error('Error fetching transaction data:', error);
       }
     );
-    this.getTransactionsForSelectedTab();
   }
 
+  // Tab selection
   selectTab(tab: string) {
     this.selectedTab = tab;
+
+    // Re-filter transactions when the tab changes
+    this.filterTransactions();
   }
+
+  // Get row background color dynamically
   getRowBackground(index: number) {
-    const baseColor = '#1E88E5'; // A fixed blue base color
-    // Generate a unique shade of blue for each row by modifying the lightness using HSL
-    const lightness = 95 - (index % 10) * 5;  // Vary lightness for each row
-    
+    const baseColor = '#1E88E5'; // Fixed blue base color
+    const lightness = 95 - (index % 10) * 5; // Dynamic lightness per row
     return {
-      'background': `hsl(210, 100%, ${lightness}%)` // Use HSL for dynamic lightness
+      background: `hsl(210, 100%, ${lightness}%)`, // HSL for dynamic lightness
     };
   }
-  
-  
-  
-  getTransactionsForSelectedTab(): Transaction[] {
-    if (this.transactionData === null || this.transactionData.length === 0) {
-      return [];
+
+  // Filter transactions based on the selected tab
+  filterTransactions() {
+    if (!this.transactionData || this.transactionData.length === 0) {
+      this.filteredTransactions = [];
+      return;
     }
-  
-    console.log('Selected Tab:', this.selectedTab);
-    console.log('Filtered Data:', this.transactionData);
-  
+
     switch (this.selectedTab) {
       case 'openTrades':
-        const openTrades = this.transactionData.filter(transaction => transaction.type === 'BUY');
-        console.log('Open Trades:', openTrades);
-        return openTrades;
+        this.filteredTransactions = this.transactionData.filter(
+          (transaction) => transaction.type === 'BUY'
+        );
+        break;
       case 'closedTrades':
-        const closedTrades = this.transactionData.filter(transaction => transaction.type === 'SELL');
-        console.log('Closed Trades:', closedTrades);
-        return closedTrades;
+        this.filteredTransactions = this.transactionData.filter(
+          (transaction) => transaction.type === 'SELL'
+        );
+        break;
       case 'allTrades':
-        console.log('All Trades:', this.transactionData);
-        return this.transactionData;
+        this.filteredTransactions = this.transactionData;
+        break;
       default:
-        return [];
+        this.filteredTransactions = [];
     }
+
+    console.log('Filtered Transactions:', this.filteredTransactions);
   }
 }
