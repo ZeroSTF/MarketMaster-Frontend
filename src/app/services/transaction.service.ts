@@ -11,6 +11,7 @@ import { WatchListDTO } from '../models/watchlist.model';
 import { BehaviorSubject } from 'rxjs';
 import { Asset, PageResponse } from '../models/asset.model';
 import { BestWinner } from '../models/BestWinner.model';
+import { Option } from '../models/option.model';
 @Injectable({
   providedIn: 'root',
 })

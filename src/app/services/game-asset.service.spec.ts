@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { PortfolioService } from './portfolio.service';
 
 import { GameAssetService } from './game-asset.service';
 

@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router} from '@angular/router';
-import { Transaction} from '../../models/Transaction.model';
 import { LimitOrder } from '../../models/limitOrder.model';
 import { CurrencyPipe, DatePipe,NgIf } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -10,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TransactionService } from '../../services/transaction.service';
 import { AuthService } from '../../auth/auth.service';
+import { Transaction } from '../../models/Transaction.model';
 @Component({
   selector: 'app-preview-order',
   standalone: true,

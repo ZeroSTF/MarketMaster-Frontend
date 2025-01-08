@@ -1,0 +1,123 @@
+<div class="flex h-screen bg-transparent">
+  <!-- Sidebar with increased width -->
+  <aside class="w-80"><app-option-sidebar></app-option-sidebar></aside>
+
+  <main class="flex-grow bg-transparent ml-0 mr-2 scrollbar-hide transition-all duration-500 ease-in-out">
+    <!-- Header Section -->
+    <div class="w-full h-44 overflow-hidden rounded-2xl relative">
+      <!-- Background image with blur and darkening -->
+      <div class="relative w-full h-full rounded-2xl">
+        <img
+          src="images/SideHEader.png"
+          alt="Background"
+          class="w-full h-full object-cover rounded-2xl filter blur-sm brightness-50"
+        />
+      </div>
+
+      <!-- Logo, Line, and Text -->
+      <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <!-- Logo -->
+        <img
+          src="images/LogoMMWhite.png"
+          alt="Logo"
+          class="w-60 h-16 mb-1 object-cover"
+        />
+
+        <!-- Text and Link -->
+        <p class="text-white text-lg">Insurance</p>
+      </div>
+    </div>
+
+    <!-- User Profile and Actions Section -->
+    <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg -mt-8 mb-3">
+        <div class="flex items-center justify-between p-6">
+          <!-- User Profile Section -->
+          <div class="flex items-center space-x-4">
+            <img
+              src="images/SidebarAvatar.png"
+              alt="User Avatar"
+              class="w-16 h-16 rounded-full border-4 border-white"
+            />
+            <div>
+              <h2 class="text-xl font-medium">User Name</h2>
+              <p class="text-sm text-gray-500">useremail.com</p>
+            </div>
+          </div>
+
+          <!-- Action Buttons Section -->
+          <div class="flex space-x-4">
+            <!-- All Options Button -->
+            <button
+              class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
+              (click)="filterOptions('ALL')"
+            >
+              <span>All Options</span>
+              <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-xs">{{ optionList().length }}</span>
+            </button>
+
+            <!-- Pending Options Button -->
+            <button
+              class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
+              (click)="filterOptions('PENDING')"
+            >
+              <span>Pending Options</span>
+              <span class="bg-green-600 text-white px-2 py-1 rounded-full text-xs">{{ getOptionCount('PENDING') }}</span>
+            </button>
+
+            <!-- Used Options Button -->
+            <button
+              class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
+              (click)="filterOptions('USED')"
+            >
+              <span>Used Options</span>
+              <span class="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs">{{ getOptionCount('USED') }}</span>
+            </button>
+
+            <!-- Expired Options Button -->
+            <button
+              class="px-4 py-2 text-sm font-medium rounded-full flex items-center space-x-1"
+              (click)="filterOptions('EXPIRED')"
+            >
+              <span>Expired Options</span>
+              <span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs">{{ getOptionCount('EXPIRED') }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid Container for Assets List and Options List -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-4 px-4 sm:px-6 lg:px-8">
+      <!-- Assets List Section -->
+      <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4">
+        <h2 class="text-lg font-semibold mb-2">Assets List</h2>
+        <div class="h-auto min-h-[80px] max-h-[60vh] overflow-y-auto">
+          <ul class="list-group">
+            <li
+              *ngFor="let asset of assets()"
+              class="list-group-item d-flex justify-content-between align-items-center px-3 py-2"
+            >
+              <!-- Asset Symbol and Logo -->
+              <div class="flex items-center space-x-3" (click)="openOptionForm(asset)">
+                <img
+                  [src]="'images/' + asset.symbol + '.png'"
+                  [alt]="asset.symbol + ' logo'"
+                  class="w-5 h-5 rounded-full"
+                  loading="lazy"
+                  onerror="this.src='images/default.png'"
+                />
+                <span class="text-sm font-medium">{{ asset.symbol }}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Options List Section -->
+      <div class="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4">
+        <app-optionslist [status]="selectedStatus"></app-optionslist>
+      </div>
+    </div>
+  </main>
+</div>

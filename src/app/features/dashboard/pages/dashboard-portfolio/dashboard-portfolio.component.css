@@ -276,3 +276,14 @@ canvas {
   max-height: 400px;
 }
 
+.custom-active {
+  background-color: #d4edda; /* light green */
+}
+
+.custom-pending {
+  background-color: #fff3cd; /* light yellow */
+}
+
+.custom-inactive {
+  background-color: #f8d7da; /* light red */
+}

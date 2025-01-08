@@ -6,11 +6,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NgIf } from '@angular/common';
-import { Transaction } from '../../models/Transaction.model';
 import { LimitOrder, OrderStatus } from '../../models/limitOrder.model';
 import { TransactionService } from '../../services/transaction.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
+import { Transaction } from '../../models/Transaction.model';
 
 @Component({
   selector: 'app-buy-sell',

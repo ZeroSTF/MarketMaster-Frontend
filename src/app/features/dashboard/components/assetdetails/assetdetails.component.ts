@@ -10,7 +10,8 @@ import { Router } from '@angular/router';
 import { TransactionService } from '../../../../services/transaction.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
-import { StockPredictionResponse } from '../../../../models/StockPredictionResponse.model';
+import { MatDialog } from '@angular/material/dialog';
+import { OptionformComponent } from '../optionform/optionform.component';
 import { Chart, registerables } from 'chart.js';
 import { ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '../../../../auth/auth.service';
@@ -35,6 +36,7 @@ export class AssetdetailsComponent implements OnInit {
   private assetService = inject(AssetService);
   private snackBar = inject(MatSnackBar);
   private transactionService = inject(TransactionService);
+  private dialog = inject(MatDialog);
   public selectedAsset = this.assetService.selectedAsset;
   public showPredictionWidget = false;
   public predictedPrice: number | null = null;
@@ -45,8 +47,8 @@ export class AssetdetailsComponent implements OnInit {
   public chart: any; // Chart.js instance
   public chartLabels: string[] = []; // Dates for the chart
   public chartData: number[] = []; // Prices for the chart
-  private authService=inject(AuthService)
-  private username:string='';
+  private authService = inject(AuthService);
+  private username: string = '';
 
   result: any;
   error: string | null = null;
@@ -56,13 +58,13 @@ export class AssetdetailsComponent implements OnInit {
     { id: 3, headline: 'New Product Launch Announced' },
   ];
 
-  constructor(private router: Router,private cdr: ChangeDetectorRef) {}
-  
+  constructor(private router: Router, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    const currentUser=this.authService.currentUser();
-    if(currentUser){
-    this.username=currentUser.username;}
+    const currentUser = this.authService.currentUser();
+    if (currentUser) {
+      this.username = currentUser.username;
+    }
   }
 
   navigateToBuySell() {
@@ -77,10 +79,15 @@ export class AssetdetailsComponent implements OnInit {
   addWatchList() {
     const asset = this.selectedAsset();
     if (asset) {
-      this.transactionService.addWatchList(this.username, asset.symbol).subscribe({
-        next: () => this.snackBar.open('Added to watchlist!', 'Close', { duration: 3000 }),
-        error: (err) => console.error(err),
-      });
+      this.transactionService
+        .addWatchList(this.username, asset.symbol)
+        .subscribe({
+          next: () =>
+            this.snackBar.open('Added to watchlist!', 'Close', {
+              duration: 3000,
+            }),
+          error: (err) => console.error(err),
+        });
     }
   }
   openPredictWidget(symbol: string): void {
@@ -106,8 +113,9 @@ export class AssetdetailsComponent implements OnInit {
           this.chartData = response.predicted_prices.map((p) => p.price);
 
           this.predictedPrice =
-            response.predicted_prices[response.predicted_prices.length - 1]
-              .price;
+            response.predicted_prices[
+              response.predicted_prices.length - 1
+            ].price;
           this.predictedChange = response.predicted_change;
 
           this.isLoadingPrediction = false;
@@ -121,20 +129,31 @@ export class AssetdetailsComponent implements OnInit {
       });
     }
   }
-  
+  openOptionForm(): void {
+    // Open the OptionForm component in a dialog
+    this.dialog.open(OptionformComponent, {
+      width: '400px', // Optional: You can define the width of the dialog
+      data: { asset: this.selectedAsset() },
+    });
+  }
+
   initializeChart(): void {
     this.cdr.detectChanges(); // Ensure DOM changes are applied
-    const canvas = document.getElementById('predictionChart') as HTMLCanvasElement;
-  
+    const canvas = document.getElementById(
+      'predictionChart'
+    ) as HTMLCanvasElement;
+
     if (!canvas) {
-      console.error('Canvas element not found after ChangeDetectorRef.detectChanges()');
+      console.error(
+        'Canvas element not found after ChangeDetectorRef.detectChanges()'
+      );
       return;
     }
-  
+
     if (this.chart) {
       this.chart.destroy();
     }
-  
+
     this.chart = new Chart(canvas, {
       type: 'line',
       data: {
@@ -174,12 +193,7 @@ export class AssetdetailsComponent implements OnInit {
         },
       },
     });
-  
+
     console.log('Chart successfully created');
   }
-  
-  
-  
-  
-  
-  }  
+}
