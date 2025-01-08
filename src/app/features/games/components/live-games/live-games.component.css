@@ -1,64 +1,99 @@
+/* Container */
 .live-games-container {
-    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
-    backdrop-filter: blur(15px);
-    border-radius: 0.75rem;
-    border: 1px solid var(--orange-gaamer, #FB6805);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    color: #ffffff;
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(25px); /* Stronger blur effect */
+  border-radius: 1.5rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5); /* Deeper shadow */
+  color: #ffffff; /* White text color */
+  padding: 2rem; /* More padding */
+}
+
+/* Gradient Text for Header */
+.text-gradient {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Gradient Text for Icon */
+.text-gradient-orange {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Pulse Animation for Icon */
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
   }
-  
-  .live-games-container h2,
-  .live-games-container h3 {
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  50% {
+    transform: scale(1.1);
   }
-  
-  .game-box {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(12px);
-    border-radius: 0.5rem;
-    border: 1px solid var(--orange-gaamer, #FB6805);
-    text-align: left;
-  }
-  
-  .game-box p {
-    color: rgba(255, 255, 255, 0.7);
-  }
-  
-  .game-btn {
-    background-color: var(--orange-gaamer, #FB6805);
-    color: #fff;
-    border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease;
-  }
-  
-  .game-btn:hover {
-    background-color: #e65d00;
-  }
-  
-  .open-btn {
-    background-color: #4CAF50; /* Green for open */
-  }
-  
-  .open-btn:hover {
-    background-color: #3e8e41;
-  }
-  
-  .portfolio-btn {
-    background-color: #2196F3; /* Blue for portfolio */
-  }
-  
-  .portfolio-btn:hover {
-    background-color: #0b7dda;
-  }
-  
-  .join-btn {
-    background-color: var(--orange-gaamer, #FB6805);
-  }
-  
-  .join-btn:hover {
-    background-color: #e65d00;
-  }
-  
+}
+
+/* Game Box */
+.game-box {
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+  backdrop-filter: blur(20px); /* Stronger blur */
+  border-radius: 1rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Soft shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.game-box:hover {
+  transform: translateY(-6px); /* Lift card on hover */
+  box-shadow: 0 8px 24px rgba(251, 104, 5, 0.5); /* Glow effect on hover */
+  background: rgba(255, 255, 255, 0.25); /* Slightly brighter background */
+}
+
+.game-box p {
+  color: rgba(255, 255, 255, 0.7); /* Softer white for text */
+}
+
+/* Buttons */
+.game-btn {
+  border-radius: 0.75rem; /* Rounded corners */
+  padding: 0.75rem 1.5rem; /* Larger padding */
+  font-weight: 600; /* Bold text */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.game-btn:hover {
+  transform: translateY(-2px); /* Lift button on hover */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); /* Glow effect on hover */
+}
+
+.open-btn {
+  background: linear-gradient(45deg, #4CAF50, #45a049); /* Green gradient */
+  color: #ffffff;
+}
+
+.open-btn:hover {
+  background: linear-gradient(45deg, #45a049, #4CAF50); /* Reverse gradient on hover */
+}
+
+.portfolio-btn {
+  background: linear-gradient(45deg, #2196F3, #0b7dda); /* Blue gradient */
+  color: #ffffff;
+}
+
+.portfolio-btn:hover {
+  background: linear-gradient(45deg, #0b7dda, #2196F3); /* Reverse gradient on hover */
+}
+
+.join-btn {
+  background: linear-gradient(45deg, #FB6805, #FF4500); /* Orange gradient */
+  color: #ffffff;
+}
+
+.join-btn:hover {
+  background: linear-gradient(45deg, #FF4500, #FB6805); /* Reverse gradient on hover */
+}

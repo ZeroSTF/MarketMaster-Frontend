@@ -1,15 +1,15 @@
-<div class="overview-details-container p-4">
+<div class="overview-details-container p-6">
   <!-- Header -->
-  <div class="mb-4">
-    <h3 class="text-lg font-semibold user-name">Trade Form</h3>
+  <div class="mb-6">
+    <h3 class="text-2xl font-bold text-gradient">Trade Form</h3>
     <p class="text-sm text-gray-300">Quickly place your trade below</p>
   </div>
 
   <!-- Form Fields -->
-  <form [formGroup]="tradeForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <form [formGroup]="tradeForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <!-- Stock Symbol -->
     <div>
-      <label for="symbol" class="block text-sm text-gray-300">Stock Symbol</label>
+      <label for="symbol" class="block text-sm text-gray-300 mb-2">Stock Symbol</label>
       <input
         id="symbol"
         type="text"
@@ -21,7 +21,7 @@
 
     <!-- Trade Type -->
     <div>
-      <label for="tradeType" class="block text-sm text-gray-300">Trade Type</label>
+      <label for="tradeType" class="block text-sm text-gray-300 mb-2">Trade Type</label>
       <select id="tradeType" class="form-select" formControlName="action">
         <option value="buy">Buy</option>
         <option value="sell">Sell</option>
@@ -30,7 +30,7 @@
 
     <!-- Quantity -->
     <div>
-      <label for="quantity" class="block text-sm text-gray-300">Quantity</label>
+      <label for="quantity" class="block text-sm text-gray-300 mb-2">Quantity</label>
       <input
         id="quantity"
         type="number"
@@ -41,15 +41,24 @@
     </div>
 
     <!-- Price -->
-    
+    <div>
+      <label for="price" class="block text-sm text-gray-300 mb-2">Price</label>
+      <input
+        id="price"
+        type="number"
+        class="form-input"
+        formControlName="price"
+        placeholder="Enter price"
+      />
+    </div>
   </form>
 
   <!-- Submit Button -->
-  <div class="mt-4">
+  <div class="mt-6">
     <button
       type="button"
       (click)="onSubmit()"
-      class="w-full py-2 px-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-md shadow-md transition-all"
+      class="w-full py-3 px-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-lg shadow-lg transition-all transform hover:scale-105"
     >
       Place Trade
     </button>

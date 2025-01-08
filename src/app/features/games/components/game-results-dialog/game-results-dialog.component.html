@@ -1,0 +1,47 @@
+<div class="dialog-container">
+    <h2 class="dialog-title">Game Results</h2>
+  
+    <!-- Final Cash -->
+    <div class="result-item">
+      <span class="label">Final Cash:</span>
+      <span class="value">{{ data.finalCash | currency }}</span>
+    </div>
+  
+    <!-- Total Holdings Value -->
+    <div class="result-item">
+      <span class="label">Total Holdings Value:</span>
+      <span class="value">{{ data.totalHoldingsValue | currency }}</span>
+    </div>
+  
+    <!-- Profit Percentage -->
+    <div class="result-item">
+      <span class="label">Profit Percentage:</span>
+      <span class="value">{{ data.profitPercentage }}%</span>
+    </div>
+  
+    <!-- Holdings Table -->
+    <h3 class="holdings-title">Your Holdings</h3>
+    <table class="holdings-table">
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Quantity</th>
+          <th>Average Cost</th>
+          <th>Final Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let holding of data.holdings">
+          <td>{{ holding.symbol }}</td>
+          <td>{{ holding.quantity }}</td>
+          <td>{{ holding.averageCostBasis | currency }}</td>
+          <td>{{ holding.averageCostBasis * holding.quantity | currency }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Close Button -->
+    <div class="dialog-actions">
+      <button mat-button class="close-button" [mat-dialog-close]="true">Close</button>
+    </div>
+  </div>

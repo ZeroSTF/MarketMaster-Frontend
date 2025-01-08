@@ -23,6 +23,20 @@ export interface TransactionDto {
   username: string;
 }
 
+export interface GameResultsDto {
+  finalCash: number; // Final cash balance
+  holdings: GameHoldingDto[]; // List of holdings
+  totalHoldingsValue: number; // Total value of all holdings
+  profitPercentage: number; // Overall profit percentage
+}
+
+// If GameHoldingDto is not already defined, add it here
+export interface GameHoldingDto {
+  symbol: string; // Asset symbol
+  quantity: number; // Number of shares held
+  averageCostBasis: number; // Average cost basis of the holding
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -71,4 +85,9 @@ export class GameService {
   }
 
   
+  getGameResults(gameId: number, username: string): Observable<GameResultsDto> {
+    return this.http.get<GameResultsDto>(`${this.apiUrl}/${gameId}/results`, {
+      params: { username }, // Pass username as a query parameter
+    });
+  }
 }

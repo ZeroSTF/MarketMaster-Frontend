@@ -1,30 +1,29 @@
 <div class="overview-details-container p-4">
-    <!-- Header -->
-    <div class="mb-4">
-      <h3 class="text-lg font-semibold user-name">Your Holdings</h3>
-      <p class="text-sm text-gray-300">Track your investments</p>
-    </div>
-  
-    <!-- Table -->
-    <div class="overflow-x-auto">
-      <table class="holdings-table w-full text-left text-sm">
-        <thead class="bg-gray-800 bg-opacity-30">
-          <tr>
-            <th class="px-4 py-2 text-gray-300">Symbol</th>
-            <th class="px-4 py-2 text-gray-300">Quantity</th>
-            <th class="px-4 py-2 text-gray-300">Current Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let holding of holdings">
-            <td class="px-4 py-2 font-bold text-orange-400">{{ holding.symbol }}</td>
-            <td class="px-4 py-2 text-gray-300">{{ holding.quantity }}</td>
-            <td class="px-4 py-2 text-gray-300">
-              ${{ holding.currentPrice.toFixed(2) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <!-- Header -->
+  <div class="mb-4">
+    <h3 class="text-xl font-bold text-gradient">Your Holdings</h3>
+    <p class="text-sm text-gray-300">Track your investments</p>
   </div>
-  
+
+  <!-- Table -->
+  <div class="overflow-x-auto">
+    <table class="holdings-table w-full text-left text-sm">
+      <thead class="bg-gray-800 bg-opacity-30">
+        <tr>
+          <th class="px-4 py-2 text-gray-300">Symbol</th>
+          <th class="px-4 py-2 text-gray-300">Quantity</th>
+          <th class="px-4 py-2 text-gray-300">Average Cost Basis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let holding of holdings$ | async" class="glow-hover">
+          <td class="px-4 py-2 font-bold text-gradient-orange">{{ holding.symbol }}</td>
+          <td class="px-4 py-2 text-gray-300">{{ holding.quantity }}</td>
+          <td class="px-4 py-2 text-gray-300">
+            ${{ holding.averageCostBasis.toFixed(2) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 <div class="overview-details-container p-4">
   <!-- Header -->
-  <div class="mb-1  flex justify-between items-center">
-    <h3 class="text-lg font-semibold user-name">Leaderboard</h3>
+  <div class="mb-4 flex justify-between items-center">
+    <h3 class="text-xl font-bold text-gradient">Leaderboard</h3>
     <p class="text-sm text-gray-300">Top Players</p>
   </div>
 
@@ -9,7 +9,7 @@
   <div>
     <div
       *ngFor="let player of players"
-      class="player-item flex items-center justify-between mb-3 p-3 rounded-md"
+      class="player-item flex items-center justify-between mb-3 p-3 rounded-md glow-hover"
       [ngClass]="player.isActive ? 'bg-active' : 'bg-inactive'"
     >
       <!-- Left: Avatar and Name -->

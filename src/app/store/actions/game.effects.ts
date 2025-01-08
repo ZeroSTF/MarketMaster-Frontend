@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { Action, Store } from '@ngrx/store';
 import { Observable, interval, of } from 'rxjs';
-import { catchError, map, switchMap, withLatestFrom, takeUntil } from 'rxjs/operators';
+import { catchError, map, switchMap, withLatestFrom, takeUntil, mergeMap } from 'rxjs/operators';
 import { 
   loadGameState, 
   loadGameStateSuccess, 
@@ -15,15 +15,17 @@ import {
   resumeGame, 
   updateSimulationTime, 
   streamMarketData,
-  stopStreaming
+  stopStreaming,
+  makeTransaction,
+  makeTransactionSuccess,
+  makeTransactionFailure,
+  persistSimulationTime
 } from './game.actions';
 import { GameStateDto } from '../../models/game-state-dto';
 import { MarketDataStreamDto } from '../../models/market-data-stream.model';
 import { environment } from '../../../environments/environment';
 import { selectGameData, selectSpeed } from './game.selectors';
-import { persistSimulationTime } from './game.actions';
 import { MarketDataResponseDto } from '../../models/market-data-response.model';
-
 
 @Injectable()
 export class GameEffects {
@@ -79,6 +81,8 @@ export class GameEffects {
       )
     )
   );
+
+  // Effect to persist simulation time
   persistSimulationTime$ = createEffect(() =>
     this.actions$.pipe(
       ofType(persistSimulationTime),
@@ -93,6 +97,8 @@ export class GameEffects {
       )
     )
   );
+
+  // Effect to stream market data
   streamMarketData$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadMarketDataSuccess), // Trigger on successful market data load
@@ -119,6 +125,40 @@ export class GameEffects {
       )
     )
   );
-}
-  
 
+  // Effect to make a transaction
+  makeTransaction$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(makeTransaction),
+      switchMap(({ transaction }) =>
+        this.http.post<void>(`${environment.apiUrl}/games/transaction`, transaction).pipe(
+          map(() => {
+            console.log('Transaction successful:', transaction);
+            return makeTransactionSuccess({ transaction });
+          }),
+          catchError((error) => {
+            console.error('Transaction failed:', error);
+            return of(makeTransactionFailure({ error }));
+          })
+        )
+      )
+    )
+  );
+
+  // Effect to refetch the game state after a successful transaction
+  makeTransactionSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(makeTransactionSuccess),
+      withLatestFrom(this.store.select(selectGameData)),
+      switchMap(([action, gameState]) => {
+        if (!gameState) {
+          return of({ type: '[Game] No Op' });
+        }
+        return of(loadGameState({ 
+          gameId: gameState.gameMetadata.id, 
+          username: gameState.gameParticipation.username 
+        }));
+      })
+    )
+  );
+}

@@ -1,52 +1,70 @@
 /* Container */
 .overview-details-container {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(15px);
-  border-radius: 0.75rem;
-  border: 1px solid var(--orange-gaamer, #FB6805);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  color: #ffffff;
-  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(20px); /* Stronger blur effect */
+  border-radius: 1rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+  color: #ffffff; /* Text color */
+  overflow-y: auto; /* Enable scrolling */
   max-height: 450px; /* Ensures it doesn't exceed container height */
+  padding: 1rem; /* Reduced padding */
+}
+
+/* Header with Gradient Text */
+.text-gradient {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
 }
 
 /* News Item */
 .news-item {
   display: flex; /* Use flexbox for layout */
   align-items: center; /* Align image and text vertically */
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem; /* Reduced padding */
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(10px); /* Slight blur for depth */
+  border-radius: 0.75rem; /* Rounded edges */
+  border: 1px solid rgba(251, 104, 5, 0.2); /* Subtle orange border */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Light shadow */
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s; /* Smooth hover effect */
 }
 
-.news-item:last-child {
-  border-bottom: none;
+/* Glow Effect on Hover */
+.glow-hover:hover {
+  transform: translateY(-2px); /* Slight lift on hover */
+  box-shadow: 0 6px 20px rgba(251, 104, 5, 0.4); /* Glowing orange shadow */
+  background: rgba(255, 255, 255, 0.15); /* Slightly brighter background */
 }
 
-.news-item img {
-  width: 80px; /* Adjust image size */
-  height: 80px; /* Keep the image square */
+/* News Image */
+.news-image {
+  width: 60px; /* Smaller image size */
+  height: 60px; /* Keep the image square */
   object-fit: cover; /* Ensure the image doesn't stretch */
-  border-radius: 6px; /* Slight rounding for aesthetic */
+  border-radius: 0.5rem; /* Slight rounding for aesthetic */
   margin-right: 1rem; /* Space between image and text */
 }
 
-.news-item h4 {
-  color: var(--orange-gaamer, #FB6805);
-  margin-bottom: 0.25rem;
-  font-size: 1rem; /* Adjust font size if needed */
+/* News Content */
+.news-content {
+  flex: 1; /* Take up remaining space */
 }
 
-.news-item p {
-  margin: 0.25rem 0;
-  color: rgba(255, 255, 255, 0.8); /* Softer white for readability */
-  font-size: 0.875rem; /* Slightly smaller text for descriptions */
+.news-content h4 {
+  color: #ffffff; /* Bright white for headline */
+  font-size: 0.875rem; /* Smaller font size */
+  margin-bottom: 0.25rem; /* Space below headline */
 }
 
-/* Header */
-.user-name {
-  color: #ffffff;
+.news-content p {
+  color: rgba(255, 255, 255, 0.8); /* Softer white for summary */
+  font-size: 0.75rem; /* Smaller text for descriptions */
 }
 
-.user-rank {
-  color: var(--orange-gaamer, #FB6805);
+/* Loading Message */
+.text-gray-500 {
+  color: rgba(255, 255, 255, 0.5); /* Softer white for loading message */
 }

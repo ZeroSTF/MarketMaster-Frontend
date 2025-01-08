@@ -1,73 +1,101 @@
+/* Container */
 .quick-match-container {
-    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
-    backdrop-filter: blur(15px); /* Blurry background effect */
-    border-radius: 0.75rem; /* Rounded corners */
-    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow */
-    color: #ffffff; /* White text color */
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(25px); /* Stronger blur effect */
+  border-radius: 1.5rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5); /* Deeper shadow */
+  color: #ffffff; /* White text color */
+  padding: 2rem; /* More padding */
+}
+
+/* Gradient Text for Header */
+.text-gradient {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Gradient Text for Icon */
+.text-gradient-orange {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Pulse Animation for Icon */
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+      transform: scale(1);
   }
-  
-  /* Header */
-  .quick-match-container h2 {
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); /* Subtle shadow for visibility */
+  50% {
+      transform: scale(1.1);
   }
-  
-  /* Match Options */
-  .option-box {
-    background: rgba(255, 255, 255, 0.2); /* Transparent background */
-    backdrop-filter: blur(12px);
-    border-radius: 0.5rem;
-    border: 1px solid var(--orange-gaamer, #FB6805);
-    text-align: center;
-  }
-  
-  .option-box p {
-    color: rgba(255, 255, 255, 0.7); /* Softer white for labels */
-  }
-  
-  .create-match-btn,
-  .join-match-btn {
-    background-color: var(--orange-gaamer, #FB6805);
-    color: #fff;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease;
-  }
-  
-  .create-match-btn:hover,
-  .join-match-btn:hover {
-    background-color: #e65d00; /* Darken on hover */
-  }
-  
-  /* Match Details Section */
-  .match-details {
-    background: rgba(255, 255, 255, 0.2); /* Transparent for consistency */
-    backdrop-filter: blur(12px);
-    border-radius: 0.5rem;
-    border: 1px solid var(--orange-gaamer, #FB6805);
-    color: #ffffff;
-  }
-  
-  .match-input {
-    width: 100%;
-    border: 1px solid var(--orange-gaamer, #FB6805);
-    background: rgba(255, 255, 255, 0.1); /* Slight transparency */
-    color: #ffffff;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-  }
-  
-  .start-match-btn {
-    background-color: var(--orange-gaamer, #FB6805);
-    color: #fff;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    margin-top: 1rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  .start-match-btn:hover {
-    background-color: #e65d00; /* Darken on hover */
-  }
-  
+}
+
+/* Match Options */
+.option-box {
+  background: rgba(255, 255, 255, 0.2); /* Transparent background */
+  backdrop-filter: blur(20px); /* Stronger blur */
+  border-radius: 1rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.option-box:hover {
+  transform: translateY(-6px); /* Lift card on hover */
+  box-shadow: 0 14px 40px rgba(251, 104, 5, 0.5); /* Glow effect on hover */
+  background: rgba(255, 255, 255, 0.25); /* Slightly brighter background */
+}
+
+.option-box p {
+  color: rgba(255, 255, 255, 0.7); /* Softer white for labels */
+}
+
+/* Buttons */
+.create-match-btn,
+.join-match-btn,
+.start-match-btn {
+  background: linear-gradient(45deg, #FB6805, #FFD700); /* Gradient background */
+  color: #fff;
+  border-radius: 0.75rem; /* Rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Soft shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.create-match-btn:hover,
+.join-match-btn:hover,
+.start-match-btn:hover {
+  transform: translateY(-2px); /* Lift button on hover */
+  box-shadow: 0 6px 20px rgba(251, 104, 5, 0.6); /* Glow effect on hover */
+}
+
+/* Match Details Section */
+.match-details {
+  background: rgba(255, 255, 255, 0.2); /* Transparent for consistency */
+  backdrop-filter: blur(20px); /* Stronger blur */
+  border-radius: 1rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  color: #ffffff;
+}
+
+.match-input {
+  width: 100%;
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  background: rgba(255, 255, 255, 0.1); /* Slight transparency */
+  color: #ffffff;
+  padding: 0.75rem; /* More padding */
+  border-radius: 0.75rem; /* Rounded corners */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.match-input:focus {
+  border-color: #FB6805; /* Highlight border on focus */
+  box-shadow: 0 0 10px rgba(251, 104, 5, 0.5); /* Glow effect on focus */
+}
