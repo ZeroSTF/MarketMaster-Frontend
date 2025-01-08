@@ -1,5 +1,14 @@
 import { createReducer, on } from '@ngrx/store';
-import { loadGameStateSuccess, updateSimulationTime, streamMarketData, stopStreaming, loadGameStateFailure, pauseGame, resumeGame, adjustSpeed } from './game.actions';
+import {
+  loadGameStateSuccess,
+  updateSimulationTime,
+  streamMarketData,
+  stopStreaming,
+  loadGameStateFailure,
+  pauseGame,
+  resumeGame,
+  adjustSpeed,
+} from './game.actions';
 import { GameStateDto } from '../../models/game-state-dto';
 import { MarketDataStreamDto } from '../../models/market-data-stream.model';
 
@@ -9,7 +18,8 @@ export interface GameState {
   speed: number;
   error: string | null;
   currentSimulationTime: string | null;
-  marketDataStream: MarketDataStreamDto[]; 
+  marketDataStream: MarketDataStreamDto[];
+  lastMarketDataTimestamp: string | null; 
 }
 
 export const initialState: GameState = {
@@ -19,6 +29,8 @@ export const initialState: GameState = {
   error: null,
   currentSimulationTime: null,
   marketDataStream: [],
+  lastMarketDataTimestamp:null 
+
 };
 
 export const gameReducer = createReducer(
@@ -27,6 +39,7 @@ export const gameReducer = createReducer(
     ...state,
     gameState,
     currentSimulationTime: gameState.gameParticipation.lastPauseTimestamp,
+    lastMarketDataTimestamp: gameState.gameMetadata.lastMarketDataTimestamp,
     error: null,
   })),
   on(updateSimulationTime, (state, { updatedTime }) => ({
@@ -41,5 +54,5 @@ export const gameReducer = createReducer(
   on(loadGameStateFailure, (state, { error }) => ({ ...state, error })),
   on(pauseGame, (state) => ({ ...state, isPaused: true })),
   on(resumeGame, (state) => ({ ...state, isPaused: false })),
-  on(adjustSpeed, (state, { speed }) => ({ ...state, speed })),
+  on(adjustSpeed, (state, { speed }) => ({ ...state, speed }))
 );

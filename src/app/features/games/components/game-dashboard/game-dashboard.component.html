@@ -1,8 +1,10 @@
 <div *ngIf="gameState$ | async as gameState" class="game-dashboard-topbar">
+  <!-- Game Info Section -->
   <div class="game-info-section">
+    <!-- Game Title -->
     <div class="info-item game-title">
       <div class="icon-wrapper">
-        <i class="fas fa-trophy"></i>
+        <i class="fas fa-trophy text-gradient-orange"></i>
       </div>
       <div class="info-content">
         <p class="label">Game Title</p>
@@ -10,6 +12,7 @@
       </div>
     </div>
 
+    <!-- Game ID -->
     <div class="info-item game-id">
       <div class="info-content">
         <p class="label">Game ID</p>
@@ -17,6 +20,7 @@
       </div>
     </div>
 
+    <!-- Prize Pool -->
     <div class="info-item prize-pool">
       <div class="info-content">
         <p class="label">Prize Pool</p>
@@ -24,10 +28,13 @@
       </div>
     </div>
 
+    <!-- Player Cash -->
     <div class="info-item player-cash">
       <div class="info-content">
         <p class="label">Your Cash</p>
-        <p class="value cash">5,000 $</p>
+        <p class="value cash">
+          {{ (cash$ | async) | currency:'USD':'symbol':'1.0-0' }}
+        </p>
       </div>
     </div>
   </div>
@@ -38,16 +45,24 @@
     <p class="value time">{{ currentSimulationTime | date:'shortTime' || 'Loading...' }}</p>
   </div>
 
+  <!-- Game Controls -->
   <div class="game-controls-section">
-    <button class="control-btn speed-down" (click)="decreaseSpeed()">
+    <button class="control-btn speed-down" (click)="decreaseSpeed()" [disabled]="isGameFinished">
       <i class="fas fa-minus"></i>
     </button>
-    <button class="control-btn speed-up" (click)="increaseSpeed()">
+    <button class="control-btn speed-up" (click)="increaseSpeed()" [disabled]="isGameFinished">
       <i class="fas fa-plus"></i>
     </button>
-    <button class="control-btn pause-toggle" (click)="togglePause()">
+    <button class="control-btn pause-toggle" (click)="togglePause()" [disabled]="isGameFinished">
       <i *ngIf="!(isPaused$ | async)" class="fas fa-pause"></i>
       <i *ngIf="(isPaused$ | async)" class="fas fa-play"></i>
     </button>
+  </div>
+
+  <!-- Game Over Message -->
+  <div *ngIf="isGameFinished" class="game-over-message">
+    <h2>Game Over!</h2>
+    <p>You have reached the end of the simulation.</p>
+    <button (click)="openResultsPopup()">View Results</button>
   </div>
 </div>
