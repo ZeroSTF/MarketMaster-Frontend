@@ -1,22 +1,18 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import {
-  Asset,
-  AssetPortfolio,
-  PageResponse,
-  WatchlistItem,
-} from '../models/asset.model';
+import { Asset, AssetPortfolio, PageResponse } from '../models/asset.model';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, of, Subject, takeUntil } from 'rxjs';
 import { StockPredictionResponse } from '../models/StockPredictionResponse.model';
 import { FlaskWebSocketService } from './flask-websocket.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AssetService {
   private selectedAssetSignal = signal<Asset | null>(null);
-  private watchlistSignal = signal<any[]>([]);
+  private watchlistSignal = signal<Asset[]>([]);
   private bestWinnersSignal = signal<any[]>([]);
   private userAssetsSignal = signal<AssetPortfolio[]>([]);
   private assetsSignal = signal<Asset[]>([]);
@@ -32,6 +28,7 @@ export class AssetService {
 
   private readonly destroy$ = new Subject<void>();
   private webSocketService = inject(FlaskWebSocketService);
+  private authService = inject(AuthService);
 
   constructor(private http: HttpClient) {
     this.webSocketService
@@ -53,28 +50,20 @@ export class AssetService {
       );
   }
 
-  // Get paginated watchlist
-  getAllWatchList(page: number = 0, size: number = 20, username: string): void {
+  // Get paginated watchlist TODO
+  getWatchlist(page: number = 0, size: number = 5): void {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
-
     this.http
-      .get<PageResponse<WatchlistItem>>(
-        `${this.apiUrl}/portf/watchlist/${username}`,
-        { params }
+      .get<PageResponse<Asset>>(
+        `${this.apiUrl}/watchlist/${this.authService.currentUser()?.username}`,
+        {
+          params,
+        }
       )
-      .subscribe({
-        next: (response) => {
-          console.log('API Response:', response.content);
-          this.watchlistSignal.set(response.content);
-        },
-        error: (error) => {
-          console.error(
-            `Error fetching watchlist for username "${username}":`,
-            error
-          );
-        },
+      .subscribe((response) => {
+        this.watchlistSignal.set(response.content);
       });
   }
 
@@ -139,23 +128,6 @@ export class AssetService {
         updated[index] = {
           ...current[index],
           currentPrice: updatedAsset.currentPrice,
-        };
-        return updated;
-      }
-      return current;
-    });
-  }
-  private updateWatchlist(updatedAsset: Asset): void {
-    this.watchlistSignal.update((current) => {
-      const index = current.findIndex(
-        (item) => item.symbol === updatedAsset.symbol
-      );
-      if (index !== -1) {
-        const updated = [...current];
-        updated[index] = {
-          ...current[index],
-          currentPrice: updatedAsset.currentPrice,
-          trend: updatedAsset.priceChange > 0 ? 'up' : 'down',
         };
         return updated;
       }
