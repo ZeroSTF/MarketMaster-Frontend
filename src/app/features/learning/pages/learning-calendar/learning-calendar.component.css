@@ -74,3 +74,17 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
+
+.fc-event {
+  max-width: 100%;
+}
+
+.fc-event-main {
+  overflow: hidden;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -9,11 +9,23 @@
     <!-- Main Interview Interface -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- AI Avatar Section -->
-      <div class="bg-black/30 rounded-xl p-4 aspect-video relative overflow-hidden">
-        <canvas #avatarCanvas class="w-full h-full"></canvas>
+      <div class="bg-black/30 rounded-xl p-4 aspect-video relative overflow-hidden flex items-center justify-center">
+        <svg width="300" height="300" viewBox="0 0 300 300">
+          <!-- Face -->
+          <circle cx="150" cy="150" r="120" fill="#FFE0B2"/>
+          
+          <!-- Eyes -->
+          <g [attr.transform]="eyesTransformValue()">
+            <circle cx="105" cy="120" r="12" fill="#000"/>
+            <circle cx="195" cy="120" r="12" fill="#000"/>
+            <circle cx="108" cy="117" r="4" fill="#FFF"/>
+            <circle cx="198" cy="117" r="4" fill="#FFF"/>
+          </g>
+          
+          <!-- Mouth -->
+          <path [attr.d]="mouthPathValue()" fill="#FF6B6B" stroke="#000" stroke-width="2"/>
+        </svg>
         
-        
-        <!-- Speaking Indicator -->
         <div *ngIf="interviewState().isSpeaking" 
              class="absolute bottom-4 left-4 flex items-center gap-2 bg-blue-500/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
           <div class="flex space-x-1">

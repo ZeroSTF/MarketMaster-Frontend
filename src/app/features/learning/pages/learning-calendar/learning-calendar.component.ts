@@ -194,9 +194,9 @@ export class LearningCalendarComponent {
 
   renderEventContent = (info: any) => ({
     html: `
-      <div class="p-2 scrollbar-hide">
-        <div class="font-medium text-xs">${info.event.title}</div>
-        <div class="text-xs mt-1">Progress: ${info.event.extendedProps.progress}%</div>
+      <div class="p-2 w-full overflow-hidden">
+        <div class="font-medium text-xs truncate" title="${info.event.title}">${info.event.title}</div>
+        <div class="text-xs mt-1 truncate">Progress: ${info.event.extendedProps.progress}%</div>
       </div>
     `,
   });
