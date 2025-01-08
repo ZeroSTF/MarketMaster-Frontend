@@ -368,8 +368,15 @@ export class LearningService {
         return;
       }
 
+      // Cancel any ongoing speech
+      this.synthesis.cancel();
+
       const utterance = new SpeechSynthesisUtterance(text);
       this.configureUtterance(utterance);
+
+      utterance.onstart = () => {
+        this.updateState({ isSpeaking: true });
+      };
 
       utterance.onend = () => {
         this.updateState({ isSpeaking: false });
@@ -382,33 +389,52 @@ export class LearningService {
         reject(error);
       };
 
-      this.updateState({ isSpeaking: true });
       this.synthesis.speak(utterance);
     });
   }
 
-  private configureUtterance(utterance: SpeechSynthesisUtterance): void {
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-    utterance.lang = 'en-US';
-  
-    if (this.synthesis) {
-      const voices = this.synthesis.getVoices();
-      const preferredVoice = voices.find(
-        voice => voice.lang.startsWith('en') && 
-                 voice.name.toLowerCase().includes('female') &&
-                 !voice.name.toLowerCase().includes('french')
-      );
-  
-      if (preferredVoice) {
-        utterance.voice = preferredVoice;
-      } else {
-        const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
-        if (englishVoice) {
-          utterance.voice = englishVoice;
-        }
+  private configureUtterance(utterance: SpeechSynthesisUtterance) {
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+    // You can set a specific voice here if needed
+  }
+
+  public async startInterview(): Promise<void> {
+    // Clear any previous state
+    this.updateState({
+      isActive: false,
+      currentQuestionIndex: 0,
+      lastAnswer: '',
+      transcript: '',
+      microphoneError: undefined,
+    });
+
+    try {
+      const micWorking = await this.testMicrophone();
+
+      if (!micWorking) {
+        console.error('Cannot start interview: Microphone not working');
+        return;
       }
+
+      this.updateState({
+        isActive: true,
+        currentQuestionIndex: 0,
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Use the same speak method for all speech
+      await this.speak('Hello, first question.');
+      await this.speak(this.questions[0]);
+      this.startListening();
+    } catch (error) {
+      console.error('Error starting interview:', error);
+      this.updateState({
+        microphoneStatus: 'error',
+        microphoneError: 'Failed to start interview. Please try again.',
+      });
     }
   }
 
@@ -525,43 +551,43 @@ export class LearningService {
     });
   }
 
-  public async startInterview(): Promise<void> {
-    // Clear any previous state
-    this.updateState({
-      isActive: false,
-      currentQuestionIndex: 0,
-      lastAnswer: '',
-      transcript: '',
-      microphoneError: undefined,
-    });
+  // public async startInterview(): Promise<void> {
+  //   // Clear any previous state
+  //   this.updateState({
+  //     isActive: false,
+  //     currentQuestionIndex: 0,
+  //     lastAnswer: '',
+  //     transcript: '',
+  //     microphoneError: undefined,
+  //   });
 
-    try {
-      const micWorking = await this.testMicrophone();
+  //   try {
+  //     const micWorking = await this.testMicrophone();
 
-      if (!micWorking) {
-        console.error('Cannot start interview: Microphone not working');
-        return;
-      }
+  //     if (!micWorking) {
+  //       console.error('Cannot start interview: Microphone not working');
+  //       return;
+  //     }
 
-      this.updateState({
-        isActive: true,
-        currentQuestionIndex: 0,
-      });
+  //     this.updateState({
+  //       isActive: true,
+  //       currentQuestionIndex: 0,
+  //     });
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+  //     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      await this.speak('Hello, first question.');
-      await this.speak(this.questions[0]);
-      this.startListening();
-    } catch (error) {
-      console.error('Error starting interview:', error);
-      this.updateState({
-        microphoneStatus: 'error',
-        microphoneError: 'Failed to start interview. Please try again.',
-      });
-    }
-  }
-  private updateState(newState: Partial<InterviewState>): void {
+  //     await this.speak('Hello, first question.');
+  //     await this.speak(this.questions[0]);
+  //     this.startListening();
+  //   } catch (error) {
+  //     console.error('Error starting interview:', error);
+  //     this.updateState({
+  //       microphoneStatus: 'error',
+  //       microphoneError: 'Failed to start interview. Please try again.',
+  //     });
+  //   }
+  // }
+  public updateState(newState: Partial<InterviewState>): void {
     this.state.update((state) => ({
       ...state,
       ...newState,
@@ -680,129 +706,6 @@ export class LearningService {
     }
   }
 
-
-
-  //video
-
-  private readonly D_ID_API_KEY = 'your_api_key';
-  private readonly D_ID_API_URL = 'https://api.d-id.com';
-
-  private async createTalkingVideo(text: string): Promise<string> {
-    const response = await fetch(`${this.D_ID_API_URL}/talks`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Basic ${this.D_ID_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        script: {
-          type: 'text',
-          input: text,
-        },
-        source_url: 'YOUR_PRESENTER_IMAGE_URL',
-        driver_url: 'bank://presenter/driver',
-        config: {
-          stitch: true,
-        },
-      }),
-    });
-
-    const { id } = await response.json();
-    return this.waitForVideo(id);
-  }
-
-  private async waitForVideo(talkId: string): Promise<string> {
-    while (true) {
-      const response = await fetch(`${this.D_ID_API_URL}/talks/${talkId}`, {
-        headers: { Authorization: `Basic ${this.D_ID_API_KEY}` },
-      });
-
-      const result = await response.json();
-      if (result.status === 'done') {
-        return result.result_url;
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
-  }
-
-  //video fraud detection
-  // private fraudDetectionTimer: any;
-  // private modelLoaded = false;
-  
-  // private _fraudState = signal<FraudState>({
-  //   isMultipleUsers: false,
-  //   isFaceVerified: false
-  // });
-
-  // readonly fraudState = computed(() => this._fraudState());
-
-  // private async loadModels() {
-  //   try {
-  //     await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-  //     await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
-  //     await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
-  //     this.modelLoaded = true;
-  //   } catch (error) {
-  //     console.error('Error loading face detection models:', error);
-  //   }
-  // }
-
-  // async startFraudDetection(videoElement: HTMLVideoElement, referenceImageUrl: string) {
-  //   // if (!this.modelLoaded) await this.loadModels();
-
-  //   // const referenceImage = await faceapi.fetchImage(referenceImageUrl);
-  //   // const referenceDetection = await this.getFaceDescriptor(referenceImage);
-    
-  //   // if (!referenceDetection) {
-  //   //   this.fraudState.set({
-  //   //     isMultipleUsers: false,
-  //   //     isFaceVerified: false,
-  //   //     error: 'Reference face not detected'
-  //   //   });
-  //     return;
-  //   }
-
-  //   // this.fraudDetectionTimer = setInterval(async () => {
-  //   //   try {
-  //   //     const detections = await faceapi.detectAllFaces(videoElement, 
-  //   //       new faceapi.TinyFaceDetectorOptions())
-  //   //       .withFaceLandmarks()
-  //   //       .withFaceDescriptors();
-
-  //   //     const isMultipleUsers = detections.length > 1;
-  //   //     let isFaceVerified = false;
-
-  //   //     if (detections.length === 1) {
-  //   //       const currentDescriptor = detections[0].descriptor;
-  //   //       const distance = faceapi.euclideanDistance(currentDescriptor, referenceDetection);
-  //   //       isFaceVerified = distance < 0.6;
-  //   //     }
-
-  //   //     this.fraudState.set({ isMultipleUsers, isFaceVerified });
-  //   //   } catch (error) {
-  //   //     this.fraudState.set({
-  //   //       isMultipleUsers: false,
-  //   //       isFaceVerified: false,
-  //   //       error: 'Detection failed'
-  //   //     });
-  //   //   }
-  //   // }, 1000);
-  
-  // private async getFaceDescriptor(image: HTMLImageElement) {
-  //   const detection = await faceapi.detectSingleFace(image, 
-  //     new faceapi.TinyFaceDetectorOptions())
-  //     .withFaceLandmarks()
-  //     .withFaceDescriptor();
-  //   return detection?.descriptor;
-  // }
-
-  // stopFraudDetection() {
-  //   if (this.fraudDetectionTimer) {
-  //     clearInterval(this.fraudDetectionTimer);
-  //   }
-  // }
-// }
 
 
 async sendMessageToApi(inputText: string): Promise<any> {

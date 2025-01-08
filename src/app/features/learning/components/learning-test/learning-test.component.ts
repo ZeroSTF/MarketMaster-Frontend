@@ -25,6 +25,8 @@ export class LearningTestComponent implements OnInit, OnDestroy {
   private isDetecting = false;
   private referenceDescriptor: Float32Array | null = null;
   private modelsLoaded = false;
+  private isSpeaking = false;
+
   
   // Reactive state using signals
   faceState = signal<FaceDetectionState>({
@@ -42,25 +44,28 @@ export class LearningTestComponent implements OnInit, OnDestroy {
   readonly currentQuestion = computed(() => this.learningService.currentQuestion());
 
   async ngOnInit() {
+    // Start avatar animations first
+    this.initializeAvatar();
+    
     try {
       this.faceState.update(state => ({ ...state, isLoading: true, error: null }));
       
-      // Load models first
-      await this.loadFaceApiModels();
+      // Initialize face detection components in parallel
+      await Promise.all([
+        this.loadFaceApiModels(),
+        this.initializeWebcam()
+      ]);
       
-      // Then initialize webcam
-      await this.initializeWebcam();
-      
-      // Wait for video to be ready
       await this.waitForVideo();
       
-      // Start detection
       this.startFaceDetection();
-      
-      // Capture reference after detection is running
       await this.captureReferenceImage();
       
       this.faceState.update(state => ({ ...state, isLoading: false }));
+      
+      // Initial greeting using the unified speaking system
+      await this.handleSpeech("Hello, are you ready to start the interview");
+      
     } catch (error) {
       console.error('Initialization error:', error);
       this.faceState.update(state => ({
@@ -70,6 +75,76 @@ export class LearningTestComponent implements OnInit, OnDestroy {
       }));
     }
   }
+
+  // Unified speech handling method
+  private async handleSpeech(text: string): Promise<void> {
+    if (!text || this.isSpeaking) return;
+
+    try {
+      this.isSpeaking = true;
+      
+      // Start mouth animation
+      this.startMouthAnimation();
+      
+      // Use learning service to handle the speech
+      await this.learningService.speak(text);
+      
+    } catch (error) {
+      console.error('Speech error:', error);
+    } finally {
+      // Always cleanup, even if there's an error
+      this.stopMouthAnimation();
+      this.isSpeaking = false;
+    }
+  }
+
+  private startMouthAnimation() {
+    // Clear any existing animation
+    this.stopMouthAnimation();
+    
+    let open = false;
+    this.mouthAnimationInterval = setInterval(() => {
+      // Use more natural mouth movements with varying degrees of opening
+      const mouthHeight = open ? Math.random() * 20 + 190 : 180; // Random height when open
+      this.mouthPath.set(`M 90 180 Q 150 ${mouthHeight} 210 180`);
+      open = !open;
+    }, 100); // Slightly faster animation for more natural movement
+  }
+  
+  private initializeAvatar() {
+    // Clear any existing intervals first
+    clearInterval(this.blinkInterval);
+    clearInterval(this.mouthAnimationInterval);
+    
+    // Start blinking animation
+    this.startBlinking();
+    
+    // Reset mouth to neutral position
+    this.mouthPath.set('M 90 180 Q 150 180 210 180');
+    
+    // Reset eyes to normal state
+    this.eyesTransform.set('scale(1 1)');
+  }
+  
+  private startBlinking() {
+    // Random blink interval between 2 and 6 seconds
+    const getRandomBlinkInterval = () => Math.random() * (6000 - 2000) + 2000;
+    
+    const blink = () => {
+      this.eyesTransform.set('scale(1 0.1)');
+      setTimeout(() => this.eyesTransform.set('scale(1 1)'), 150);
+      
+      // Set next blink with random interval
+      this.blinkInterval = setTimeout(blink, getRandomBlinkInterval());
+    };
+    
+    // Start first blink after a random interval
+    this.blinkInterval = setTimeout(blink, getRandomBlinkInterval());
+  }
+  
+  
+
+
 
   private async waitForVideo(): Promise<void> {
     const video = this.userVideo.nativeElement;
@@ -219,8 +294,11 @@ export class LearningTestComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    clearInterval(this.blinkInterval);
+    clearInterval(this.mouthAnimationInterval);
     this.isDetecting = false;
     this.videoStream?.getTracks().forEach(track => track.stop());
+    window.speechSynthesis.cancel();
   }
 
   submitEditedAnswer() {
@@ -232,4 +310,41 @@ export class LearningTestComponent implements OnInit, OnDestroy {
   async startInterview() {
     await this.learningService.startInterview();
   }
+
+  //avatar
+  private mouthPath = signal('M 90 180 Q 150 180 210 180');
+  private eyesTransform = signal('translate(0 0)');
+  private mouthAnimationInterval: any;
+  private blinkInterval: any;
+
+  // Computed values for template
+  mouthPathValue = computed(() => this.mouthPath());
+  eyesTransformValue = computed(() => this.eyesTransform());
+
+  
+  
+  // private startMouthAnimation() {
+  //   // Clear any existing animation
+  //   clearInterval(this.mouthAnimationInterval);
+    
+  //   let open = false;
+  //   this.mouthAnimationInterval = setInterval(() => {
+  //     this.mouthPath.set(open
+  //       ? 'M 90 180 Q 150 180 210 180'  // closed
+  //       : 'M 90 180 Q 150 210 210 180'  // open
+  //     );
+  //     open = !open;
+  //   }, 150);
+  // }
+  
+  private stopMouthAnimation() {
+    clearInterval(this.mouthAnimationInterval);
+    this.mouthPath.set('M 90 180 Q 150 180 210 180');
+  }
+  
+  
+
+  
+
+  
 }
