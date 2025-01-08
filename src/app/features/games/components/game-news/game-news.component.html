@@ -1,14 +1,14 @@
 <div class="overview-details-container p-4">
   <!-- Header -->
-  <div class="mb-2 flex justify-between items-center">
-    <h3 class="text-lg font-semibold user-name">News Feed</h3>
+  <div class="mb-3 flex justify-between items-center">
+    <h3 class="text-xl font-bold text-gradient">News Feed</h3>
   </div>
 
   <!-- Filtered News Items -->
   <ng-container *ngIf="filteredNews$ | async as filteredNews; else loading">
-    <div *ngFor="let news of filteredNews" class="news-item mb-3" (click)="openNewsDetails(news)">
-      <img [src]="news.image" alt="News image" />
-      <div>
+    <div *ngFor="let news of filteredNews" class="news-item p-2 mb-2 glow-hover" (click)="openNewsDetails(news)">
+      <img [src]="news.image" alt="News image" class="news-image" />
+      <div class="news-content">
         <h4 class="text-base font-bold text-white">{{ news.headline }}</h4>
       </div>
     </div>

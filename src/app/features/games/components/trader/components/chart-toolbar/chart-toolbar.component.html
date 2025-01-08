@@ -4,7 +4,7 @@
     <mat-button-toggle-group [value]="chartType" class="!bg-gray-100 dark:!bg-gray-700 !border-0 !rounded-lg">
       @for (type of chartTypes; track type.value) {
       <mat-button-toggle [value]="type.value" (change)="onChartTypeChange(type.value)" [matTooltip]="type.name" class="!bg-transparent dark:!text-gray-200 hover:!bg-gray-200 dark:hover:!bg-gray-600
-                 [&.mat-button-toggle-checked]:!bg-primary-500 [&.mat-button-toggle-checked]:!text-white">
+                 [&.mat-button-toggle-checked]:!bg-gradient-to-r [&.mat-button-toggle-checked]:!from-primary-500 [&.mat-button-toggle-checked]:!to-primary-600 [&.mat-button-toggle-checked]:!text-white">
         <mat-icon>{{type.icon}}</mat-icon>
       </mat-button-toggle>
       }
@@ -17,7 +17,7 @@
       class="!bg-gray-100 dark:!bg-gray-700 !border-0 !rounded-lg">
       @for (tf of timeframes; track tf.value) {
       <mat-button-toggle [value]="tf.value" (change)="onTimeframeChange(tf)" [matTooltip]="tf.label" class="!bg-transparent dark:!text-gray-200 hover:!bg-gray-200 dark:hover:!bg-gray-600
-                 [&.mat-button-toggle-checked]:!bg-primary-500 [&.mat-button-toggle-checked]:!text-white">
+                 [&.mat-button-toggle-checked]:!bg-gradient-to-r [&.mat-button-toggle-checked]:!from-primary-500 [&.mat-button-toggle-checked]:!to-primary-600 [&.mat-button-toggle-checked]:!text-white">
         {{tf.name}}
       </mat-button-toggle>
       }

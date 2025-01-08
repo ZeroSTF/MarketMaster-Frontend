@@ -1,17 +1,24 @@
 <!-- Main Container -->
-<div class="flex h-full bg-gradient-to-br from-blue-50 via-white to-blue-50 rounded-2xl scrollbar-hide">
+<div
+  class="flex h-full bg-gradient-to-br from-blue-50 via-white to-blue-50 rounded-2xl scrollbar-hide"
+>
   <!-- Calendar Section -->
   <div class="flex-grow scrollbar-hide">
-    <div class="bg-transparent rounded-t-2xl shadow-md h-full flex flex-col overflow-hidden scrollbar-hide ">
+    <div
+      class="bg-transparent rounded-t-2xl shadow-md h-full flex flex-col overflow-hidden scrollbar-hide"
+    >
       <header class="bg-white shadow-sm border-b border-blue-100 rounded-t-2xl">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 class="text-2xl font-bold text-blue-900">Manage your learning journey</h1>
-          
+        <div
+          class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between"
+        >
+          <h1 class="text-2xl font-bold text-blue-900">
+            Manage your learning journey
+          </h1>
         </div>
       </header>
 
-      <div class="flex-grow  bg-transparent scrollbar-hide">
-        <full-calendar 
+      <div class="flex-grow bg-transparent scrollbar-hide">
+        <full-calendar
           [options]="calendarOptions()"
           class="w-full h-full !font-sans scrollbar-hide"
         ></full-calendar>
@@ -23,114 +30,148 @@
   <div class="w-80 flex-shrink-0 ml-2">
     <div class="bg-white shadow-lg rounded-t-3xl h-full flex flex-col">
       <!-- Sidebar Header -->
-      <header class="bg-white  border-b border-blue-100 rounded-t-2xl">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <header class="bg-white border-b border-blue-100 rounded-t-2xl">
+        <div
+          class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between"
+        >
           <h1 class="text-2xl font-bold text-blue-900">Available Courses</h1>
           <!-- <p class="text-sm text-gray-500 mt-1">Drag courses to schedule them</p> -->
-          
         </div>
       </header>
-      
 
       <!-- Search Box -->
       <div class="px-6 pt-4">
         <div class="relative">
-          <span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
+          <span
+            class="absolute inset-y-0 left-3 flex items-center text-gray-400"
+          >
             <span class="material-icons text-xl">search</span>
           </span>
-          <input 
-            type="text" 
+          <input
+            type="text"
             placeholder="Search courses..."
             (input)="updateSearch($event)"
             class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-          >
+          />
         </div>
       </div>
 
       <!-- Filter Tabs -->
-<div class="flex gap-2 px-6 pt-4 pb-2 overflow-x-auto scrollbar-hide">
-  <button
-    *ngFor="let filter of filters"
-    (click)="setActiveFilter(filter.name)"
-    [class.bg-blue-50]="filter.name === 'all' && activeFilter() === filter.name"
-    [class.text-blue-500]="filter.name === 'all' && activeFilter() === filter.name"
-    [class.bg-yellow-50]="filter.name === 'inProgress' && activeFilter() === filter.name"
-    [class.text-yellow-600]="filter.name === 'inProgress' && activeFilter() === filter.name"
-    [class.bg-green-50]="filter.name === 'completed' && activeFilter() === filter.name"
-    [class.text-green-500]="filter.name === 'completed' && activeFilter() === filter.name"
-    [class.text-gray-70]="activeFilter() !== filter.name"
-    class="px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200">
-    {{ filter.label }}
-  </button>
-</div>
-
+      <div class="flex gap-2 px-6 pt-4 pb-2 overflow-x-auto scrollbar-hide">
+        <button
+          *ngFor="let filter of filters"
+          (click)="setActiveFilter(filter.name)"
+          [class.bg-blue-50]="
+            filter.name === 'all' && activeFilter() === filter.name
+          "
+          [class.text-blue-500]="
+            filter.name === 'all' && activeFilter() === filter.name
+          "
+          [class.bg-yellow-50]="
+            filter.name === 'inProgress' && activeFilter() === filter.name
+          "
+          [class.text-yellow-600]="
+            filter.name === 'inProgress' && activeFilter() === filter.name
+          "
+          [class.bg-green-50]="
+            filter.name === 'completed' && activeFilter() === filter.name
+          "
+          [class.text-green-500]="
+            filter.name === 'completed' && activeFilter() === filter.name
+          "
+          [class.text-gray-70]="activeFilter() !== filter.name"
+          class="px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200"
+        >
+          {{ filter.label }}
+        </button>
+      </div>
 
       <!-- Course List -->
       <div class="flex-1 overflow-auto px-6 py-4 scrollbar-hide">
         <div class="space-y-3">
-          <div 
-      *ngFor="let course of filteredCourses()"
-      class="course-item group relative bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300  cursor-pointer overflow-hidden"
-      [class.expanded]="course.isExpanded"
-      [attr.data-course-id]="course.course.title"
-      (click)="course.isExpanded = !course.isExpanded">
-      
-      <!-- Main Content -->
-      <div class="flex p-3 gap-3"> 
-        <!-- Course Image -->
-        <div class="w-28 h-24 flex-shrink-0 rounded-xl bg-gray-100 overflow-hidden">
-          <img 
-          [src]="'/images/' + course.course.title + '.png'"
-            alt="{{ course.course.title }}"
-            class="w-full h-full object-cover"
-            onerror="this.src='/api/placeholder/400/320'"
+          <div
+            *ngFor="let course of filteredCourses()"
+            class="course-item group relative bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden"
+            [class.expanded]="course.isExpanded"
+            [attr.data-course-id]="course.course.title"
+            (click)="course.isExpanded = !course.isExpanded"
           >
-        </div>
+            <!-- Main Content -->
+            <div class="flex p-3 gap-3">
+              <!-- Course Image -->
+              <div
+                class="w-28 h-24 flex-shrink-0 rounded-xl bg-gray-100 overflow-hidden"
+              >
+                <img
+                  [src]="'/images/' + course.course.title + '.png'"
+                  alt="{{ course.course.title }}"
+                  class="w-full h-full object-cover"
+                  onerror="this.src='/api/placeholder/400/320'"
+                />
+              </div>
 
-        <!-- Content Section -->
-        <div class="flex-1 min-w-0 relative">
-          <!-- Title and Description -->
-          <h3 class="font-medium text-gray-900 mb-1 text-base transition-all duration-300 break-words"
-              [class.line-clamp-1]="!course.isExpanded">
-            {{ course.course.title }}
-          </h3>
-          <p class="text-sm text-gray-500 transition-all duration-300"
-             [class.line-clamp-2]="!course.isExpanded"
-             [class.mb-4]="!course.isExpanded"
-             [class.mb-8]="course.isExpanded">
-            {{ course.course.description }}
-          </p>
+              <!-- Content Section -->
+              <div class="flex-1 min-w-0 relative">
+                <!-- Title and Description -->
+                <h3
+                  class="font-medium text-gray-900 mb-1 text-base transition-all duration-300 break-words"
+                  [class.line-clamp-1]="!course.isExpanded"
+                >
+                  {{ course.course.title }}
+                </h3>
+                <p
+                  class="text-sm text-gray-500 transition-all duration-300"
+                  [class.line-clamp-2]="!course.isExpanded"
+                  [class.mb-4]="!course.isExpanded"
+                  [class.mb-8]="course.isExpanded"
+                >
+                  {{ course.course.description }}
+                </p>
 
-          <!-- Action Button - Stop Event Propagation to prevent card expansion -->
-          <button
-            [ngClass]="{
-              'bg-blue-50 text-blue-600': course.progress === 0 && course.startDate === '',
-              'bg-transparent text-yellow-600': course.progress >= 0 && course.progress <100 && course.startDate !== '',
-              'bg-green-50 text-green-600': course.progress === 100
-            }"
-            class="absolute bottom-0 left-0 right-0 py-0.5 rounded-full text-sm font-medium transition-colors duration-300 hover:bg-opacity-80"
-            (click)="$event.stopPropagation(); 
-                    course.progress === 0 ? startCourse(course) : 
-                    course.progress === 100 ? redoCourse(course) : 
-                    resumeCourse(course)">
-            {{ course.progress === 0 ? 'Start Course' : 
-               course.progress === 100 ? 'Review Again' : 
-               'Continue Course' }}
-          </button>
-        </div>
-      </div>
+                <!-- Action Button - Stop Event Propagation to prevent card expansion -->
+                <button
+                  [ngClass]="{
+                    'bg-blue-50 text-blue-600':
+                      course.progress === 0 && course.startDate === '',
+                    'bg-transparent text-yellow-600':
+                      course.progress >= 0 &&
+                      course.progress < 100 &&
+                      course.startDate !== '',
+                    'bg-green-50 text-green-600': course.progress === 100
+                  }"
+                  class="absolute bottom-0 left-0 right-0 py-0.5 rounded-full text-sm font-medium transition-colors duration-300 hover:bg-opacity-80"
+                  (click)="
+                    $event.stopPropagation();
+                    course.progress === 0
+                      ? startCourse(course)
+                      : course.progress === 100
+                      ? redoCourse(course)
+                      : resumeCourse(course)
+                  "
+                >
+                  {{
+                    course.progress === 0
+                      ? "Start Course"
+                      : course.progress === 100
+                      ? "Review Again"
+                      : "Continue Course"
+                  }}
+                </button>
+              </div>
+            </div>
 
-      <!-- Progress Bar-->
-      <div class="absolute bottom-0 left-0 right-0 h-1 bg-blue-50">
-        <div class="h-full transition-all duration-300"
-             [style.width.%]="course.progress"
-             [ngClass]="{
+            <!-- Progress Bar-->
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-blue-50">
+              <div
+                class="h-full transition-all duration-300"
+                [style.width.%]="course.progress"
+                [ngClass]="{
                'bg-green-500': course.progress === 100,
                'bg-yellow-600': course.progress > 0 && course.progress < 100,
-             }">
-        </div>
-      </div>
-    </div>
+             }"
+              ></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

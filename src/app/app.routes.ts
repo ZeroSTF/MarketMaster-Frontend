@@ -105,6 +105,11 @@ export const routes: Routes = [
     component: GamesLayoutComponent,
     children: [
       {
+        path:'',
+        redirectTo: 'overview',
+        pathMatch : 'full'
+      },
+      {
         path: 'overview',
         component: GameOverviewComponent,
       },

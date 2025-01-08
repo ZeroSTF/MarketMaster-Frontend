@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { GameStateDto } from '../../../../models/game-state-dto';
-import { GameService, TransactionDto } from '../../../../services/game.service';
 import { selectGameData, selectSimulationTime } from '../../../../store/actions/game.selectors';
+import { TransactionDto } from '../../../../services/game.service';
 
 @Component({
   selector: 'app-trade-form',
@@ -15,6 +15,7 @@ import { selectGameData, selectSimulationTime } from '../../../../store/actions/
   imports: [CommonModule, ReactiveFormsModule],
 })
 export class TradeFormComponent implements OnInit, OnDestroy {
+  @Output() transactionSubmit = new EventEmitter<TransactionDto>(); // Emit transaction to parent component
   tradeForm: FormGroup;
   currentSimulationTime: string | null = null;
   gameData: GameStateDto | null = null;
@@ -23,7 +24,6 @@ export class TradeFormComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private store: Store,
-    private gameService: GameService,
     private cdRef: ChangeDetectorRef
   ) {
     this.tradeForm = this.fb.group({
@@ -39,7 +39,6 @@ export class TradeFormComponent implements OnInit, OnDestroy {
     // Fetch simulation time
     this.subscription.add(
       this.store.select(selectSimulationTime).subscribe((simulationTime) => {
-        console.log('Simulation Time Updated:', simulationTime);
         this.currentSimulationTime = simulationTime;
         this.cdRef.detectChanges();
       })
@@ -48,28 +47,13 @@ export class TradeFormComponent implements OnInit, OnDestroy {
     // Fetch game metadata
     this.subscription.add(
       this.store.select(selectGameData).subscribe((gameData) => {
-        console.log('Game Data Updated:', gameData);
         this.gameData = gameData;
         this.cdRef.detectChanges();
       })
     );
-
-    // Simulated price for now
-    this.fetchCurrentPrice();
-  }
-
-  fetchCurrentPrice(): void {
-    const simulatedPrice = 150.5; // Replace with actual price fetching logic if needed
-    console.log('Setting simulated price:', simulatedPrice);
-    this.tradeForm.patchValue({ price: simulatedPrice });
   }
 
   onSubmit(): void {
-    console.log('Submit button clicked.');
-    console.log('Form Value:', this.tradeForm.getRawValue());
-    console.log('Current Simulation Time:', this.currentSimulationTime);
-    console.log('Game Data:', this.gameData);
-
     if (this.tradeForm.valid && this.currentSimulationTime && this.gameData) {
       const tradeData = this.tradeForm.getRawValue();
 
@@ -83,18 +67,11 @@ export class TradeFormComponent implements OnInit, OnDestroy {
       };
 
       console.log('Prepared Transaction:', transaction);
-
-      this.gameService.processTransaction(transaction).subscribe({
-        next: (response) => {
-          console.log('Transaction successful:', response);
-          this.tradeForm.reset({
-            asset: '',
-            quantity: 1,
-            action: 'buy',
-            price: tradeData.price,
-          });
-        },
-        error: (error) => console.error('Transaction failed:', error),
+      this.transactionSubmit.emit(transaction); // Emit the transaction
+      this.tradeForm.reset({
+        asset: '',
+        quantity: 1,
+        action: 'buy',
       });
     } else {
       console.error('Form is invalid or missing required state data.');

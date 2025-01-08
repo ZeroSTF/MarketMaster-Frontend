@@ -1,50 +1,81 @@
+/* Container */
 .live-events-container {
-    background: rgba(255, 255, 255, 0.15); /* Semi-transparent background */
-    backdrop-filter: blur(15px); /* Blurry background effect */
-    border-radius: 1rem; /* Rounded corners */
-    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); /* Elevated shadow for depth */
-    color: #ffffff; /* Text color */
-    max-height: 400px; /* Set a max height */
-    overflow-y: auto; /* Enable scrolling */
-  }
-  
-  /* Header */
-  .live-events-container h2 {
-    color: #ffffff;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); /* Soft shadow */
-  }
-  
-  /* Event Items */
-  .events-list .event-item {
-    background: rgba(255, 255, 255, 0.2); /* Transparent background */
-    backdrop-filter: blur(10px); /* Slight blur for depth */
-    border-radius: 0.5rem; /* Rounded edges */
-    border: 1px solid var(--orange-gaamer, #FB6805); /* Orange border */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
-    transition: transform 0.2s, box-shadow 0.2s; /* Smooth hover effect */
-  }
-  
-  .events-list .event-item:hover {
-    transform: translateY(-2px); /* Lift card on hover */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
-  }
-  
-  .event-title {
-    color: #ffffff; /* Title color */
-  }
-  
-  .event-time {
-    color: rgba(255, 255, 255, 0.7); /* Softer white */
-  }
-  
-  .event-description {
-    color: rgba(255, 255, 255, 0.8); /* Softer white for description */
-  }
-  
-  .event-type {
-    display: inline-block;
-    padding: 0.25rem 0.5rem; /* Padding for event type label */
-    border-radius: 0.25rem; /* Rounded corners */
-  }
-  
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(20px); /* Stronger blur effect */
+  border-radius: 1.5rem; /* Rounded corners */
+  border: 1px solid rgba(251, 104, 5, 0.3); /* Subtle orange border */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+  color: #ffffff; /* Text color */
+  max-height: 500px; /* Slightly taller */
+  overflow-y: auto; /* Enable scrolling */
+  padding: 1.5rem; /* More padding */
+}
+
+/* Header with Gradient Text */
+.text-gradient {
+  background: linear-gradient(45deg, #FB6805, #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Event Items */
+.events-list .event-item {
+  background: rgba(255, 255, 255, 0.1); /* Transparent background */
+  backdrop-filter: blur(10px); /* Slight blur for depth */
+  border-radius: 1rem; /* Rounded edges */
+  border: 1px solid rgba(251, 104, 5, 0.2); /* Subtle orange border */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Light shadow */
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s; /* Smooth hover effect */
+}
+
+/* Glow Effect on Hover */
+.glow-hover:hover {
+  transform: translateY(-4px); /* Lift card on hover */
+  box-shadow: 0 8px 24px rgba(251, 104, 5, 0.4); /* Glowing orange shadow */
+  background: rgba(255, 255, 255, 0.15); /* Slightly brighter background */
+}
+
+/* Event Title */
+.event-title {
+  color: #ffffff; /* Title color */
+  font-weight: 600; /* Bold title */
+}
+
+/* Event Time */
+.event-time {
+  color: rgba(255, 255, 255, 0.7); /* Softer white */
+}
+
+/* Event Description */
+.event-description {
+  color: rgba(255, 255, 255, 0.8); /* Softer white for description */
+}
+
+/* Event Type Labels */
+.event-type {
+  display: inline-block;
+  padding: 0.25rem 0.75rem; /* Slightly larger padding */
+  border-radius: 1rem; /* Fully rounded corners */
+  text-transform: uppercase; /* Uppercase text */
+  letter-spacing: 0.05rem; /* Spaced letters */
+}
+
+/* Scrollbar Styling */
+.live-events-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.live-events-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.live-events-container::-webkit-scrollbar-thumb {
+  background: rgba(251, 104, 5, 0.6);
+  border-radius: 4px;
+}
+
+.live-events-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(251, 104, 5, 0.8);
+}

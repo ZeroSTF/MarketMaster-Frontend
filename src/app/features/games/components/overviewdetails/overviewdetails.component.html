@@ -1,33 +1,34 @@
-<div class="overview-details-container p-4">
-  <div class="flex justify-between items-center mb-4">
+<div class="overview-details-container p-6">
+  <!-- User Info Section -->
+  <div class="flex justify-between items-center mb-6">
     <!-- User Avatar and Info -->
     <div class="flex items-center">
-      <img class="user-avatar rounded-full mr-4" src="images/SidebarAvatar.png" alt="User Avatar" />
+      <img class="user-avatar rounded-full mr-4 glow-border" src="images/SidebarAvatar.png" alt="User Avatar" />
       <div>
-        <h2 class="user-name text-lg font-semibold">CHUCHU</h2>
-        <p class="user-rank text-sm">Rank : Gold</p>
+        <h2 class="user-name text-xl font-bold text-gradient">{{ username }}</h2> <!-- Use dynamic username -->
+        <p class="user-rank text-sm text-orange-300">Rank : Gold</p>
       </div>
     </div>
 
     <!-- Portfolio Value -->
     <div class="portfolio-value text-right">
-      <p class="text-sm">Total Profit</p>
-      <h3 class="text-xl font-bold">{{ playerPerformance?.totalProfit | currency }}</h3>
+      <p class="text-sm text-gray-300">Total Profit</p>
+      <h3 class="text-2xl font-bold text-green-400">{{ playerPerformance?.totalProfit | currency }}</h3>
     </div>
   </div>
 
   <!-- Performance Metrics -->
-  <div class="grid grid-cols-3 gap-4 mb-4">
-    <div class="metric-box p-4">
-      <p class="text-sm">Average Profit</p>
+  <div class="grid grid-cols-3 gap-4 mb-6">
+    <div class="metric-box p-4 glow-hover">
+      <p class="text-sm text-gray-300">Average Profit</p>
       <h3 class="text-2xl font-bold text-green-400">{{ playerPerformance?.averageProfit | percent }}</h3>
     </div>
-    <div class="metric-box p-4">
-      <p class="text-sm">Games Played</p>
+    <div class="metric-box p-4 glow-hover">
+      <p class="text-sm text-gray-300">Games Played</p>
       <h3 class="text-2xl font-bold">{{ playerPerformance?.gamesPlayed }}</h3>
     </div>
-    <div class="metric-box p-4">
-      <p class="text-sm">Win rate</p>
+    <div class="metric-box p-4 glow-hover">
+      <p class="text-sm text-gray-300">Win Rate</p>
       <h3 class="text-2xl font-bold text-blue-400">{{ playerPerformance?.winRate | percent }}</h3>
     </div>
   </div>
@@ -35,16 +36,16 @@
   <!-- Achievements/Badges -->
   <div class="achievements flex justify-around">
     <div class="achievement-badge text-center">
-      <i class="fas mb-2 fa-trophy text-2xl text-yellow-400"></i>
-      <p class="text-sm">Top Trader</p>
+      <i class="fas mb-2 fa-trophy text-3xl text-gradient-yellow"></i>
+      <p class="text-sm text-gray-300">Top Trader</p>
     </div>
     <div class="achievement-badge text-center">
-      <i class="fas mb-2 fa-chart-line text-2xl text-green-400"></i>
-      <p class="text-sm">Consistent Gains</p>
+      <i class="fas mb-2 fa-chart-line text-3xl text-gradient-green"></i>
+      <p class="text-sm text-gray-300">Consistent Gains</p>
     </div>
     <div class="achievement-badge text-center">
-      <i class="fas mb-2 fa-star text-2xl text-red-400"></i>
-      <p class="text-sm">Risk Taker</p>
+      <i class="fas mb-2 fa-star text-3xl text-gradient-red"></i>
+      <p class="text-sm text-gray-300">Risk Taker</p>
     </div>
   </div>
 </div>
