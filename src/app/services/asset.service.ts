@@ -26,9 +26,8 @@ export class AssetService {
   readonly bestWinners = computed(() => this.bestWinnersSignal());
   readonly userAssets = computed(() => this.userAssetsSignal());
   readonly assets = computed(() => this.assetsSignal());
-  private readonly apiFlask = `${environment.flaskUrl}`;
-  private readonly apiUrl = `${environment.apiUrl}/asset`;
-  private readonly apiUrl1 = `${environment.apiUrl}/portf`;
+  private readonly apiFlask = environment.flaskUrl;
+  private readonly apiUrl = environment.apiUrl;
 
   private readonly destroy$ = new Subject<void>();
   private webSocketService = inject(FlaskWebSocketService);
@@ -59,7 +58,7 @@ export class AssetService {
 
     this.http
       .get<PageResponse<WatchlistItem>>(
-        `${this.apiUrl1}/watchlist/${username}`,
+        `${this.apiUrl}/portf/watchlist/${username}`,
         { params }
       )
       .subscribe({
@@ -82,7 +81,7 @@ export class AssetService {
       .set('page', page.toString())
       .set('size', size.toString());
     this.http
-      .get<PageResponse<Asset>>(`${this.apiUrl}/getAll`, { params })
+      .get<PageResponse<Asset>>(`${this.apiUrl}/asset/getAll`, { params })
       .subscribe((response) => {
         // Update signals with new data
         this.assetsSignal.set(response.content);
