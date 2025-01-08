@@ -50,7 +50,7 @@ export class AssetService {
       );
   }
 
-  // Get paginated watchlist TODO
+  // Get paginated watchlist
   getWatchlist(page: number = 0, size: number = 5): void {
     const params = new HttpParams()
       .set('page', page.toString())
