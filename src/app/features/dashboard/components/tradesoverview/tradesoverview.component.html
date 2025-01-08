@@ -1,11 +1,16 @@
-<div class="bg-white rounded-lg shadow h-full w-full flex flex-col p-3">
-  <!-- Title Section -->
-  <div class="pb-2 pl-3 border-b border-gray-300">
-    <h2 class="text-base font-bold text-[#01013D]">Trading Account</h2>
-  </div>
+<div class="bg-white rounded-lg shadow h-full w-full flex flex-col ">
+  <header class="bg-white shadow-sm border-b border-blue-100 rounded-t-2xl">
+    <div
+      class="max-w-7xl mx-auto  py-3 px-3  flex items-center justify-between"
+    >
+      <h1 class="text-sm font-bold text-blue-900">
+        Trading Account
+      </h1>
+    </div>
+  </header>
 
   <!-- Tab Bar Section -->
-  <div class="flex justify-between py-0 px-0 bg-gray-50 rounded-t-md mt-4">
+  <div class="flex justify-between py-0 px-3 bg-gray-50 rounded-t-md mt-4">
     <button
       class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-white hover:bg-[#1E88E5] focus:outline-none focus:ring-2 focus:ring-[#1E88E5] rounded-md transition"
       (click)="selectTab('openTrades')" [class.active]="selectedTab === 'openTrades'">
@@ -24,7 +29,7 @@
   </div>
 
   <!-- Content Section (Table) -->
-  <div class="pt-0 flex-grow overflow-x-auto">
+  <div class="pt-0 px-3 flex-grow overflow-x-auto">
     <table class="w-full max-w-full text-left border-collapse bg-white rounded-lg shadow-md">
       <thead class="bg-gray-100 border-b border-gray-300">
         <tr>
