@@ -92,7 +92,15 @@ export class LearningCourseComponent implements OnInit {
     }
   }
   takeExam() {
-    this.router.navigate(['/learning/test']);
+    const currentCourse = this.courseTitle();
+    if (currentCourse) {
+      this.router.navigate(['/learning/test'], {
+        state: { courseTitle: currentCourse }
+      });
+      console.log('Title', this.courseTitle() )
+    } else {
+      console.error('No course title available');
+    }
   }
 
   private resetChat() {

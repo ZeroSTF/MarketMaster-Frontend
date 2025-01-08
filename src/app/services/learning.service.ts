@@ -391,15 +391,23 @@ export class LearningService {
     utterance.rate = 0.9;
     utterance.pitch = 1;
     utterance.volume = 1;
-
+    utterance.lang = 'en-US';
+  
     if (this.synthesis) {
       const voices = this.synthesis.getVoices();
       const preferredVoice = voices.find(
-        (voice) => voice.lang === 'en-US' && voice.name.includes('Female')
+        voice => voice.lang.startsWith('en') && 
+                 voice.name.toLowerCase().includes('female') &&
+                 !voice.name.toLowerCase().includes('french')
       );
-
+  
       if (preferredVoice) {
         utterance.voice = preferredVoice;
+      } else {
+        const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
+        if (englishVoice) {
+          utterance.voice = englishVoice;
+        }
       }
     }
   }

@@ -37,6 +37,7 @@ export class LearningTestComponent implements OnInit, OnDestroy {
   });
   
   private learningService = inject(LearningService);
+  public courseTitle = this.learningService.courseTitle();
   readonly interviewState = computed(() => this.learningService.interviewState());
   readonly currentQuestion = computed(() => this.learningService.currentQuestion());
 
