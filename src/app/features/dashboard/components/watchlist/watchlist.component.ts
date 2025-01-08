@@ -54,7 +54,7 @@ export class WatchlistComponent implements OnInit {
     { field: 'dayHigh', label: 'High' },
     { field: 'currentPrice', label: 'Price' },
     { field: 'previousClose', label: 'Close' },
-    { field: 'priceChange', label: 'Change' },
+    { field: 'priceChange', label: 'Chg' },
   ] as const;
 
   readonly stockColumns = this.columns.map((col) => col.field);
