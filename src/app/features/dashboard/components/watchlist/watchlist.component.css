@@ -1,58 +1,63 @@
 /* Table Styling */
 table {
-    border-spacing: 0;
-    width: 100%;
-  }
-  
-  th, td {
-    border-bottom: 1px solid #e5e7eb;
-    padding: 4px 8px;
-  }
-  
-  th {
-    font-size: 0.75rem; /* Smaller font size for header */
-  }
-  
-  td {
-    font-size: 0.75rem; /* Smaller font size for body */
-  }
-  
-  tr:hover {
-    background-color: #f9fafb;
-  }
-  
-  /* Scroll behavior for table container */
-  .flex-grow {
-    max-height: calc(100% - 32px); /* Adjust the height of the tables */
-    overflow-y: auto;
-  }
-  
-  h2 {
-    font-size: 0.875rem; /* Smaller heading size */
-  }
-  .trend-up {
-    color: green;
-    font-weight: bold;
-  }
-  
-  .trend-down {
-    color: red;
-    font-weight: bold;
-  }
-  
-  .watchlist-container {
-    padding: 16px;
-  }
-  
-  .watchlist-header {
-    font-size: 24px;
-    margin-bottom: 16px;
-  }
-  
-  .asset-details {
-    margin-top: 24px;
-    border: 1px solid #ccc;
-    padding: 16px;
-    border-radius: 8px;
-  }
-  
+  border-spacing: 0;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 4px 8px;
+}
+
+th {
+  font-size: 0.75rem; /* Smaller font size for header */
+}
+
+td {
+  font-size: 0.75rem; /* Smaller font size for body */
+}
+
+tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Scroll behavior for table container */
+.flex-grow {
+  max-height: calc(100% - 32px); /* Adjust the height of the tables */
+  overflow-y: auto;
+}
+
+h2 {
+  font-size: 0.875rem; /* Smaller heading size */
+}
+.trend-up {
+  color: green;
+  font-weight: bold;
+}
+
+.trend-down {
+  color: red;
+  font-weight: bold;
+}
+
+.watchlist-container {
+  padding: 16px;
+}
+
+.watchlist-header {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.asset-details {
+  margin-top: 24px;
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

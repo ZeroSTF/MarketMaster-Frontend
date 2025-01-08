@@ -58,7 +58,10 @@ export class DashboardExploreComponent implements OnDestroy {
   readonly stockColumns = this.columns.map((col) => col.field);
 
   public selectedAsset = signal<Asset | null>(null);
+
   public isLoading = signal<boolean>(true);
+  public isEmpty = signal<boolean>(false);
+
   public stockDataSource: MatTableDataSource<Asset> =
     new MatTableDataSource<Asset>();
 
@@ -70,7 +73,7 @@ export class DashboardExploreComponent implements OnDestroy {
   public trendControl = signal<string>('all');
 
   private assets = signal<Asset[]>([]);
-  
+
   public filteredAssets = computed(() => {
     const searchTerm = this.searchControl().toLowerCase();
     const sector = this.sectorControl();
@@ -80,7 +83,7 @@ export class DashboardExploreComponent implements OnDestroy {
     return data.filter((asset) => {
       const matchesSearch =
         searchTerm === '' || asset.symbol.toLowerCase().includes(searchTerm);
-      const matchesSector = sector === 'all' || asset.symbol === sector;
+      const matchesSector = sector === 'all' || asset.sector === sector;
       const matchesTrend =
         trend === 'all' ||
         (trend === 'up' ? asset.priceChange > 0 : asset.priceChange < 0);
@@ -115,7 +118,27 @@ export class DashboardExploreComponent implements OnDestroy {
   private updateDataSource() {
     const filteredData = this.filteredAssets();
     this.stockDataSource.data = filteredData;
-    this.isLoading.set(filteredData.length === 0);
+    console.log('filtered data', filteredData);
+
+    const hasInitialData = this.assets().length > 0;
+    const hasValidData =
+      filteredData.length > 0 &&
+      filteredData.every(
+        (asset) =>
+          asset.volume !== undefined &&
+          asset.volume !== null &&
+          asset.volume > 0
+      );
+
+    // First check if we should show empty state
+    if (hasInitialData && filteredData.length === 0) {
+      this.isEmpty.set(true);
+      this.isLoading.set(false);
+    } else {
+      this.isEmpty.set(false);
+      // Only show loading when waiting for initial data or valid volumes
+      this.isLoading.set(hasInitialData ? !hasValidData : true);
+    }
   }
 
   ngAfterViewInit() {
