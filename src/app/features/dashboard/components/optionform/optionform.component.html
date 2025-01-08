@@ -16,7 +16,7 @@
       </div>
   
       <!-- Form Section -->
-      <form (ngSubmit)="buyOption()">
+      <form (ngSubmit)="getPreview()">
         <!-- Symbol Field (Display as Text, Not Editable) -->
         <div class="mb-4">
           <label for="symbol" class="block text-sm font-medium text-gray-700">Symbol</label>
@@ -55,15 +55,33 @@
         <!-- Expiration Date Field -->
         <div class="mb-4">
           <label for="dateEcheance" class="block text-sm font-medium text-gray-700">Expiration Date</label>
-          <input type="datetime-local" id="dateEcheance" [(ngModel)]="option.dateEcheance" name="dateEcheance" 
-                 class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" 
-                 required />
+          <input type="datetime-local" 
+                 id="dateEcheance" 
+                 [(ngModel)]="option.dateEcheance" 
+                 name="dateEcheance"
+                 class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                 required 
+                 [min]="minDate" />
         </div>
+        <div *ngIf="isPremiumVisible" class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Calculated Premium</label>
+          <div class="flex gap-4 items-center">
+            <span class="font-medium text-lg">{{ totalprime | currency:'USD' }}</span>
+          </div>
+        </div>
+        
   
         <!-- Submit Button -->
         <button type="submit" class="px-4 py-2 text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-[#1E88E5] hover:text-white rounded-lg focus:bg-[#1E88E5]">
-          Create Option
+          get Preview
         </button>
+        <button 
+          (click)="buyOption()" 
+          [disabled]="!isPremiumVisible"
+          class="px-4 py-2 text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-[#1E88E5] hover:text-white rounded-lg focus:bg-[#1E88E5]">
+          Buy Option
+        </button>
+
       </form>
   
       <!-- Prime Section -->

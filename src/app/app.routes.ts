@@ -18,6 +18,7 @@ import { LearningCalendarComponent } from './features/learning/pages/learning-ca
 import { LearningTestComponent } from './features/learning/components/learning-test/learning-test.component';
 import { BuySellComponent } from './features/buy-sell/buy-sell.component';
 import { PreviewOrderComponent } from './features/preview-order/preview-order.component';
+import { OptionsComponent } from './features/Insurance/pages/options/options.component';
 
 
 export const routes: Routes = [
@@ -141,5 +142,8 @@ export const routes: Routes = [
       },
     ],
   },
-
+  {
+    path: 'options',
+    component : OptionsComponent
+  }
 ];

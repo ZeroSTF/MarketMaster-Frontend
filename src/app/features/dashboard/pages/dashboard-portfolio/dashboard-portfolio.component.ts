@@ -318,5 +318,17 @@ export class DashboardPortfolioComponent implements OnInit {
       }
     );
   }
+  applyOption(option:Option){
+    this.optionService.applyOption(option).subscribe({
+      next:(data)=>{
+       console.log("transaction",data);
+      },
+      error:(err)=>{
+        alert("something happen");
+        console.error(err);
+      }
+    })
+
+  }
 }
 

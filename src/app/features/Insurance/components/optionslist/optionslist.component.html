@@ -1,0 +1,49 @@
+<!-- Options List -->
+<div >
+    <div class="px-4 py-2 max-h-[40vh] overflow-y-auto scrollbar-hide">
+      <h2 class="text-2xl font-bold mb-4">Options</h2>
+      <table class="min-w-full table-auto border-collapse">
+        <thead class="sticky top-0 bg-white z-10 shadow-sm">
+          <tr>
+            <th class="px-4 py-2 border-b text-left">Symbol</th>
+            <th class="px-4 py-2 border-b text-left">Type</th>
+            <th class="px-4 py-2 border-b text-left">Strike Price</th>
+            <th class="px-4 py-2 border-b text-left">Expiration</th>
+            <th class="px-4 py-2 border-b text-left">Premium</th>
+            <th class="px-4 py-2 border-b text-left">Underlying Price</th>
+            <th class="px-4 py-2 border-b text-left">Status</th>
+            <th class="px-4 py-2 border-b text-left">apply</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let option of filteredOptions"  [ngClass]="{
+            'custom-active': option.status === 'PENDING',
+            'custom-pending': option.status === 'USED',
+            'custom-inactive': option.status === 'EXPIRED'
+          }">
+            <td class="px-4 py-2 border-b">{{ option.symbol }}</td>
+            <td class="px-4 py-2 border-b">{{ option.type }}</td>
+            <td class="px-4 py-2 border-b">{{ option.strikePrice | currency: 'USD': 'symbol':'1.2-2' }}</td>
+            <td class="px-4 py-2 border-b">{{ option.dateEcheance | date: 'yyyy-MM-dd' }}</td>
+            <td class="px-4 py-2 border-b">{{ option.premium | currency: 'USD': 'symbol':'1.2-2' }}</td>
+            <td class="px-4 py-2 border-b">{{ option.underlyingPrice | currency: 'USD': 'symbol':'1.2-2' }}</td>
+            <td class="px-4 py-2 border-b">{{ option.status }}</td>
+            <td class="px-4 py-2 border-b">
+              <button 
+              (click)="applyOption(option)" 
+              [disabled]="option.status !== 'PENDING'"
+              class="px-4 py-2 text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-[#1E88E5] hover:text-white rounded-lg focus:bg-[#1E88E5]">
+              apply
+            </button>
+            
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <!-- Message if optionList is empty -->
+      <div *ngIf="filteredOptions?.length === 0" class="text-center text-gray-500 mt-4">
+        NO OPTIONS TO DISPLAY
+      </div>
+    </div>
+  </div>

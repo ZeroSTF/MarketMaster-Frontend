@@ -212,4 +212,15 @@ canvas {
 .text-gray-700 {
   color: #4a5568;
 }
+.custom-active {
+  background-color: #d4edda; /* light green */
+}
+
+.custom-pending {
+  background-color: #fff3cd; /* light yellow */
+}
+
+.custom-inactive {
+  background-color: #f8d7da; /* light red */
+}
   

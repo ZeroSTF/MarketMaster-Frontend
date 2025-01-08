@@ -12,7 +12,7 @@ import { PortfolioService } from '../../../../services/portfolio.service';
 export class ChartComponent implements OnInit {
   performanceChart: any;  // Reference for the chart
   selectedPeriod: string = '1m';  // Default period is 1 month
-  username: string = 'zerostf'; 
+  username: string = 'gaddour77'; 
   totalValues: { key: string, value: number }[] = []; 
 
   constructor(private portfolioService: PortfolioService) {}

@@ -4,12 +4,14 @@ import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/auth.service';
 import { Option } from '../models/option.model';
 import { Observable } from 'rxjs';
+import { Transaction } from '../models/transaction.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OptionService {
   private readonly API_URL = `${environment.apiUrl}`;
+  private readonly apiFlask = `${environment.flaskUrl}`;
   private authService = inject(AuthService)
   private readonly optionsignal = signal<Option | null> (null);
   private readonly options : Signal<Option | null> = computed(() => this.optionsignal?.());
@@ -21,5 +23,15 @@ export class OptionService {
   getOptions(): Observable<Option[]>{
     const username = this.authService.username();
     return this.http.get<Option[]>(`${this.API_URL}/portf/myoptions/${username}`);
+  }
+  getPreview(option:Option): Observable<any>{
+    return this.http.post(`${this.API_URL}/option/preview`, option)
+  }
+  applyOption(option:Option): Observable<Transaction> {
+    const username = this.authService.username();
+    return this.http.post<Transaction>(`${this.API_URL}/option/applyoption/${username}`, option);
+  }
+  optionPrediction(symbol:string):Observable<any>{
+    return this.http.get(`${this.apiFlask}/api/predict/signal/${symbol}`);
   }
 }
