@@ -5,15 +5,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InsuranceService {
-
-  private authService = inject(AuthService)
+  private authService = inject(AuthService);
   private readonly apiUrl = `${environment.apiUrl}/insurance`;
-  constructor(private http: HttpClient) { }
-  prime(): Observable<number> { // Adjust type to match the backend response
-    const username = this.authService.username();
+  constructor(private http: HttpClient) {}
+  prime(): Observable<number> {
+    // Adjust type to match the backend response
+    const username = this.authService.currentUser()?.username;
     return this.http.get<number>(`${this.apiUrl}/primes/${username}`);
   }
 }
